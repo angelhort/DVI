@@ -27,19 +27,19 @@ export default class Animation extends Phaser.Scene {
 		let boxes = this.physics.add.group();
 
 		var player1Controls = {
-			left: game.input.keyboard.addKey(Phaser.Keyboard.A),
-			right: game.input.keyboard.addKey(Phaser.Keyboard.D),
-			up: game.input.keyboard.addKey(Phaser.Keyboard.W),
-			down: game.input.keyboard.addKey(Phaser.Keyboard.S),
-			fire: game.input.keyboard.addKey(Phaser.Keyboard.SPACE)
+			left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+			right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+			up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+			down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+			fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 		  };
 
 		  var player2Controls = {
-			left: game.input.keyboard.addKey(Phaser.Keyboard.LEFT),
-			right: game.input.keyboard.addKey(Phaser.Keyboard.RIGHT),
-			up: game.input.keyboard.addKey(Phaser.Keyboard.UP),
-			down: game.input.keyboard.addKey(Phaser.Keyboard.DOWN),
-			fire: game.input.keyboard.addKey(Phaser.Keyboard.ENTER)
+			left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
+			right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
+			up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
+			down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+			fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
 		  };
 		
 		//Instanciamos nuestro personaje, que es un caballero, y la plataforma invisible que hace de suelo

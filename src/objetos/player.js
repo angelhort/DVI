@@ -5,7 +5,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 * @param {number} x - coordenada x
 	 * @param {number} y - coordenada y
 	 */
-	constructor(scene, x, y) {
+	constructor(scene, x, y, controls) {
 		super(scene, x, y, 'player', controls);
 		this.speed = 140; // Nuestra velocidad de movimiento será 140
 		this.controls = controls;
