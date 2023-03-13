@@ -4,10 +4,14 @@ class Bootloader extends Phaser.Scene{
     }
 
     preload(){
-        console.log("se ha cargado la escena")
+        this.load.image("jugadorUno", "./assets/jugadorUno.png");
+        this.load.image("jugadorDos", "./assets/jugador2.png");
+        this.load.image("plataforma", "./assets/platform.png");
     }
 
-
+    create(){
+        this.add.image("jugadorUno");
+    }
 }
 
 export default Bootloader;
