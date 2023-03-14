@@ -116,8 +116,10 @@ export default class Personaje extends Phaser.GameObjects.Sprite {
     }
     
     enableJump(){
+		if(this.salto){
+			this.play('idle');			
+		}
 		this.salto = false;
-		this.play('idle');
 	}
 
     attack(){

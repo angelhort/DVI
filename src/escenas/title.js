@@ -16,7 +16,7 @@ export default class Title extends Phaser.Scene {
 	 */
 	preload(){
 		this.load.image('start', 'assets/GUI/start.png');
-		this.load.image('castle', 'assets/castle.gif');
+		this.load.image('castle', 'assets/desierto.png');
 		this.load.spritesheet('knight', 'assets/Caballero/caballero.png', {frameWidth: 72, frameHeight: 86})
 		this.load.spritesheet('box', 'assets/Box/box.png', {frameWidth: 64, frameHeight: 64})
 	}
@@ -27,7 +27,8 @@ export default class Title extends Phaser.Scene {
 	create() {
 		//Pintamos un fondo
 		var back = this.add.image(0, 0, 'castle').setOrigin(0, 0);
-
+		this.add.image(0, 0, 'castle').setOrigin(0, 0);
+		
 		//Pintamos un botón de Empezar
 		var sprite = this.add.image(this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 'start')
 		sprite.setInteractive(); // Hacemos el sprite interactivo para que lance eventos

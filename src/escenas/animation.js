@@ -13,7 +13,7 @@ export default class Animation extends Phaser.Scene {
 	}
 
 	preload(){
-		this.load.image('castle', 'assets/castle.gif');
+		this.load.image('castle', 'assets/desierto.png');
 		this.load.spritesheet('personajeDeath', 'assets/soldados/Yellow/Gunner_Yellow_Death.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('personajeJump', 'assets/soldados/Yellow/Gunner_Yellow_Jump.png', {frameWidth: 48, frameHeight: 40})
 		this.load.spritesheet('personajeRun', 'assets/soldados/Yellow/Gunner_Yellow_Run.png', {frameWidth: 48, frameHeight: 40})
@@ -28,7 +28,6 @@ export default class Animation extends Phaser.Scene {
 	create() {
 		//Imagen de fondo
 		this.add.image(0, 0, 'castle').setOrigin(0, 0);
-
 		let boxes = this.physics.add.group();
 
 		//Instanciamos nuestro personaje, que es un caballero, y la plataforma invisible que hace de suelo
