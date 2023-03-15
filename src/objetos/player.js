@@ -114,7 +114,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			this.disableJump();
 			this.disa
 			this.isAttacking = false;
-			this.body.setVelocityY(-this.speed);
+			this.body.setVelocityY(-this.speed*5);
 		}
 
 		// Si pulsamos 'CTRL' atacamos

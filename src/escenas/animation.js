@@ -1,6 +1,7 @@
 import Player from '../objetos/player.js';
 import Floor from '../objetos/floor.js';
 import Box from '../objetos/box.js';
+import Platform from '../objetos/platform.js';
 /**
  * Escena principal de juego.
  * @extends Phaser.Scene
@@ -46,6 +47,8 @@ export default class Animation extends Phaser.Scene {
 		let player1 = new Player(this, 50, 0, player1Controls);
 		let player2 = new Player(this, 30, 0, player2Controls);
 		let floor = new Floor(this, 50);
+		let platform1 = new Platform(this, 135, 200);
+		let platform2 = new Platform(this, 520, 200);
 		let box1 = new Box(this, 200, 0, boxes);	
 		let box2 = new Box(this, 400, 0, boxes);
 
@@ -67,9 +70,36 @@ export default class Animation extends Phaser.Scene {
 			}
 		});
 
+		this.physics.add.collider(player1, platform1, function(){
+			if(scene.physics.world.overlap(player1, platform1)) {
+				player1.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
+			}
+		});
+
+		this.physics.add.collider(player2, platform1, function(){
+			if(scene.physics.world.overlap(player2, platform1)) {
+				player2.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
+			}
+		});
+
+		this.physics.add.collider(player1, platform2, function(){
+			if(scene.physics.world.overlap(player1, platform2)) {
+				player1.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
+			}
+		});
+
+		this.physics.add.collider(player2, platform2, function(){
+			if(scene.physics.world.overlap(player2, platform2)) {
+				player2.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
+			}
+		});
+
 		this.physics.add.collider(floor, boxes);
 		this.physics.add.collider(player1, boxes);
 		this.physics.add.collider(player2, boxes);
+
+		this.physics.add.collider(boxes, platform1);
+		this.physics.add.collider(boxes, platform2);
 
 		/*
 		 * Escuchamos los eventos de colisión en el mundo para poder actuar ante ellos
@@ -78,7 +108,7 @@ export default class Animation extends Phaser.Scene {
 		 * También comprobamos si está en contacto con alguna caja mientras ataca, en ese caso destruimos la caja
 		 */
 		scene.physics.world.on('collide', function(gameObject1, gameObject2, body1, body2) {
-			if(gameObject1 === player1 && gameObject2 === floor || gameObject1 === floor && gameObject2 === player1){
+			if((gameObject1 === player1 && gameObject2 === floor || gameObject1 === floor && gameObject2 === player1) || (gameObject1 === player1 && gameObject2 === platform1 || gameObject1 === platform1 && gameObject2 === player1) || (gameObject1 === player1 && gameObject2 === platform2 || gameObject1 === platform2 && gameObject2 === player1)){
 				player1.enableJump();
 			}
 
@@ -92,7 +122,7 @@ export default class Animation extends Phaser.Scene {
 		});	
 
 		scene.physics.world.on('collide', function(gameObject1, gameObject2, body1, body2) {
-			if(gameObject1 === player2 && gameObject2 === floor || gameObject1 === floor && gameObject2 === player2){
+			if((gameObject1 === player2 && gameObject2 === floor || gameObject1 === floor && gameObject2 === player2) || (gameObject1 === player2 && gameObject2 === platform1 || gameObject1 === platform1 && gameObject2 === player2) || (gameObject1 === player2 && gameObject2 === platform2 || gameObject1 === platform2 && gameObject2 === player2)){
 				player2.enableJump();
 			}
 
