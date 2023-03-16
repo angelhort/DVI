@@ -14,7 +14,7 @@ export default class Animation extends Phaser.Scene {
 	
 	preload(){
 		this.load.image('castle', 'assets/castle.gif');
-		this.load.spritesheet('player', 'assets/Player/player.png', {frameWidth: 72, frameHeight: 86})
+		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 80, frameHeight: 80})
 		this.load.spritesheet('box', 'assets/Box/box.png', {frameWidth: 64, frameHeight: 64})
 	}
 	
@@ -27,12 +27,18 @@ export default class Animation extends Phaser.Scene {
 
 		let boxes = this.physics.add.group();
 
+		this.playerGroup = this.physics.add.group({
+			classType: Player,
+			runChildUpdate: true
+		});
+
 		var player1Controls = {
 			left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
 			right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
 			up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
 			down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-			fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+			fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+			playerNumber: 1
 		  };
 
 		  var player2Controls = {
@@ -40,17 +46,31 @@ export default class Animation extends Phaser.Scene {
 			right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
 			up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
 			down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-			fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+			fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER),
+			playerNumber: 2
 		  };
 		
 		//Instanciamos nuestro personaje, que es un caballero, y la plataforma invisible que hace de suelo
 		let player1 = new Player(this, 50, 0, player1Controls);
 		let player2 = new Player(this, 30, 0, player2Controls);
+		// asignar el valor de "otherPlayer" a cada jugador
+		player1.otherPlayer = player2;
+		player2.otherPlayer = player1;
+
+		this.playerGroup.add(player1);
+    	this.playerGroup.add(player2);
+
 		let floor = new Floor(this, 50);
 		let platform1 = new Platform(this, 135, 200);
 		let platform2 = new Platform(this, 520, 200);
 		let box1 = new Box(this, 200, 0, boxes);	
 		let box2 = new Box(this, 400, 0, boxes);
+
+		// Detectar colisiones entre los jugadores
+		this.physics.add.overlap(this.playerGroup, this.playerGroup, (player1, player2) => {
+			player1.takeDamage(player2);
+			player2.takeDamage(player1);
+		});
 
 		player1.body.onCollide = true; // Activamos onCollide para poder detectar la colisión del caballero con el suelo
 		player2.body.onCollide = true; // Activamos onCollide para poder detectar la colisión del caballero con el suelo

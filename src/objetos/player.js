@@ -12,26 +12,30 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
 		this.isAttacking = false;
+		this.otherPlayer = null;
+
+		this.hitDelay = 500; // Tiempo mínimo entre cada golpe (en milisegundos)
+    	this.lastHitTime = 0; // Tiempo del último golpe (en milisegundos)
 
 		this.scene.add.existing(this); //Añadimos el caballero a la escena
 
 		// Creamos las animaciones de nuestro caballero
 		this.scene.anims.create({
 			key: 'idle',
-			frames: scene.anims.generateFrameNumbers('player', {start:0, end:3}),
-			frameRate: 5,
+			frames: scene.anims.generateFrameNumbers('player', {start:0, end:1}),
+			frameRate: 2,
 			repeat: -1
 		});
 		this.scene.anims.create({
 			key: 'attack',
-			frames: scene.anims.generateFrameNumbers('player', {start:4, end:7}),
-			frameRate: 18,
+			frames: scene.anims.generateFrameNumbers('player', {start:2, end:5}),
+			frameRate: 4,
 			repeat: 0
 		});
 		this.scene.anims.create({
 			key: 'run',
-			frames: scene.anims.generateFrameNumbers('player', {start:8, end:14}),
-			frameRate: 5,
+			frames: scene.anims.generateFrameNumbers('player', {start:2, end:5}),
+			frameRate: 4,
 			repeat: -1
 		});
 
@@ -58,7 +62,49 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		
 		this.body.setOffset(this.bodyOffset, 0);
 		this.body.width = this.bodyWidth;
+
+		this.health = 100; // Definimos la vida inicial del jugador como 100
+    	this.damage = 10; // Definimos si el jugador está vivo o muerto
+
 	}
+
+	/**
+	 * Detecta si el jugador está siendo golpeado por otro jugador y resta vida en consecuencia
+	 * @param {Player} otherPlayer - el otro jugador que está golpeando a este jugador
+	 */
+	takeDamage(otherPlayer) {
+		if (this.health > 0 && otherPlayer.isAttacking && Phaser.Geom.Intersects.RectangleToRectangle(this.getBounds(), otherPlayer.getBounds())) {
+			const currentTime = this.scene.time.now;
+		if (currentTime - this.lastHitTime > this.hitDelay) { // Verificar si ha pasado suficiente tiempo
+		this.health -= otherPlayer.damage;
+		console.log(`Jugador ${this.controls.playerNumber} ha sido golpeado y tiene ${this.health} puntos de vida`);
+		this.lastHitTime = currentTime; // Establecer el tiempo del último golpe
+		if (this.health <= 0) {
+			console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
+		
+		}
+		}
+    }
+	}
+
+	/**
+	 * Hace que el jugador ataque a otro jugador y le reste vida
+	 * @param {Player} otherPlayer - el otro jugador al que se va a atacar
+	 */
+	attack(otherPlayer) {
+		if (!this.isAttacking) {
+			this.isAttacking = true;
+			this.play('attack');
+
+			this.scene.time.delayedCall(500, () => {
+				this.isAttacking = false;
+				this.play('idle');
+			});
+
+			otherPlayer.takeDamage(this);
+		}
+	}
+
 
 	/**
 	 * Bucle principal del personaje, actualizamos su posición y ejecutamos acciones según el Input
@@ -114,12 +160,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			this.disableJump();
 			this.disa
 			this.isAttacking = false;
-			this.body.setVelocityY(-this.speed*5);
+			this.body.setVelocityY(-this.speed*2);
 		}
 
 		// Si pulsamos 'CTRL' atacamos
 		if(Phaser.Input.Keyboard.JustDown(this.controls.fire)){
-			this.attack();
+			this.attack(this.otherPlayer);
 		}
 	}
 
