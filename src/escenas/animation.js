@@ -17,7 +17,7 @@ export default class Animation extends Phaser.Scene {
 		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 80, frameHeight: 80})
 		this.load.spritesheet('box', 'assets/Box/box.png', {frameWidth: 64, frameHeight: 64})
 	}
-	
+
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
@@ -32,23 +32,38 @@ export default class Animation extends Phaser.Scene {
 			runChildUpdate: true
 		});
 
-		var player1Controls = {
-			left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-			right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-			up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-			down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-			fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
-			playerNumber: 1
-		  };
+			// Función para generar un objeto de control para cada jugador
+		function createPlayerControls(keys, playerNumber) {
+		const controls = {};
+		for (const key in keys) {
+			controls[key] = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[keys[key]]);
+		}
+		controls.playerNumber = playerNumber;
+		return controls;
+		}
 
-		  var player2Controls = {
-			left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
-			right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-			up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
-			down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-			fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER),
-			playerNumber: 2
-		  };
+					// Función para manejar colisiones entre jugadores y plataformas
+		const handlePlayerPlatformCollision = (player, platform) => {
+			if (this.physics.world.overlap(player, platform)) {
+			player.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
+		}
+		};
+
+		const player1Controls = createPlayerControls.call(this, {
+		left: 'A',
+		right: 'D',
+		up: 'W',
+		down: 'S',
+		fire: 'SPACE'
+		}, 1);
+		
+		const player2Controls = createPlayerControls.call(this, {
+		left: 'LEFT',
+		right: 'RIGHT',
+		up: 'UP',
+		down: 'DOWN',
+		fire: 'ENTER'
+		}, 2);
 		
 		//Instanciamos nuestro personaje, que es un caballero, y la plataforma invisible que hace de suelo
 		let player1 = new Player(this, 50, 0, player1Controls);
@@ -58,7 +73,7 @@ export default class Animation extends Phaser.Scene {
 		player2.otherPlayer = player1;
 
 		this.playerGroup.add(player1);
-    	this.playerGroup.add(player2);
+  this.playerGroup.add(player2);
 
 		let floor = new Floor(this, 50);
 		let platform1 = new Platform(this, 135, 200);
@@ -77,42 +92,15 @@ export default class Animation extends Phaser.Scene {
 
 
 		let scene = this; // Nos guardamos una referencia a la escena para usarla en la función anidada que viene a continuación
+
 		
-		this.physics.add.collider(player1, floor, function(){
-			if(scene.physics.world.overlap(player1, floor)) {
-				player1.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
-			}
-		});
-
-		this.physics.add.collider(player2, floor, function(){
-			if(scene.physics.world.overlap(player2, floor)) {
-				player2.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
-			}
-		});
-
-		this.physics.add.collider(player1, platform1, function(){
-			if(scene.physics.world.overlap(player1, platform1)) {
-				player1.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
-			}
-		});
-
-		this.physics.add.collider(player2, platform1, function(){
-			if(scene.physics.world.overlap(player2, platform1)) {
-				player2.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
-			}
-		});
-
-		this.physics.add.collider(player1, platform2, function(){
-			if(scene.physics.world.overlap(player1, platform2)) {
-				player1.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
-			}
-		});
-
-		this.physics.add.collider(player2, platform2, function(){
-			if(scene.physics.world.overlap(player2, platform2)) {
-				player2.enableJump(); // Hemos tocado el suelo, permitimos volver a saltar
-			}
-		});
+	// Añadir colisiones entre jugadores y plataformas usando un bucle
+	const platforms = [floor, platform1, platform2];
+	for (const player of this.playerGroup.getChildren()) {
+	   for (const platform of platforms) {
+	        this.physics.add.collider(player, platform, () => handlePlayerPlatformCollision(player, platform));
+	    }
+	}
 
 		this.physics.add.collider(floor, boxes);
 		this.physics.add.collider(player1, boxes);
@@ -127,33 +115,19 @@ export default class Animation extends Phaser.Scene {
 		 * El salto del caballero lo desactivamos en su "clase" (archivo knight.js) para evitar dobles saltos
 		 * También comprobamos si está en contacto con alguna caja mientras ataca, en ese caso destruimos la caja
 		 */
-		scene.physics.world.on('collide', function(gameObject1, gameObject2, body1, body2) {
-			if((gameObject1 === player1 && gameObject2 === floor || gameObject1 === floor && gameObject2 === player1) || (gameObject1 === player1 && gameObject2 === platform1 || gameObject1 === platform1 && gameObject2 === player1) || (gameObject1 === player1 && gameObject2 === platform2 || gameObject1 === platform2 && gameObject2 === player1)){
-				player1.enableJump();
-			}
+		scene.physics.world.on('collide', function (gameObject1, gameObject2, body1, body2) {
+        for (const player of scene.playerGroup.getChildren()) {
+            if ((gameObject1 === player && gameObject2 === floor) || (gameObject1 === floor && gameObject2 === player)) {
+                player.enableJump();
+            }
 
-			
-
-			if(gameObject1 === player1 && boxes.contains(gameObject2)){
-				if(gameObject1.isAttackInProcess()) {
-					gameObject2.destroyMe()
-				} 				
-			}
-		});	
-
-		scene.physics.world.on('collide', function(gameObject1, gameObject2, body1, body2) {
-			if((gameObject1 === player2 && gameObject2 === floor || gameObject1 === floor && gameObject2 === player2) || (gameObject1 === player2 && gameObject2 === platform1 || gameObject1 === platform1 && gameObject2 === player2) || (gameObject1 === player2 && gameObject2 === platform2 || gameObject1 === platform2 && gameObject2 === player2)){
-				player2.enableJump();
-			}
-
-			
-
-			if(gameObject1 === player2 && boxes.contains(gameObject2)){
-				if(gameObject1.isAttackInProcess()) {
-					gameObject2.destroyMe()
-				} 				
-			}
-		});	
+            if (gameObject1 === player && boxes.contains(gameObject2)) {
+                if (gameObject1.isAttackInProcess()) {
+                    gameObject2.destroyMe();
+                }
+            }
+        }
+    });
 
 		this.scene.launch('title');
 	}
