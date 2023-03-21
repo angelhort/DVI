@@ -8,7 +8,7 @@ export default class Box extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, colliderGroup) {
 		super(scene, x, y, 'box');
 		this.setScale(0.5,.5);
-		this.scene.add.existing(this); //Añadimos la caja a la escena
+		scene.add.existing(this); //Añadimos la caja a la escena
 
 		// Creamos las animaciones de nuestra caja
 		this.scene.anims.create({
