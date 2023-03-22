@@ -31,7 +31,7 @@ export default class PowerUp extends Phaser.GameObjects.Sprite {
 		});
 
 
-		// Si la animación de ataque se completa pasamos a ejecutar la animación 'idle'
+		// Si la animación de ataque se completa
 		this.on('animationcomplete', end => {
 			if (this.anims.currentAnim.key === 'hit'){
 				this.setActive(false).setVisible(false);
@@ -51,7 +51,7 @@ export default class PowerUp extends Phaser.GameObjects.Sprite {
 	}
 
 	/**
-	 * Bucle principal del powerUp, comprobamos la velocidad para reducirla y setearla a 0en ciertos umbrales
+	 * Bucle principal del powerUp, comprobamos la velocidad para reducirla y setearla a 0 en ciertos umbrales
 	 * Así no se movera de manera infinita cuando la golpeemos
 	 * @param {number} t - Tiempo total
 	 * @param {number} dt - Tiempo entre frames
@@ -68,13 +68,14 @@ export default class PowerUp extends Phaser.GameObjects.Sprite {
 			 this.body.velocity.x = 0;
 		}
 
-		// Si el powerUp se está moviendo, reproducimos la animación 'roll'
-		if (this.body.velocity.x !== 0) {
-			this.play('roll', true);
-		} else {
-			// Si el powerUp está quieto, reproducimos la animación 'none'
-			this.play('none', true);
-		}
+		// Si la animación actual no es 'hit', entonces cambiamos la animación a 'roll' o 'none' según la velocidad
+    if (this.anims.currentAnim.key !== 'hit') {
+        if (this.body.velocity.x !== 0) {
+            this.play('roll', true);
+        } else {
+            this.play('none', true);
+        }
+    }
 
 		// Si es necesario, lo destruimos al final del update para evitar errores
 		if(this.toDestroy){

@@ -36,10 +36,17 @@ export default class Animation extends Phaser.Scene {
 		}
 	};
 
+	handlePlayerPowerUpCollision(player, powerUp) {
+		// Verificar si el jugador está tocando un powerup por arriba
+		if (player.body.touching.down && powerUp.body.touching.up) {
+			player.enableJump();
+		}
+	}
+
 	//Función para generar los powerUps
 	spawnPowerUps(powerUps) {
-  let powerUp = new PowerUp(this, Phaser.Math.Between(100, 600), 0, powerUps);
- };
+		let powerUp = new PowerUp(this, Phaser.Math.Between(100, 600), 0, powerUps);
+	};
 
 	/**
 	* Creación de los elementos de la escena principal de juego
@@ -52,11 +59,11 @@ export default class Animation extends Phaser.Scene {
 		let powerUps = this.physics.add.group();
 
 		// Añadir temporizador para generar una nueva caja cada 30 segundos
-  this.time.addEvent({
-  delay: 10000, // 10 segundos en milisegundos
-  callback: () => this.spawnPowerUps(powerUps),
-  loop: true
-  });
+		this.time.addEvent({
+			delay: 10000, // 10 segundos en milisegundos
+			callback: () => this.spawnPowerUps(powerUps),
+			loop: true
+		});
 
 		// Crear grupo de jugadores y habilitar actualización de hijos
 		this.playerGroup = this.physics.add.group({
@@ -123,11 +130,14 @@ export default class Animation extends Phaser.Scene {
 		// Añadir colisiones entre suelo, cajas y jugadores
 		this.physics.add.collider(floor, powerUps);
 		this.physics.add.collider(player1, powerUps, (player, powerUp) => {
-        player.touchingPowerUp = true;
-    });
-  this.physics.add.collider(player2, powerUps, (player, PowerUp) => {
-        player.touchingPowerUp = true;
-    });
+			this.handlePlayerPowerUpCollision(player, powerUp);
+			player.touchingPowerUp = true;
+		});
+		this.physics.add.collider(player2, powerUps, (player, powerUp) => {
+			this.handlePlayerPowerUpCollision(player, powerUp);
+			player.touchingPowerUp = true;
+		});
+
 
 		// Añadir colisiones entre cajas y plataformas
 		this.physics.add.collider(powerUps, platform1);
