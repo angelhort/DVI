@@ -1,6 +1,6 @@
 import Player from '../objetos/player.js';
 import Floor from '../objetos/floor.js';
-import Box from '../objetos/box.js';
+import PowerUp from '../objetos/powerUp.js';
 import Platform from '../objetos/platform.js';
 /**
  * Escena principal de juego.
@@ -15,8 +15,8 @@ export default class Animation extends Phaser.Scene {
 	preload(){
 		// Cargar imágenes y spritesheets
 		this.load.image('castle', 'assets/castle.gif');
-		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 80, frameHeight: 80})
-		this.load.spritesheet('box', 'assets/Box/box.png', {frameWidth: 64, frameHeight: 64})
+		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
+		this.load.spritesheet('powerup', 'assets/PowerUp/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
 	}
 
 	// Función para generar un objeto de control para cada jugador
@@ -36,9 +36,9 @@ export default class Animation extends Phaser.Scene {
 		}
 	};
 
-	//Función para generar las cajas
-	spawnBox(boxes) {
-  let box = new Box(this, Phaser.Math.Between(100, 600), 0, boxes);
+	//Función para generar los powerUps
+	spawnPowerUps(powerUps) {
+  let powerUp = new PowerUp(this, Phaser.Math.Between(100, 600), 0, powerUps);
  };
 
 	/**
@@ -49,16 +49,12 @@ export default class Animation extends Phaser.Scene {
 		this.add.image(0, 0, 'castle').setOrigin(0, 0);
 
 		// Crear grupo de cajas
-		let boxes = this.physics.add.group();
-
-		// Crear las dos primeras cajas
-  this.spawnBox(boxes);
-  this.spawnBox(boxes);
+		let powerUps = this.physics.add.group();
 
 		// Añadir temporizador para generar una nueva caja cada 30 segundos
   this.time.addEvent({
-  delay: 30000, // 30 segundos en milisegundos
-  callback: () => this.spawnBox(boxes),
+  delay: 10000, // 10 segundos en milisegundos
+  callback: () => this.spawnPowerUps(powerUps),
   loop: true
   });
 
@@ -98,13 +94,13 @@ export default class Animation extends Phaser.Scene {
 		// Crear suelo y plataformas
 		let floor = new Floor(this, 100, 50);
 
-		let platform1 = new Platform(this, 135, 200);
-		let platform2 = new Platform(this, 520, 200);
-		let platform3 = new Platform(this, (platform1.x + platform2.x) / 2, 150); // Crear una tercera plataforma entre las otras dos pero un poco más arriba
+		let platform1 = new Platform(this, 135, 250);
+		let platform2 = new Platform(this, 520, 250);
+		let platform3 = new Platform(this, (platform1.x + platform2.x) / 2, 200); // Crear una tercera plataforma entre las otras dos pero un poco más arriba
 
-		// Crear cajas y añadirlas al grupo de cajas
-		let box1 = new Box(this, 200, 0, boxes);	
-		let box2 = new Box(this, 400, 0, boxes);
+		// Añadir dos nuevas plataformas en el mismo eje x que las dos de abajo, pero más arriba incluso que la platform3
+		let platform4 = new Platform(this, platform1.x, platform3.y - 50);
+		let platform5 = new Platform(this, platform2.x, platform3.y - 50);
 
 		// Detectar colisiones entre jugadores
 		this.physics.add.overlap(this.playerGroup, this.playerGroup, (player1, player2) => {
@@ -117,7 +113,7 @@ export default class Animation extends Phaser.Scene {
 		player2.body.onCollide = true;
 
 		// Añadir colisiones entre jugadores y plataformas usando un bucle
-		const platforms = [floor, platform1, platform2, platform3];
+		const platforms = [floor, platform1, platform2, platform3, platform4, platform5];
 		for (const player of this.playerGroup.getChildren()) {
 			for (const platform of platforms) {
 				this.physics.add.collider(player, platform, () => this.handlePlayerPlatformCollision(player, platform));
@@ -125,14 +121,20 @@ export default class Animation extends Phaser.Scene {
 		}
 
 		// Añadir colisiones entre suelo, cajas y jugadores
-		this.physics.add.collider(floor, boxes);
-		this.physics.add.collider(player1, boxes);
-		this.physics.add.collider(player2, boxes);
+		this.physics.add.collider(floor, powerUps);
+		this.physics.add.collider(player1, powerUps, (player, powerUp) => {
+        player.touchingPowerUp = true;
+    });
+  this.physics.add.collider(player2, powerUps, (player, PowerUp) => {
+        player.touchingPowerUp = true;
+    });
 
 		// Añadir colisiones entre cajas y plataformas
-		this.physics.add.collider(boxes, platform1);
-		this.physics.add.collider(boxes, platform2);
-		this.physics.add.collider(boxes, platform3);
+		this.physics.add.collider(powerUps, platform1);
+		this.physics.add.collider(powerUps, platform2);
+		this.physics.add.collider(powerUps, platform3);
+		this.physics.add.collider(powerUps, platform4);
+		this.physics.add.collider(powerUps, platform5);
 
 		// Escuchar eventos de colisión en el mundo
 		this.physics.world.on('collide', (gameObject1, gameObject2, body1, body2) => {
@@ -141,7 +143,7 @@ export default class Animation extends Phaser.Scene {
 					player.enableJump();
 				}
 
-				if (gameObject1 === player && boxes.contains(gameObject2)) {
+				if (gameObject1 === player && powerUps.contains(gameObject2)) {
 					if (gameObject1.isAttackInProcess()) {
 						gameObject2.destroyMe();
 					}
