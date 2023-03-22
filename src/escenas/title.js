@@ -17,8 +17,6 @@ export default class Title extends Phaser.Scene {
 	preload(){
 		this.load.image('start', 'assets/GUI/start.png');
 		this.load.image('castle', 'assets/castle.gif');
-		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 80, frameHeight: 80})
-		this.load.spritesheet('box', 'assets/Box/box.png', {frameWidth: 64, frameHeight: 64})
 	}
 	
 	/**
