@@ -105,6 +105,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 					console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
 					this.play('dead');
 					this.isDead = true;
+					this.emit('died');
 					this.updateColliderOnDeath();
 				}
 			}
