@@ -4,16 +4,16 @@
  */
 export default class Platform extends Phaser.GameObjects.Sprite {
 
-    constructor(scene, x, y) {
-      super(scene, x, y);
+    constructor(scene, x, y, width) {
+      super(scene, x, y, width);
   
       this.scene.add.existing(this);
       this.scene.physics.add.existing(this, true);
   
-      this.scene.physics.add.collider(this);
+    this.scene.physics.add.collider(this);
   
       // Cambiamos el tamaño del body para ocupar todo el ancho de la escena
-      this.body.width = 70;
-      this.body.height = 10;
+      this.body.width = width;
+      this.body.height = 5;
     }
   }

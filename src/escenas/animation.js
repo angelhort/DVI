@@ -14,7 +14,7 @@ export default class Animation extends Phaser.Scene {
 
 	preload(){
 		// Cargar imágenes y spritesheets
-		this.load.image('castle', 'assets/castle.gif');
+		this.load.image('fondo', 'assets/backgroundPlataformas.png');
 		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('powerup', 'assets/PowerUp/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
 	}
@@ -53,7 +53,7 @@ export default class Animation extends Phaser.Scene {
 	*/
 	create() {
 		//Imagen de fondo
-		this.add.image(0, 0, 'castle').setOrigin(0, 0);
+		this.add.image(0, 0, 'fondo').setOrigin(0, 0);
 
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
@@ -99,15 +99,13 @@ export default class Animation extends Phaser.Scene {
 		this.playerGroup.add(player2);
 
 		// Crear suelo y plataformas
-		let floor = new Floor(this, 100, 50);
+		let floor = new Floor(this, 97, 4);
 
-		let platform1 = new Platform(this, 135, 250);
-		let platform2 = new Platform(this, 520, 250);
-		let platform3 = new Platform(this, (platform1.x + platform2.x) / 2, 200); // Crear una tercera plataforma entre las otras dos pero un poco más arriba
-
-		// Añadir dos nuevas plataformas en el mismo eje x que las dos de abajo, pero más arriba incluso que la platform3
-		let platform4 = new Platform(this, platform1.x, platform3.y - 50);
-		let platform5 = new Platform(this, platform2.x, platform3.y - 50);
+		let platform1 = new Platform(this, 140, 289, 153);
+		let platform2 = new Platform(this, 561, 316, 141);
+		let platform3 = new Platform(this, 370, 227, 160);
+		let platform4 = new Platform(this, 45, 196, 143);
+		let platform5 = new Platform(this, 589, 175, 121);
 
 		// Detectar colisiones entre jugadores
 		this.physics.add.overlap(this.playerGroup, this.playerGroup, (player1, player2) => {
@@ -165,4 +163,4 @@ export default class Animation extends Phaser.Scene {
 		this.scene.launch('title');
 	}
 
-}
+}1

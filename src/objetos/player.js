@@ -18,7 +18,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 */
 	constructor(scene, x, y, controls) {
 		super(scene, x, y, 'player', controls);
-		this.speed = 200; // Nuestra velocidad de movimiento
+		this.speed = 170; // Nuestra velocidad de movimiento
 		this.controls = controls;
 
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
@@ -33,7 +33,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		// Añadir propiedad para detectar si el jugador está en contacto con una caja
   		this.touchingPowerUp = false;
 
-		this.airSpeedMultiplier = 0.7; // Ajusta este valor para cambiar la velocidad en el aire
+		this.airSpeedMultiplier = 0.6; // Ajusta este valor para cambiar la velocidad en el aire
 
 		// Creamos las animaciones de nuestro jugador
 		this.scene.anims.create({
@@ -44,14 +44,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		});
 		this.scene.anims.create({
 			key: 'attack',
-			frames: scene.anims.generateFrameNumbers('player', {start:2, end:5}),
+			frames: scene.anims.generateFrameNumbers('player', {start:7, end:10}),
 			frameRate: 12,
 			repeat: 0
 		});
 		this.scene.anims.create({
 			key: 'run',
 			frames: scene.anims.generateFrameNumbers('player', {start:2, end:5}),
-			frameRate: 8,
+			frameRate: 12,
 			repeat: -1
 		});
 		this.scene.anims.create({
@@ -144,6 +144,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			this.body.setVelocityX(this.body.velocity.x * (1 - frictionForce));
 		}
 
+		if (this.y > this.scene.game.config.height) {
+    this.health = 0;
+			 this.isDead = true;
+    this.updateColliderOnDeath();
+				this.play('dead');
+}
+
 		if(this.isDead) {
 			return;
 		}
@@ -193,7 +200,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		// Mientras saltamos no podremos volver a saltar ni atacar
 		if(Phaser.Input.Keyboard.JustDown(this.controls.up) && !this.jumpDisabled && this.body.touching.down){
 			this.disableJump();
-			this.body.setVelocityY(-this.speed);
+			this.body.setVelocityY(-this.speed*1.2);
 		}
 
 		// Si pulsamos 'CTRL' atacamos
@@ -223,11 +230,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	attack(){
 		this.isAttacking = true;
 		this.play('attack');
-		// Ajustamos el "collider" de nuestro jugador según hacia donde miremos
-		this.body.width = this.bodyWidth*2;
-		if(this.flipX){
-			this.body.setOffset(-this.bodyOffset, 0);
-		} 
 	}
 
 	/**
@@ -237,17 +239,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.stop()
 		this.play('idle');
 		this.isAttacking = false;
-		// Ajustamos el "collider" de nuestro jugador según hacia donde miremos		
-		this.resetCollider()
 	}
 
 	isAttackInProcess(){
 		return this.isAttacking;
-	}
-
-	resetCollider(){
-		this.body.width = this.bodyWidth;
-		this.body.setOffset(this.bodyOffset, 0);
 	}
 
 }

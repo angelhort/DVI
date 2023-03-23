@@ -12,8 +12,8 @@ export default class Floor extends Phaser.GameObjects.Sprite {
 
     this.scene.physics.add.collider(this);
 
-    // Cambiamos el tamaño del body para ocupar todo el ancho de la escena
-    this.body.width = 500;
-    this.body.height = 10;
+    // Cambiamos el tamaño del body
+    this.body.width = 534;
+    this.body.height = 8;
   }
 }
