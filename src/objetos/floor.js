@@ -4,8 +4,8 @@
  */
 export default class Floor extends Phaser.GameObjects.Sprite {
 
-  constructor(scene, y) {
-    super(scene, 0, scene.sys.game.canvas.height-y);
+  constructor(scene, x, y) {
+    super(scene, x, scene.sys.game.canvas.height-y);
 
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this, true);

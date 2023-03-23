@@ -1,33 +1,39 @@
-export default class Box extends Phaser.GameObjects.Sprite {
+export default class PowerUp extends Phaser.GameObjects.Sprite {
 	/**
-	 * Constructor de Box, nuestras cajas destructibles
+	 * Constructor de PowerUp, nuestras powerUps destructibles
 	 * @param {Scene} scene - escena en la que aparece
 	 * @param {number} x - coordenada x
 	 * @param {number} y - coordenada y
 	 */
 	constructor(scene, x, y, colliderGroup) {
-		super(scene, x, y, 'box');
+		super(scene, x, y, 'powerup');
 		this.setScale(0.5,.5);
-		this.scene.add.existing(this); //Añadimos la caja a la escena
+		scene.add.existing(this); //Añadimos el powerUp a la escena
 
-		// Creamos las animaciones de nuestra caja
+		// Creamos las animaciones de nuestro powerUp
 		this.scene.anims.create({
 			key: 'none',
-			frames: scene.anims.generateFrameNumbers('box', {start:0, end:0}),
+			frames: scene.anims.generateFrameNumbers('powerup', {start:0, end:0}),
 			frameRate: 5,
 			repeat: -1
 		});
 		this.scene.anims.create({
 			key: 'hit',
-			frames: scene.anims.generateFrameNumbers('box', {start:1, end:4}),
+			frames: scene.anims.generateFrameNumbers('powerup', {start:1, end:3}),
 			frameRate: 18,
 			repeat: 0
 		});
+		this.scene.anims.create({
+			key: 'roll',
+			frames: scene.anims.generateFrameNumbers('powerup', {start:4, end:7}),
+			frameRate: 8,
+			repeat: -1
+		});
 
-		// Si la animación de ataque se completa pasamos a ejecutar la animación 'idle'
+
+		// Si la animación de ataque se completa
 		this.on('animationcomplete', end => {
 			if (this.anims.currentAnim.key === 'hit'){
-				new Box(scene, Phaser.Math.Between(50, scene.sys.game.canvas.width-100),20, colliderGroup);
 				this.setActive(false).setVisible(false);
 				this.toDestroy = true;
 			}
@@ -35,17 +41,17 @@ export default class Box extends Phaser.GameObjects.Sprite {
 
 		this.play('none');
 
-		// Agregamos la caja a las físicas para que Phaser lo tenga en cuenta
+		// Agregamos el powerUp a las físicas para que Phaser lo tenga en cuenta
 		scene.physics.add.existing(this);
 
-		// Decimos que la caja colisiona con los límites del mundo
+		// Decimos que el powerUp colisiona con los límites del mundo
 		this.body.setCollideWorldBounds();
 
 		colliderGroup.add(this);
 	}
 
 	/**
-	 * Bucle principal de la caja, comprobamos la velocidad para reducirla y setearla a 0 en ciertos umbrales
+	 * Bucle principal del powerUp, comprobamos la velocidad para reducirla y setearla a 0 en ciertos umbrales
 	 * Así no se movera de manera infinita cuando la golpeemos
 	 * @param {number} t - Tiempo total
 	 * @param {number} dt - Tiempo entre frames
@@ -62,7 +68,16 @@ export default class Box extends Phaser.GameObjects.Sprite {
 			 this.body.velocity.x = 0;
 		}
 
-		// Si es necesario, la caja la destruimos al final del update para evitar errores
+		// Si la animación actual no es 'hit', entonces cambiamos la animación a 'roll' o 'none' según la velocidad
+    if (this.anims.currentAnim.key !== 'hit') {
+        if (this.body.velocity.x !== 0) {
+            this.play('roll', true);
+        } else {
+            this.play('none', true);
+        }
+    }
+
+		// Si es necesario, lo destruimos al final del update para evitar errores
 		if(this.toDestroy){
 			this.destroy();
 		}
@@ -74,6 +89,5 @@ export default class Box extends Phaser.GameObjects.Sprite {
 	 */
 	destroyMe(){
 		this.play('hit');
-
 	}
 }
