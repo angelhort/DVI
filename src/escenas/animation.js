@@ -27,7 +27,7 @@ export default class Animation extends Phaser.Scene {
 		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('powerup', 'assets/PowerUp/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
 		// Cargar fuente personalizada
-  		this.loadFont('font', '/assets/webfonts/NightMare%20Codehack.otf');
+  		this.loadFont('font', '/assets/webfonts/NightMareCodehack.otf');
 	}
 	
 	// Función para generar un objeto de control para cada jugador
