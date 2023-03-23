@@ -12,13 +12,24 @@ export default class Animation extends Phaser.Scene {
 		super({ key: 'animation' });
 	}
 
+	loadFont(name, url){
+		let newFont = new FontFace(name, `url(${url})`);
+		newFont.load().then(function (loaded){
+			document.fonts.add(loaded);
+		}).catch(function (error){
+			return error;
+		});
+	}
+
 	preload(){
 		// Cargar imágenes y spritesheets
 		this.load.image('fondo', 'assets/backgroundPlataformas.png');
 		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('powerup', 'assets/PowerUp/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
+		// Cargar fuente personalizada
+  		this.loadFont('font', '/assets/webfonts/NightMareCodehack.otf');
 	}
-
+	
 	// Función para generar un objeto de control para cada jugador
 	createPlayerControls(keys, playerNumber) {
 		const controls = {};
@@ -36,6 +47,7 @@ export default class Animation extends Phaser.Scene {
 		}
 	};
 
+	// Función para manejar colisiones entre jugadores y powerUps
 	handlePlayerPowerUpCollision(player, powerUp) {
 		// Verificar si el jugador está tocando un powerup por arriba
 		if (player.body.touching.down && powerUp.body.touching.up) {
@@ -159,8 +171,16 @@ export default class Animation extends Phaser.Scene {
 			}
 		});
 
-		// Lanzar escena de título
-		this.scene.launch('title');
-	}
+		// Añadir evento para mostrar texto cuando un jugador muere		
+		this.playerGroup.getChildren().forEach(player => {
+			player.on('died', () => {
+				const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${player.otherPlayer.controls.playerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
+				winnerText.setOrigin(0.5);
+				setTimeout(() => {
+					this.scene.restart();
+				}, 5000);
+			});
+		});
 
-}1
+	}
+}
