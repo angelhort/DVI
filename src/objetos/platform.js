@@ -14,6 +14,6 @@ export default class Platform extends Phaser.GameObjects.Sprite {
   
       // Cambiamos el tamaño del body para ocupar todo el ancho de la escena
       this.body.width = width;
-      this.body.height = 5;
+      this.body.height = 7;
     }
   }

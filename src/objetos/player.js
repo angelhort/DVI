@@ -8,6 +8,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		this.body.setSize(deadBodyWidth, deadBodyHeight);
 		this.body.setOffset(deadBodyOffsetX, deadBodyOffsetY);
+		this.setPosition(this.controls.x, this.controls.y);
 	}
 	
 	/**
@@ -106,7 +107,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 					this.play('dead');
 					this.isDead = true;
 					this.emit('died');
-					this.updateColliderOnDeath();
+					this.updateColliderOnDeath(x);
 				}
 			}
 		}
@@ -146,11 +147,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		if (this.y > this.scene.game.config.height) {
-    this.health = 0;
-			 this.isDead = true;
-    this.updateColliderOnDeath();
-				this.play('dead');
-}
+    		this.health = 0;
+			this.isDead = true;
+    		this.updateColliderOnDeath();
+			this.play('dead');
+			this.emit('died');
+			this.destroy();
+		}
 
 		if(this.isDead) {
 			return;

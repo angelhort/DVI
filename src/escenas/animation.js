@@ -1,5 +1,4 @@
 import Player from '../objetos/player.js';
-import Floor from '../objetos/floor.js';
 import PowerUp from '../objetos/powerUp.js';
 import Platform from '../objetos/platform.js';
 /**
@@ -10,6 +9,8 @@ export default class Animation extends Phaser.Scene {
 	
 	constructor() {
 		super({ key: 'animation' });
+		// Variable para llevar la cuenta de powerUps en el juego
+  this.powerUpCount = 0;
 	}
 
 	loadFont(name, url){
@@ -53,12 +54,20 @@ export default class Animation extends Phaser.Scene {
 		if (player.body.touching.down && powerUp.body.touching.up) {
 			player.enableJump();
 		}
+		if(player.isAttacking){
+			powerUp.destroyMe();
+   this.powerUpCount--;
+			player.isAttacking = false;
+		}
 	}
 
 	//Función para generar los powerUps
 	spawnPowerUps(powerUps) {
-		let powerUp = new PowerUp(this, Phaser.Math.Between(100, 600), 0, powerUps);
-	};
+		if (this.powerUpCount < 4) {
+      let powerUp = new PowerUp(this, Phaser.Math.Between(100, 600), 0, powerUps);
+      this.powerUpCount++;
+    }
+	}
 
 	/**
 	* Creación de los elementos de la escena principal de juego
@@ -111,7 +120,7 @@ export default class Animation extends Phaser.Scene {
 		this.playerGroup.add(player2);
 
 		// Crear suelo y plataformas
-		let floor = new Floor(this, 97, 4);
+		let floor = new Platform(this, 97, 391, 533);
 
 		let platform1 = new Platform(this, 140, 289, 153);
 		let platform2 = new Platform(this, 561, 316, 141);
@@ -176,6 +185,7 @@ export default class Animation extends Phaser.Scene {
 			player.on('died', () => {
 				const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${player.otherPlayer.controls.playerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
 				winnerText.setOrigin(0.5);
+				this.powerUpCount = 0;
 				setTimeout(() => {
 					this.scene.restart();
 				}, 5000);

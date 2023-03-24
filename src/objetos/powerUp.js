@@ -61,6 +61,7 @@ export default class PowerUp extends Phaser.GameObjects.Sprite {
 
 		// Comprobar si el powerup ha caído por debajo de la pantalla
   if (this.y > this.scene.game.config.height) {
+			 this.scene.powerUpCount--;
     this.destroy();
 			return;
   }
