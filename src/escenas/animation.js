@@ -1,6 +1,7 @@
 import Player from '../objetos/player.js';
 import PowerUp from '../objetos/powerUp.js';
 import Platform from '../objetos/platform.js';
+import Bullet from '../objetos/bullet.js';
 /**
  * Escena principal de juego.
  * @extends Phaser.Scene
@@ -27,6 +28,7 @@ export default class Animation extends Phaser.Scene {
 		this.load.image('fondo', 'assets/backgroundPlataformas.png');
 		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('powerup', 'assets/PowerUp/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
+		this.load.image('bullet', 'PixelArt/billete.png');
 		// Cargar fuente personalizada
   		this.loadFont('font', 'assets/webfonts/NightmareCodehack.otf');
 	}
@@ -86,6 +88,13 @@ export default class Animation extends Phaser.Scene {
 			loop: true
 		});
 
+		// Bala
+		this.bullets = this.physics.add.group({
+			classType: Bullet,
+			maxSize: 10,
+			runChildUpdate: true
+		});
+
 		// Crear grupo de jugadores y habilitar actualización de hijos
 		this.playerGroup = this.physics.add.group({
 			classType: Player,
@@ -110,8 +119,8 @@ export default class Animation extends Phaser.Scene {
 		}, 2);
 		
 		// Crear jugadores y establecer su propiedad otherPlayer
-		let player1 = new Player(this, 200, 0, player1Controls);
-		let player2 = new Player(this, 500, 0, player2Controls);
+		let player1 = new Player(this, 200, 0, player1Controls, this.bullets);
+		let player2 = new Player(this, 500, 0, player2Controls, this.bullets);
 		player1.otherPlayer = player2;
 		player2.otherPlayer = player1;
 
@@ -134,6 +143,8 @@ export default class Animation extends Phaser.Scene {
 			player2.takeDamage(player1);
 		});
 
+		
+		
 		// Habilitar colisiones en los cuerpos de los jugadores
 		player1.body.onCollide = true;
 		player2.body.onCollide = true;

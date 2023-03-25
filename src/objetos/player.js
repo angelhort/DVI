@@ -17,11 +17,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 * @param {number} x - coordenada x
 	 * @param {number} y - coordenada y
 	 */
-	constructor(scene, x, y, controls) {
-		super(scene, x, y, 'player', controls);
+	constructor(scene, x, y, controls, balas) {
+		super(scene, x, y, 'player', balas);
 		this.speed = 170; // Nuestra velocidad de movimiento
 		this.controls = controls;
-
+		this.balas = balas;
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
 		this.isAttacking = false;
 		this.otherPlayer = null;
@@ -208,10 +208,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		// Si pulsamos 'CTRL' atacamos
-		if(Phaser.Input.Keyboard.JustDown(this.controls.fire)){
+		/*if(Phaser.Input.Keyboard.JustDown(this.controls.fire)){
 			this.attack(this.otherPlayer);
-		}
+		}*/
 		
+		if (Phaser.Input.Keyboard.JustDown(this.controls.fire)) {
+            this.shoot(this.balas);
+        }
 	}
 
 	/**
@@ -248,5 +251,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	isAttackInProcess(){
 		return this.isAttacking;
 	}
+
+	shoot(balas) {
+        let bullet = this.balas.get();
+        if (bullet) {
+            // Dispara la bala desde la posición del personaje
+            bullet.fire(this.x, this.y, this.rotation);
+        }
+    }
 
 }
