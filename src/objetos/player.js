@@ -103,26 +103,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.play('dead');
 		this.isDead = true;
 		this.emit('died');
-		this.updateColliderOnDeath(x);
+		//this.updateColliderOnDeath();
 			
-	}
-
-	/**
-	 * Hace que el jugador ataque a otro jugador y le reste vida
-	 * @param {Player} otherPlayer - el otro jugador al que se va a atacar
-	 */
-	attack(otherPlayer) {
-		if (!this.isAttacking) {
-			this.isAttacking = true;
-			this.play('attack');
-
-			this.scene.time.delayedCall(300, () => {
-				this.isAttacking = false;
-				this.play('idle');
-			});
-
-			otherPlayer.takeDamage(this);
-		}
 	}
 
 	/**
@@ -149,7 +131,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			this.destroy();
 		}
 
-		if(this.isDead) {
+		if(this.isDead  || this.otherPlayer.isDead) {
 			return;
 		}
 		

@@ -135,15 +135,7 @@ export default class Animation extends Phaser.Scene {
 		let platform2 = new Platform(this, 561, 316, 141);
 		let platform3 = new Platform(this, 370, 227, 160);
 		let platform4 = new Platform(this, 45, 196, 143);
-		let platform5 = new Platform(this, 589, 175, 121);
-
-		// Detectar colisiones entre jugadores
-		this.physics.add.overlap(this.playerGroup, this.playerGroup, (player1, player2) => {
-			player1.takeDamage(player2);
-			player2.takeDamage(player1);
-		});
-
-		
+		let platform5 = new Platform(this, 589, 175, 121);		
 		
 		// Habilitar colisiones en los cuerpos de los jugadores
 		player1.body.onCollide = true;
@@ -202,14 +194,14 @@ export default class Animation extends Phaser.Scene {
 		});
 
 		//añadir colisiones entre bala y jugadores
+		this.physics.add.collider(this.playerGroup, this.bullets, (player, bullet) => {
+  if (bullet.playerNumber !== player.controls.playerNumber) {
+    player.takeDamage();
+    bullet.destroy();
+  }
+});
 
-		this.physics.add.collider(this.player1, this.bullets, (p, b)=>{
-			
-		});
 
-		this.physics.add.collider(this.player2, this.bullets, (p, b)=>{
-			
-		});
 
 		// Escuchar eventos de colisión en el mundo
 		this.physics.world.on('collide', (gameObject1, gameObject2, body1, body2) => {
@@ -234,7 +226,7 @@ export default class Animation extends Phaser.Scene {
 				this.powerUpCount = 0;
 				setTimeout(() => {
 					this.scene.restart();
-				}, 5000);
+				}, 3000);
 			});
 		});
 
