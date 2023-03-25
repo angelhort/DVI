@@ -11,7 +11,7 @@ export default class Animation extends Phaser.Scene {
 	constructor() {
 		super({ key: 'animation' });
 		// Variable para llevar la cuenta de powerUps en el juego
-  this.powerUpCount = 0;
+  		this.powerUpCount = 0;
 	}
 
 	loadFont(name, url){
@@ -193,13 +193,18 @@ export default class Animation extends Phaser.Scene {
 			b.destroy();
 		});
 
+		this.physics.add.collider(this.bullets, powerUps, (f, b)=>{
+			f.play('hit')
+			b.destroy();
+		});
+
 		//añadir colisiones entre bala y jugadores
 		this.physics.add.collider(this.playerGroup, this.bullets, (player, bullet) => {
-  if (bullet.playerNumber !== player.controls.playerNumber) {
-    player.takeDamage();
-    bullet.destroy();
-  }
-});
+			if (bullet.playerNumber !== player.controls.playerNumber) {
+				player.takeDamage();
+				bullet.destroy();
+			}
+		});
 
 
 
