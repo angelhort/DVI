@@ -25,6 +25,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
 		this.isAttacking = false;
 		this.otherPlayer = null;
+		this.rotationAux = 0;
 
 		this.hitDelay = 500; // Tiempo mínimo entre cada golpe (en milisegundos)
   		this.lastHitTime = 0; // Tiempo del último golpe (en milisegundos)
@@ -260,6 +261,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
             // Dispara la bala desde la posición del personaje
 			console.log("la rotacion: " + this.rotationAux)
             bullet.fire(this.x, this.y, this.rotationAux);
+			this.play('attack');
         }
     }
 

@@ -157,6 +157,11 @@ export default class Animation extends Phaser.Scene {
 			}
 		}
 
+		this.physics.add.collider(player1, powerUps, (player, powerUp) => {
+			this.handlePlayerPowerUpCollision(player, powerUp);
+			player.touchingPowerUp = true;
+		});
+
 		// Añadir colisiones entre suelo, cajas y jugadores
 		this.physics.add.collider(floor, powerUps);
 		this.physics.add.collider(player1, powerUps, (player, powerUp) => {
