@@ -25,6 +25,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
 		this.isAttacking = false;
 		this.otherPlayer = null;
+		this.cdDisparo = false;
 		this.rotationAux = 0;
 
 		this.hitDelay = 500; // Tiempo mínimo entre cada golpe (en milisegundos)
@@ -96,22 +97,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 * Detecta si el jugador está siendo golpeado por otro jugador y resta vida en consecuencia
 	 * @param {Player} otherPlayer - el otro jugador que está golpeando a este jugador
 	 */
-	takeDamage(otherPlayer) {
-		if (this.health > 0 && otherPlayer.isAttacking && Phaser.Geom.Intersects.RectangleToRectangle(this.getBounds(), otherPlayer.getBounds())) {
-			const currentTime = this.scene.time.now;
-			if (currentTime - this.lastHitTime > this.hitDelay) { // Verificar si ha pasado suficiente tiempo
-				this.health -= otherPlayer.damage;
-				console.log(`Jugador ${this.controls.playerNumber} ha sido golpeado y tiene ${this.health} puntos de vida`);
-				this.lastHitTime = currentTime; // Establecer el tiempo del último golpe
-				if (this.health <= 0) {
-					console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
-					this.play('dead');
-					this.isDead = true;
-					this.emit('died');
-					this.updateColliderOnDeath(x);
-				}
-			}
-		}
+	takeDamage() {
+
+		console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
+		this.play('dead');
+		this.isDead = true;
+		this.emit('died');
+		this.updateColliderOnDeath(x);
+			
 	}
 
 	/**
@@ -216,7 +209,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		}*/
 		
 		if (Phaser.Input.Keyboard.JustDown(this.controls.fire)) {
-            this.shoot(this.balas);
+			if(!this.cdDisparo)
+            	this.shoot(this.balas);
         }
 	}
 
@@ -255,13 +249,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		return this.isAttacking;
 	}
 
-	shoot(balas) {
+	shoot() {
+
         let bullet = this.balas.get();
         if (bullet) {
+			this.cdDisparo = true;
             // Dispara la bala desde la posición del personaje
 			console.log("la rotacion: " + this.rotationAux)
-            bullet.fire(this.x, this.y, this.rotationAux);
 			this.play('attack');
+            bullet.fire(this.x, this.y, this.rotationAux);
+			setTimeout(() => {
+				this.cdDisparo = false;
+			}, 1000);
         }
     }
 

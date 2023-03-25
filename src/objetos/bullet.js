@@ -6,10 +6,17 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
         this.setActive(false);
         this.setVisible(false);
+
+        this.scene.anims.create({
+			key: 'bullet',
+			frames: scene.anims.generateFrameNumbers('bullet', {start:0, end:2}),
+			frameRate: 2,
+			repeat: -1
+		});
     }
 
     fire(x, y, angle) {
-        
+        this.play('bullet');
         this.setActive(true);
         this.setVisible(true);
         this.setPosition(x, y);

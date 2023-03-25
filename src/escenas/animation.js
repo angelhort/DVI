@@ -28,7 +28,7 @@ export default class Animation extends Phaser.Scene {
 		this.load.image('fondo', 'assets/backgroundPlataformas.png');
 		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('powerup', 'assets/PowerUp/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
-		this.load.image('bullet', 'PixelArt/billete.png');
+		this.load.spritesheet('bullet', 'PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
 		// Cargar fuente personalizada
   		this.loadFont('font', 'assets/webfonts/NightmareCodehack.otf');
 	}
@@ -180,6 +180,36 @@ export default class Animation extends Phaser.Scene {
 		this.physics.add.collider(powerUps, platform3);
 		this.physics.add.collider(powerUps, platform4);
 		this.physics.add.collider(powerUps, platform5);
+
+		//Añadir colisiones entre bala y plataformas
+		this.physics.add.collider(this.bullets, floor, (f, b)=>{
+			b.destroy();
+		});
+		this.physics.add.collider(this.bullets, platform1, (f, b)=>{
+			b.destroy();
+		});
+		this.physics.add.collider(this.bullets, platform2, (f, b)=>{
+			b.destroy();
+		});
+		this.physics.add.collider(this.bullets, platform3, (f, b)=>{
+			b.destroy();
+		});
+		this.physics.add.collider(this.bullets, platform4, (f, b)=>{
+			b.destroy();
+		});
+		this.physics.add.collider(this.bullets, platform5, (f, b)=>{
+			b.destroy();
+		});
+
+		//añadir colisiones entre bala y jugadores
+
+		this.physics.add.collider(this.player1, this.bullets, (p, b)=>{
+			
+		});
+
+		this.physics.add.collider(this.player2, this.bullets, (p, b)=>{
+			
+		});
 
 		// Escuchar eventos de colisión en el mundo
 		this.physics.world.on('collide', (gameObject1, gameObject2, body1, body2) => {
