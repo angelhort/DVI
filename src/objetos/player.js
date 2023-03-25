@@ -205,6 +205,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.jumpDisabled = false;
 	}
 
+	
+	/**
+	 * Terminamos el ataque
+	 */
+	stopAttack(){
+		this.stop()
+		this.play('idle'+this.sprite);
+		this.isAttacking = false;
+	}
+	
 	shoot() {
 			this.cdDisparo = true;
             // Dispara la bala desde la posición del personaje
