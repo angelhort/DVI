@@ -1,3 +1,5 @@
+import Bullet from '../objetos/bullet.js';
+
 export default class Player extends Phaser.GameObjects.Sprite {
 
 	updateColliderOnDeath() {
@@ -17,17 +19,17 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 * @param {number} x - coordenada x
 	 * @param {number} y - coordenada y
 	 */
-	constructor(scene, x, y, controls, balas, sprite) {
-		super(scene, x, y, sprite, balas);
+	constructor(scene, x, y, controls, sprite, spriteBullets) {
+		super(scene, x, y, sprite, spriteBullets);
 		this.speed = 170; // Nuestra velocidad de movimiento
 		this.controls = controls;
-		this.balas = balas;
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
 		this.isAttacking = false;
 		this.otherPlayer = null;
 		this.cdDisparo = false;
 		this.rotationAux = 0;
 		this.sprite = sprite;
+		this.spriteBullets = spriteBullets;
 
 		this.hitDelay = 500; // Tiempo mínimo entre cada golpe (en milisegundos)
   		this.lastHitTime = 0; // Tiempo del último golpe (en milisegundos)
@@ -129,8 +131,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			this.destroy();
 		}
 
-		if(this.isDead  || this.otherPlayer.isDead) {
+		if(this.isDead) {
 			return;
+		}
+
+		if(this.otherPlayer.isDead){
+			this.body.setVelocityX(0);
+			this.play('idle'+this.sprite);
+    return;
 		}
 		
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
@@ -227,17 +235,18 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 	shoot() {
 
-        let bullet = this.balas.get();
-        if (bullet) {
 			this.cdDisparo = true;
             // Dispara la bala desde la posición del personaje
 			console.log("la rotacion: " + this.rotationAux)
 			this.play('attack'+this.sprite);
-            bullet.fire(this.x, this.y, this.rotationAux);
+			let bullet = new Bullet(this.scene, this.x, this.y, this.spriteBullets, this.controls.playerNumber);
+            this.scene.add.existing(bullet);
+		    this.scene.physics.add.existing(bullet);
+			this.scene.bullets.add(bullet);		
+			bullet.fire(this.x, this.y, this.rotationAux);
 			setTimeout(() => {
 				this.cdDisparo = false;
 			}, 1000);
-        }
     }
 
 }

@@ -16,7 +16,7 @@ export default class Title extends Phaser.Scene {
 	 */
 	preload(){
 		this.load.image('start', 'assets/GUI/start.png');
-		this.load.image('fondo', 'assets/backgroundPlataformas.png');
+		this.load.image('fondo', 'assets/PixelArt/backgroundPlataformas.png');
 	}
 	
 	/**

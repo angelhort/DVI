@@ -25,11 +25,12 @@ export default class Animation extends Phaser.Scene {
 
 	preload(){
 		// Cargar imágenes y spritesheets
-		this.load.image('fondo', 'PixelArt/backgroundPlataformas.png');
-		this.load.spritesheet('amancio', 'PixelArt/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
-		this.load.spritesheet('rajoy', 'PixelArt/rajoyAnimaciones.png', {frameWidth: 48, frameHeight: 48})
-		this.load.spritesheet('powerup', 'PixelArt/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
-		this.load.spritesheet('bullet', 'PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
+		this.load.image('fondo', 'assets/PixelArt/backgroundPlataformas.png');
+		this.load.spritesheet('amancio', 'assets/PixelArt/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
+		this.load.spritesheet('rajoy', 'assets/PixelArt/rajoyAnimaciones.png', {frameWidth: 48, frameHeight: 48})
+		this.load.spritesheet('powerup', 'assets/PixelArt/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
+		this.load.spritesheet('billete', 'assets/PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
+		this.load.spritesheet('pp', 'assets/PixelArt/pp.png', {frameWidth: 15, frameHeight: 15});
 		// Cargar fuente personalizada
   		this.loadFont('font', 'assets/webfonts/NightmareCodehack.otf');
 	}
@@ -46,7 +47,7 @@ export default class Animation extends Phaser.Scene {
 
 	// Función para manejar colisiones entre jugadores y plataformas
 	handlePlayerPlatformCollision(player, platform) {
-		if (player.body.touching.down && platform.body.touching.up) {
+		if(player.body.touching.down && platform.body.touching.up){
 			player.enableJump(); // Hemos tocado el suelo o una plataforma por encima, permitimos volver a saltar
 		}
 	};
@@ -120,8 +121,8 @@ export default class Animation extends Phaser.Scene {
 		}, 2);
 		
 		// Crear jugadores y establecer su propiedad otherPlayer
-		let player1 = new Player(this, 200, 0, player1Controls, this.bullets, 'amancio');
-		let player2 = new Player(this, 500, 0, player2Controls, this.bullets, 'rajoy');
+		let player1 = new Player(this, 200, 0, player1Controls, 'amancio', 'billete');
+		let player2 = new Player(this, 500, 0, player2Controls, 'rajoy', 'pp');
 		player1.otherPlayer = player2;
 		player2.otherPlayer = player1;
 
@@ -138,68 +139,31 @@ export default class Animation extends Phaser.Scene {
 		let platform4 = new Platform(this, 45, 196, 143);
 		let platform5 = new Platform(this, 589, 175, 121);		
 		
-		// Habilitar colisiones en los cuerpos de los jugadores
-		player1.body.onCollide = true;
-		player2.body.onCollide = true;
-
-		// Añadir colisiones entre jugadores y plataformas usando un bucle
-		const platforms = [floor, platform1, platform2, platform3, platform4, platform5];
-		for (const player of this.playerGroup.getChildren()) {
-			for (const platform of platforms) {
-				this.physics.add.collider(player, platform, () => this.handlePlayerPlatformCollision(player, platform));
-			}
-		}
-
-		this.physics.add.collider(player1, powerUps, (player, powerUp) => {
-			this.handlePlayerPowerUpCollision(player, powerUp);
-			player.touchingPowerUp = true;
+		// Habilitar colisiones entre jugadores y plataformas
+		this.playerGroup.getChildren().forEach(player => {
+			this.physics.add.collider(player, [floor, platform1, platform2, platform3, platform4, platform5], (player, platform) => {
+				this.handlePlayerPlatformCollision(player, platform);
+			});
 		});
 
-		// Añadir colisiones entre suelo, cajas y jugadores
-		this.physics.add.collider(floor, powerUps);
-		this.physics.add.collider(player1, powerUps, (player, powerUp) => {
-			this.handlePlayerPowerUpCollision(player, powerUp);
-			player.touchingPowerUp = true;
-		});
-		this.physics.add.collider(player2, powerUps, (player, powerUp) => {
-			this.handlePlayerPowerUpCollision(player, powerUp);
-			player.touchingPowerUp = true;
+		// Habilitar colisiones entre jugadores y powerUps
+		this.playerGroup.getChildren().forEach(player => {
+			this.physics.add.collider(player, powerUps, (player, powerUp) => {
+				this.handlePlayerPowerUpCollision(player, powerUp);
+				player.touchingPowerUp = true;
+			});
 		});
 
 
-		// Añadir colisiones entre cajas y plataformas
-		this.physics.add.collider(powerUps, platform1);
-		this.physics.add.collider(powerUps, platform2);
-		this.physics.add.collider(powerUps, platform3);
-		this.physics.add.collider(powerUps, platform4);
-		this.physics.add.collider(powerUps, platform5);
+		// Añadir colisiones entre powerUps y plataformas
+		this.physics.add.collider(powerUps, [platform1, platform2, platform3, platform4, platform5, floor]);
 
-		//Añadir colisiones entre bala y plataformas
-		this.physics.add.collider(this.bullets, floor, (f, b)=>{
-			b.destroy();
-		});
-		this.physics.add.collider(this.bullets, platform1, (f, b)=>{
-			b.destroy();
-		});
-		this.physics.add.collider(this.bullets, platform2, (f, b)=>{
-			b.destroy();
-		});
-		this.physics.add.collider(this.bullets, platform3, (f, b)=>{
-			b.destroy();
-		});
-		this.physics.add.collider(this.bullets, platform4, (f, b)=>{
-			b.destroy();
-		});
-		this.physics.add.collider(this.bullets, platform5, (f, b)=>{
+		// Añadir colisiones entre bala y plataformas
+		this.physics.add.collider(this.bullets, [floor, platform1, platform2, platform3, platform4, platform5], (f, b)=>{
 			b.destroy();
 		});
 
-		this.physics.add.collider(this.bullets, powerUps, (f, b)=>{
-			f.play('hit')
-			b.destroy();
-		});
-
-		//Añadir colisiones entre bala y jugadores
+		// Añadir colisiones entre bala y jugadores
 		this.physics.add.collider(this.playerGroup, this.bullets, (player, bullet) => {
 			if (bullet.playerNumber !== player.controls.playerNumber) {
 				player.takeDamage();
@@ -208,7 +172,7 @@ export default class Animation extends Phaser.Scene {
 		});
 
 		// Añadir colisiones entre balas y powerUps
-		this.physics.add.collider(this.bullets, powerUps, (powerUp, bullet) => {
+		this.physics.add.collider(this.bullets, powerUps, (bullet, powerUp) => {
 			bullet.destroy();
 			powerUp.destroyMe();
 		});
