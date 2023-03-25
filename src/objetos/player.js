@@ -31,12 +31,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.sprite = sprite;
 		this.spriteBullets = spriteBullets;
 
-		this.hitDelay = 500; // Tiempo mínimo entre cada golpe (en milisegundos)
-  		this.lastHitTime = 0; // Tiempo del último golpe (en milisegundos)
-
 		this.scene.add.existing(this); //Añadimos el jugador a la escena
 
-		// Añadir propiedad para detectar si el jugador está en contacto con una caja
+		// Añadir propiedad para detectar si el jugador está en contacto con un powerup
   		this.touchingPowerUp = false;
 
 		this.airSpeedMultiplier = 0.6; // Ajusta este valor para cambiar la velocidad en el aire
@@ -90,15 +87,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.body.setOffset(this.bodyOffset, 0);
 		this.body.width = this.bodyWidth;
 
-		this.health = 100; // Definimos la vida inicial del jugador como 100
-  		this.damage = 10;
 		this.isDead = false; // Definimos si el jugador está vivo o muerto
 
 	}
 
 	/**
-	 * Detecta si el jugador está siendo golpeado por otro jugador y resta vida en consecuencia
-	 * @param {Player} otherPlayer - el otro jugador que está golpeando a este jugador
+	 * Detecta si el jugador está siendo golpeado por otro jugador
 	 */
 	takeDamage() {
 		console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
@@ -123,7 +117,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		if (this.y > this.scene.game.config.height) {
-    		this.health = 0;
 			this.isDead = true;
     		this.updateColliderOnDeath();
 			this.play('dead'+this.sprite);
@@ -138,7 +131,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		if(this.otherPlayer.isDead){
 			this.body.setVelocityX(0);
 			this.play('idle'+this.sprite);
-    return;
+    		return;
 		}
 		
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
@@ -194,7 +187,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		// Si pulsamos 'SPACE' o 'ENTER' atacamos		
 		if (Phaser.Input.Keyboard.JustDown(this.controls.fire)) {
 			if(!this.cdDisparo)
-            	this.shoot(this.balas);
+            	this.shoot();
         }
 	}
 
@@ -212,29 +205,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.jumpDisabled = false;
 	}
 
-	/**
-	 * EjecutrunDisabledamos un ataque
-	 */
-	attack(){
-		this.isAttacking = true;
-		this.play('attack'+this.sprite);
-	}
-
-	/**
-	 * Terminamos el ataque
-	 */
-	stopAttack(){
-		this.stop()
-		this.play('idle'+this.sprite);
-		this.isAttacking = false;
-	}
-
-	isAttackInProcess(){
-		return this.isAttacking;
-	}
-
 	shoot() {
-
 			this.cdDisparo = true;
             // Dispara la bala desde la posición del personaje
 			console.log("la rotacion: " + this.rotationAux)

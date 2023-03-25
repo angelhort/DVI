@@ -58,11 +58,6 @@ export default class Animation extends Phaser.Scene {
 		if (player.body.touching.down && powerUp.body.touching.up) {
 			player.enableJump();
 		}
-		if(player.isAttacking){
-			powerUp.destroyMe();
-   			this.powerUpCount--;
-			player.isAttacking = false;
-		}
 	}
 
 	//Función para generar los powerUps
@@ -175,6 +170,8 @@ export default class Animation extends Phaser.Scene {
 		this.physics.add.collider(this.bullets, powerUps, (bullet, powerUp) => {
 			bullet.destroy();
 			powerUp.destroyMe();
+			this.powerUpCount--;
+			console.log(this.powerUpCount);
 		});
 
 
@@ -198,10 +195,10 @@ export default class Animation extends Phaser.Scene {
 			player.on('died', () => {
 				const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${player.otherPlayer.controls.playerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
 				winnerText.setOrigin(0.5);
-				this.powerUpCount = 0;
 				setTimeout(() => {
 					this.scene.restart();
 				}, 3000);
+				this.powerUpCount = 0;
 			});
 		});
 
