@@ -17,8 +17,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 * @param {number} x - coordenada x
 	 * @param {number} y - coordenada y
 	 */
-	constructor(scene, x, y, controls, balas) {
-		super(scene, x, y, 'player', balas);
+	constructor(scene, x, y, controls, balas, sprite) {
+		super(scene, x, y, sprite, balas);
 		this.speed = 170; // Nuestra velocidad de movimiento
 		this.controls = controls;
 		this.balas = balas;
@@ -27,6 +27,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.otherPlayer = null;
 		this.cdDisparo = false;
 		this.rotationAux = 0;
+		this.sprite = sprite;
 
 		this.hitDelay = 500; // Tiempo mínimo entre cada golpe (en milisegundos)
   		this.lastHitTime = 0; // Tiempo del último golpe (en milisegundos)
@@ -40,39 +41,39 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		// Creamos las animaciones de nuestro jugador
 		this.scene.anims.create({
-			key: 'idle',
-			frames: scene.anims.generateFrameNumbers('player', {start:0, end:1}),
+			key: 'idle'+this.sprite,
+			frames: scene.anims.generateFrameNumbers(sprite, {start:0, end:1}),
 			frameRate: 2,
 			repeat: -1
 		});
 		this.scene.anims.create({
-			key: 'attack',
-			frames: scene.anims.generateFrameNumbers('player', {start:7, end:10}),
+			key: 'attack'+this.sprite,
+			frames: scene.anims.generateFrameNumbers(sprite, {start:7, end:10}),
 			frameRate: 12,
 			repeat: 0
 		});
 		this.scene.anims.create({
-			key: 'run',
-			frames: scene.anims.generateFrameNumbers('player', {start:2, end:5}),
+			key: 'run'+this.sprite,
+			frames: scene.anims.generateFrameNumbers(sprite, {start:2, end:5}),
 			frameRate: 12,
 			repeat: -1
 		});
 		this.scene.anims.create({
-			key: 'dead',
-			frames: scene.anims.generateFrameNumbers('player', {start:6, end:6}),
+			key: 'dead'+this.sprite,
+			frames: scene.anims.generateFrameNumbers(sprite, {start:6, end:6}),
 			frameRate: 1,
 			repeat: -1
 		});
 
 		// Si la animación de ataque se completa pasamos a ejecutar la animación 'idle'
 		this.on('animationcomplete', end => {
-			if (this.anims.currentAnim.key === 'attack'){
+			if (this.anims.currentAnim.key === 'attack'+this.sprite){
 				this.stopAttack()
 			}
 		})
 
 		// La animación a ejecutar según se genere el personaje será 'idle'
-		this.play('idle');
+		this.play('idle'+this.sprite);
 
 		// Agregamos el jugador a las físicas para que Phaser lo tenga en cuenta
 		scene.physics.add.existing(this);
@@ -98,13 +99,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 * @param {Player} otherPlayer - el otro jugador que está golpeando a este jugador
 	 */
 	takeDamage() {
-
 		console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
-		this.play('dead');
+		this.play('dead'+this.sprite);
 		this.isDead = true;
 		this.emit('died');
-		//this.updateColliderOnDeath();
-			
 	}
 
 	/**
@@ -126,7 +124,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     		this.health = 0;
 			this.isDead = true;
     		this.updateColliderOnDeath();
-			this.play('dead');
+			this.play('dead'+this.sprite);
 			this.emit('died');
 			this.destroy();
 		}
@@ -139,8 +137,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		if(this.controls.left.isDown && !this.isAttacking){
 			this.setFlip(true, false)
 			this.rotationAux = -Math.PI;
-			if(this.anims.currentAnim.key !== 'run'){
-				this.play('run');
+			if(this.anims.currentAnim.key !== 'run'+this.sprite){
+				this.play('run'+this.sprite);
 			}
 			
 			const speed = this.body.touching.down ? this.speed : this.speed * this.airSpeedMultiplier;
@@ -154,8 +152,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		if(this.controls.right.isDown && !this.isAttacking){
 			this.rotationAux = 0;
 			this.setFlip(false, false)
-			if(this.anims.currentAnim.key !== 'run'){
-				this.play('run');
+			if(this.anims.currentAnim.key !== 'run'+this.sprite){
+				this.play('run'+this.sprite);
 			}
 			const speed = this.body.touching.down ? this.speed : this.speed * this.airSpeedMultiplier;
    			this.body.setVelocityX(speed);
@@ -167,8 +165,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		// Si dejamos de pulsar 'A' o 'D' volvemos al estado de animación'idle'
 		// Phaser.Input.Keyboard.JustUp y Phaser.Input.Keyboard.JustDown nos aseguran detectar la tecla una sola vez (evitamos repeticiones)
 		if(Phaser.Input.Keyboard.JustUp(this.controls.left) || Phaser.Input.Keyboard.JustUp(this.controls.right)){
-			if(this.anims.currentAnim.key !== 'attack' && this.anims.isPlaying === true){
-				this.play('idle');
+			if(this.anims.currentAnim.key !== 'attack'+this.sprite && this.anims.isPlaying === true){
+				this.play('idle'+this.sprite);
 			}
 			this.body.setVelocityX(0);
 		}
@@ -185,11 +183,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			this.body.setVelocityY(-this.speed*1.2);
 		}
 
-		// Si pulsamos 'CTRL' atacamos
-		/*if(Phaser.Input.Keyboard.JustDown(this.controls.fire)){
-			this.attack(this.otherPlayer);
-		}*/
-		
+		// Si pulsamos 'SPACE' o 'ENTER' atacamos		
 		if (Phaser.Input.Keyboard.JustDown(this.controls.fire)) {
 			if(!this.cdDisparo)
             	this.shoot(this.balas);
@@ -215,7 +209,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 */
 	attack(){
 		this.isAttacking = true;
-		this.play('attack');
+		this.play('attack'+this.sprite);
 	}
 
 	/**
@@ -223,7 +217,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 */
 	stopAttack(){
 		this.stop()
-		this.play('idle');
+		this.play('idle'+this.sprite);
 		this.isAttacking = false;
 	}
 
@@ -238,7 +232,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			this.cdDisparo = true;
             // Dispara la bala desde la posición del personaje
 			console.log("la rotacion: " + this.rotationAux)
-			this.play('attack');
+			this.play('attack'+this.sprite);
             bullet.fire(this.x, this.y, this.rotationAux);
 			setTimeout(() => {
 				this.cdDisparo = false;

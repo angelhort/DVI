@@ -25,9 +25,10 @@ export default class Animation extends Phaser.Scene {
 
 	preload(){
 		// Cargar imágenes y spritesheets
-		this.load.image('fondo', 'assets/backgroundPlataformas.png');
-		this.load.spritesheet('player', 'assets/Player/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
-		this.load.spritesheet('powerup', 'assets/PowerUp/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
+		this.load.image('fondo', 'PixelArt/backgroundPlataformas.png');
+		this.load.spritesheet('amancio', 'PixelArt/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
+		this.load.spritesheet('rajoy', 'PixelArt/rajoyAnimaciones.png', {frameWidth: 48, frameHeight: 48})
+		this.load.spritesheet('powerup', 'PixelArt/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
 		this.load.spritesheet('bullet', 'PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
 		// Cargar fuente personalizada
   		this.loadFont('font', 'assets/webfonts/NightmareCodehack.otf');
@@ -58,7 +59,7 @@ export default class Animation extends Phaser.Scene {
 		}
 		if(player.isAttacking){
 			powerUp.destroyMe();
-   this.powerUpCount--;
+   			this.powerUpCount--;
 			player.isAttacking = false;
 		}
 	}
@@ -66,9 +67,9 @@ export default class Animation extends Phaser.Scene {
 	//Función para generar los powerUps
 	spawnPowerUps(powerUps) {
 		if (this.powerUpCount < 4) {
-      let powerUp = new PowerUp(this, Phaser.Math.Between(100, 600), 0, powerUps);
-      this.powerUpCount++;
-    }
+			let powerUp = new PowerUp(this, Phaser.Math.Between(100, 600), 0, powerUps);
+			this.powerUpCount++;
+    	}
 	}
 
 	/**
@@ -119,8 +120,8 @@ export default class Animation extends Phaser.Scene {
 		}, 2);
 		
 		// Crear jugadores y establecer su propiedad otherPlayer
-		let player1 = new Player(this, 200, 0, player1Controls, this.bullets);
-		let player2 = new Player(this, 500, 0, player2Controls, this.bullets);
+		let player1 = new Player(this, 200, 0, player1Controls, this.bullets, 'amancio');
+		let player2 = new Player(this, 500, 0, player2Controls, this.bullets, 'rajoy');
 		player1.otherPlayer = player2;
 		player2.otherPlayer = player1;
 
@@ -198,7 +199,7 @@ export default class Animation extends Phaser.Scene {
 			b.destroy();
 		});
 
-		//añadir colisiones entre bala y jugadores
+		//Añadir colisiones entre bala y jugadores
 		this.physics.add.collider(this.playerGroup, this.bullets, (player, bullet) => {
 			if (bullet.playerNumber !== player.controls.playerNumber) {
 				player.takeDamage();
@@ -206,6 +207,11 @@ export default class Animation extends Phaser.Scene {
 			}
 		});
 
+		// Añadir colisiones entre balas y powerUps
+		this.physics.add.collider(this.bullets, powerUps, (powerUp, bullet) => {
+			bullet.destroy();
+			powerUp.destroyMe();
+		});
 
 
 		// Escuchar eventos de colisión en el mundo
