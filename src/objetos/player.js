@@ -162,6 +162,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
 		if(this.controls.left.isDown && !this.isAttacking){
 			this.setFlip(true, false)
+			this.rotationAux = -Math.PI;
 			if(this.anims.currentAnim.key !== 'run'){
 				this.play('run');
 			}
@@ -175,6 +176,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		// Mientras pulsemos la tecla 'D' movelos el personaje en la X
 		if(this.controls.right.isDown && !this.isAttacking){
+			this.rotationAux = 0;
 			this.setFlip(false, false)
 			if(this.anims.currentAnim.key !== 'run'){
 				this.play('run');
@@ -256,7 +258,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
         let bullet = this.balas.get();
         if (bullet) {
             // Dispara la bala desde la posición del personaje
-            bullet.fire(this.x, this.y, this.rotation);
+			console.log("la rotacion: " + this.rotationAux)
+            bullet.fire(this.x, this.y, this.rotationAux);
         }
     }
 
