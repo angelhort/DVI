@@ -25,11 +25,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.controls = controls;
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
 		this.isAttacking = false;
-		this.otherPlayer = null;
 		this.cdDisparo = false;
 		this.rotationAux = 0;
 		this.sprite = sprite;
 		this.spriteBullets = spriteBullets;
+		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
 
 		this.scene.add.existing(this); //Añadimos el jugador a la escena
 
@@ -128,10 +128,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			return;
 		}
 
-		if(this.otherPlayer.isDead){
+		const otherPlayer = this.scene.playerGroup.getChildren().find(player => player !== this);
+
+		// Si el otro jugador esta muerto
+		if (otherPlayer === undefined || otherPlayer.isDead) {
 			this.body.setVelocityX(0);
 			this.play('idle'+this.sprite);
-    		return;
+			return;
 		}
 		
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
@@ -216,6 +219,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	}
 	
 	shoot() {
+		if(this.canShoot){
 			this.cdDisparo = true;
             // Dispara la bala desde la posición del personaje
 			console.log("la rotacion: " + this.rotationAux)
@@ -228,6 +232,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			setTimeout(() => {
 				this.cdDisparo = false;
 			}, 1000);
+		}
     }
-
 }

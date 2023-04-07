@@ -49,6 +49,7 @@ export default class Animation extends Phaser.Scene {
 	handlePlayerPlatformCollision(player, platform) {
 		if(player.body.touching.down && platform.body.touching.up){
 			player.enableJump(); // Hemos tocado el suelo o una plataforma por encima, permitimos volver a saltar
+			player.canShoot =  true; // Permitimos atacar al principio de ronda al caer
 		}
 	};
 
@@ -71,9 +72,15 @@ export default class Animation extends Phaser.Scene {
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
-	create() {
+	create(data) {
 		//Imagen de fondo
 		this.add.image(0, 0, 'fondo').setOrigin(0, 0);
+
+		// Recogemos datos de personajes
+		const player1Character = data.player1Character;
+    	const player2Character = data.player2Character;
+		const player1Bullets = data.player1Bullets;
+    	const player2Bullets = data.player2Bullets;
 
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
@@ -116,10 +123,8 @@ export default class Animation extends Phaser.Scene {
 		}, 2);
 		
 		// Crear jugadores y establecer su propiedad otherPlayer
-		let player1 = new Player(this, 200, 0, player1Controls, 'amancio', 'billete');
-		let player2 = new Player(this, 500, 0, player2Controls, 'rajoy', 'pp');
-		player1.otherPlayer = player2;
-		player2.otherPlayer = player1;
+		let player1 = new Player(this, 200, 0, player1Controls, player1Character, player1Bullets);
+		let player2 = new Player(this, 500, 0, player2Controls, player2Character, player2Bullets);
 
 		// Añadir jugadores al grupo de jugadores
 		this.playerGroup.add(player1);
@@ -193,7 +198,7 @@ export default class Animation extends Phaser.Scene {
 		// Añadir evento para mostrar texto cuando un jugador muere		
 		this.playerGroup.getChildren().forEach(player => {
 			player.on('died', () => {
-				const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${player.otherPlayer.controls.playerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
+				const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${player.controls.playerNumber === 1 ? 2 : 1} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
 				winnerText.setOrigin(0.5);
 				setTimeout(() => {
 					this.scene.restart();
@@ -201,6 +206,5 @@ export default class Animation extends Phaser.Scene {
 				this.powerUpCount = 0;
 			});
 		});
-
 	}
 }

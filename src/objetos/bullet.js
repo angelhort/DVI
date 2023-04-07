@@ -13,7 +13,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.scene.anims.create({
 			key: this.sprite,
 			frames: scene.anims.generateFrameNumbers(this.sprite, {start:0, end:2}),
-			frameRate: 2,
+			frameRate: 3,
 			repeat: -1
 		});
     }
