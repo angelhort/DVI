@@ -94,7 +94,7 @@ export default class CharacterSelection extends Phaser.Scene {
             } else if (player2Turn) {
                 player2Character = 'amancio';
                 player2Bullets = 'billete';
-                this.scene.launch('animation', {
+                this.scene.launch('sceneSelection', {
                     player1Character,
                     player2Character,
                     player1Bullets,
@@ -113,7 +113,7 @@ export default class CharacterSelection extends Phaser.Scene {
             } else if (player2Turn) {
                 player2Character = 'rajoy';
                 player2Bullets = 'pp';
-                this.scene.launch('animation', {
+                this.scene.launch('sceneSelection', {
                     player1Character,
                     player2Character,
                     player1Bullets,
@@ -129,7 +129,7 @@ export default class CharacterSelection extends Phaser.Scene {
         characterSelectionMenu.add(rajoyText);
 
         // Si cambiamos de escena borramos lo de esta escena
-        this.scene.get('animation').events.on('start', () => {
+        this.scene.get('sceneSelection').events.on('start', () => {
             characterSelectionMenu.destroy();
             this.playerText.destroy();
             this.fondo.destroy();

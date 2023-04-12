@@ -1,6 +1,8 @@
 import Animation from './escenas/animation.js';
 import Title from './escenas/title.js'
 import CharacterSelection from './escenas/characterSelection.js';
+import SceneSelection from './escenas/sceneSelection.js';
+
 /**
  * Inicio del juego en Phaser. Creamos el archivo de configuración del juego y creamos
  * la clase Game de Phaser, encargada de crear e iniciar el juego.
@@ -29,7 +31,7 @@ let config = {
         },
 		zoom: 1
     },
-    scene: [Title, Animation, CharacterSelection],
+    scene: [Title, Animation, CharacterSelection, SceneSelection],
     physics: { 
         default: 'arcade', 
         arcade: { 

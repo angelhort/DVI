@@ -25,7 +25,7 @@ export default class Animation extends Phaser.Scene {
 
 	preload(){
 		// Cargar imágenes y spritesheets
-		this.load.image('fondo', 'assets/PixelArt/backgroundPlataformas.png');
+		this.load.image('catedral', 'assets/PixelArt/backgroundPlataformas.png');
 		this.load.spritesheet('amancio', 'assets/PixelArt/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('rajoy', 'assets/PixelArt/rajoyAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('powerup', 'assets/PixelArt/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
@@ -73,14 +73,19 @@ export default class Animation extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create(data) {
-		//Imagen de fondo
-		this.add.image(0, 0, 'fondo').setOrigin(0, 0);
 
 		// Recogemos datos de personajes
 		const player1Character = data.player1Character;
     	const player2Character = data.player2Character;
 		const player1Bullets = data.player1Bullets;
     	const player2Bullets = data.player2Bullets;
+
+		// Recogemos los datos de la escena
+		const fondo = data.fondo;
+		const plataformas = data.plataformas;
+
+		//Imagen de fondo
+		this.add.image(0, 0, fondo).setOrigin(0, 0);
 
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
@@ -104,6 +109,9 @@ export default class Animation extends Phaser.Scene {
 			classType: Player,
 			runChildUpdate: true
 		});
+
+		// Crear grupo de plataformas
+		const platforms = [];
 
 		// Crear controles para los jugadores
 		const player1Controls = this.createPlayerControls.call(this, {
@@ -130,19 +138,19 @@ export default class Animation extends Phaser.Scene {
 		this.playerGroup.add(player1);
 		this.playerGroup.add(player2);
 
-		// Crear suelo y plataformas
-		let floor = new Platform(this, 97, 391, 533);
-
-		let platform1 = new Platform(this, 140, 289, 153);
-		let platform2 = new Platform(this, 561, 316, 141);
-		let platform3 = new Platform(this, 370, 227, 160);
-		let platform4 = new Platform(this, 45, 196, 143);
-		let platform5 = new Platform(this, 589, 175, 121);		
+		// Crear plataformas
+		for (const plataforma of Object.values(plataformas)) {
+			let { x, y, width } = plataforma;
+			let platform = new Platform(this, x, y, width);
+			platforms.push(platform);
+		}
 		
 		// Habilitar colisiones entre jugadores y plataformas
 		this.playerGroup.getChildren().forEach(player => {
-			this.physics.add.collider(player, [floor, platform1, platform2, platform3, platform4, platform5], (player, platform) => {
-				this.handlePlayerPlatformCollision(player, platform);
+			platforms.forEach(platform => {
+				this.physics.add.collider(player, platform, (player, platform) => {
+					this.handlePlayerPlatformCollision(player, platform);
+				});
 			});
 		});
 
@@ -156,10 +164,10 @@ export default class Animation extends Phaser.Scene {
 
 
 		// Añadir colisiones entre powerUps y plataformas
-		this.physics.add.collider(powerUps, [platform1, platform2, platform3, platform4, platform5, floor]);
+		this.physics.add.collider(powerUps, platforms);
 
 		// Añadir colisiones entre bala y plataformas
-		this.physics.add.collider(this.bullets, [floor, platform1, platform2, platform3, platform4, platform5], (f, b)=>{
+		this.physics.add.collider(this.bullets, platforms, (f, b)=>{
 			b.destroy();
 		});
 
@@ -183,9 +191,6 @@ export default class Animation extends Phaser.Scene {
 		// Escuchar eventos de colisión en el mundo
 		this.physics.world.on('collide', (gameObject1, gameObject2, body1, body2) => {
 			for (const player of this.playerGroup.getChildren()) {
-				if ((gameObject1 === player && gameObject2 === floor) || (gameObject1 === floor && gameObject2 === player)) {
-					player.enableJump();
-				}
 
 				if (gameObject1 === player && powerUps.contains(gameObject2)) {
 					if (gameObject1.isAttackInProcess()) {
