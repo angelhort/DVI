@@ -115,14 +115,17 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			const frictionForce = 0.1; // Ajusta este valor para cambiar la fuerza de rozamiento
 			this.body.setVelocityX(this.body.velocity.x * (1 - frictionForce));
 		}
-
-		if (this.y > this.scene.game.config.height) {
-			this.isDead = true;
-    		this.updateColliderOnDeath();
-			this.play('dead'+this.sprite);
-			this.emit('died');
-			this.destroy();
+		
+		if(!this.isDead){
+			if (this.y > this.scene.game.config.height) {
+				this.isDead = true;
+				this.updateColliderOnDeath();
+				this.play('dead'+this.sprite);
+				this.emit('died');
+				this.destroy();
+			}
 		}
+
 
 		if(this.isDead) {
 			return;

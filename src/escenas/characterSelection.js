@@ -28,7 +28,7 @@ export default class CharacterSelection extends Phaser.Scene {
 	 */
 	preload(){
 		this.load.image('start', 'assets/PixelArt/start.png');
-		this.load.image('fondo1', 'assets/PixelArt/backgroundStart.png');
+		this.load.image('fondo2', 'assets/PixelArt/backgroundMenu.png');
         this.load.spritesheet('amancio', 'assets/PixelArt/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('rajoy', 'assets/PixelArt/rajoyAnimaciones.png', {frameWidth: 48, frameHeight: 48})
         this.loadFont('font', 'assets/webfonts/AncientModernTales.otf');
@@ -39,7 +39,7 @@ export default class CharacterSelection extends Phaser.Scene {
 	*/
 	create() {
 
-        //this.add.image(0, 0, 'fondo1').setOrigin(0, 0);
+        this.fondo = this.add.image(0, 0, 'fondo2').setOrigin(0, 0);
 
         // Crear un menú de selección de personajes
         const characterSelectionMenu = this.add.container();
@@ -132,6 +132,7 @@ export default class CharacterSelection extends Phaser.Scene {
         this.scene.get('animation').events.on('start', () => {
             characterSelectionMenu.destroy();
             this.playerText.destroy();
+            this.fondo.destroy();
         });
     }
 }
