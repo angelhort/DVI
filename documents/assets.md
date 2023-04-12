@@ -19,4 +19,9 @@
 
 # 7. webfonts:
     Fuentes necesarias para la página web, cogidas de html5.net.
+
+# Páginas web utilizadas para la creación de todos los pixel art:
+* https://www.pixilart.com/
+* https://pixlr.com/es/x/
+* https://pinetools.com/es/efecto-pixelado-imagen
     
