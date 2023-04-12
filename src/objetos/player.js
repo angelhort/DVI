@@ -30,6 +30,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.sprite = sprite;
 		this.spriteBullets = spriteBullets;
 		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
+		this.inmortal = false;
 
 		this.scene.add.existing(this); //Añadimos el jugador a la escena
 
@@ -94,11 +95,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	/**
 	 * Detecta si el jugador está siendo golpeado por otro jugador
 	 */
+
 	takeDamage() {
+		if(!this.inmortal){
 		console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
 		this.play('dead'+this.sprite);
 		this.isDead = true;
 		this.emit('died');
+		}
 	}
 
 	/**
@@ -131,12 +135,23 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			return;
 		}
 
+		 const 	cargarSonido = function (fuente) {
+			const sonido = document.createElement("audio");
+			sonido.src = fuente;
+			sonido.setAttribute("preload", "auto");
+			sonido.setAttribute("controls", "none");
+			sonido.style.display = "none"; // <-- oculto
+			document.body.appendChild(sonido);
+			return sonido;
+		};
+
 		const otherPlayer = this.scene.playerGroup.getChildren().find(player => player !== this);
 
 		// Si el otro jugador esta muerto
 		if (otherPlayer === undefined || otherPlayer.isDead) {
 			this.body.setVelocityX(0);
 			this.play('idle'+this.sprite);
+			this.inmortal = true;
 			return;
 		}
 		
@@ -188,6 +203,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		if(Phaser.Input.Keyboard.JustDown(this.controls.up) && !this.jumpDisabled && this.body.touching.down){
 			this.disableJump();
 			this.body.setVelocityY(-this.speed*1.2);
+			const miAudio = cargarSonido("./assets/sonidos/jump.mp3");
+			miAudio.play();
 		}
 
 		// Si pulsamos 'SPACE' o 'ENTER' atacamos		
