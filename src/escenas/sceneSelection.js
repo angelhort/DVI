@@ -30,6 +30,8 @@ export default class SceneSelection extends Phaser.Scene {
 		this.load.image('start', 'assets/PixelArt/start.png');
 		this.load.image('fondo2', 'assets/PixelArt/backgroundMenu.png');
         this.load.image('catedralMini', 'assets/PixelArt/backgroundPlataformasMini.png');
+        this.load.image('murallaMini', 'assets/PixelArt/backgroundMurallaPlataformasMini.png');
+        this.load.image('muralla', 'assets/PixelArt/backgroundMurallaPlataformas.png');
         this.loadFont('font', 'assets/webfonts/AncientModernTales.otf');
 	}
 
@@ -50,11 +52,11 @@ export default class SceneSelection extends Phaser.Scene {
 
         // Crear los sprites de las escenas
         const catedral = this.add.sprite(this.cameras.main.centerX - 100, this.cameras.main.centerY, 'catedralMini', 0);
-        const muralla = this.add.sprite(this.cameras.main.centerX + 100, this.cameras.main.centerY, 'catedralMini', 0);
+        const muralla = this.add.sprite(this.cameras.main.centerX + 100, this.cameras.main.centerY, 'murallaMini', 0);
 
         // Añadir texto debajo de cada sprite
-        const catedralText = this.add.text(catedral.x+5, catedral.y + catedral.height / 2 + 10, 'Catedral de Santiago de Compostela', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
-        const murallaText = this.add.text(muralla.x+5, muralla.y + muralla.height / 2 + 10, 'Muralla de Lugo', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        const catedralText = this.add.text(catedral.x, catedral.y + catedral.height / 2 + 10, 'Catedral de Santiago de Compostela', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        const murallaText = this.add.text(muralla.x, muralla.y + muralla.height / 2 + 10, 'Muralla de Lugo', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
 
         // Texto para la selección de escena
         this.playerText = this.add.text(this.cameras.main.centerX, 50, 'Selecciona la escena de combate', { fontSize: '48px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
@@ -69,12 +71,12 @@ export default class SceneSelection extends Phaser.Scene {
         catedral.on('pointerdown', pointer => {
             fondo = 'catedral';
             plataformas = {
-                platform1: { x: 140, y: 289, width: 153 },
-                platform2: { x: 561, y: 316, width: 141 },
-                platform3: { x: 370, y: 227, width: 160 },
-                platform4: { x: 45, y: 196, width: 143 },
-                platform5: { x: 589, y: 175, width: 121 },
-                platform6: { x: 97, y: 391, width: 533}
+                platform1: { x: 140, y: 289, width: 153, height: 7 },
+                platform2: { x: 561, y: 316, width: 141, height: 7 },
+                platform3: { x: 370, y: 227, width: 160, height: 7 },
+                platform4: { x: 45, y: 196, width: 143, height: 7 },
+                platform5: { x: 589, y: 175, width: 121, height: 7 },
+                platform6: { x: 97, y: 391, width: 533, height: 7}
             };
             this.scene.launch('animation', {
                 fondo,
@@ -87,14 +89,25 @@ export default class SceneSelection extends Phaser.Scene {
         });
 
         muralla.on('pointerdown', pointer => {
-            fondo = 'catedral';
+            fondo = 'muralla';
             plataformas = {
-                platform1: { x: 140, y: 289, width: 153 },
-                platform2: { x: 561, y: 316, width: 141 },
-                platform3: { x: 370, y: 227, width: 160 },
-                platform4: { x: 45, y: 196, width: 143 },
-                platform5: { x: 589, y: 175, width: 121 },
-                platform6: { x: 97, y: 391, width: 533}
+                platform1: { x: 196, y: 248, width: 178, height: 15 },
+                platform2: { x: 417, y: 316, width: 159, height: 16 },
+                platform3: { x: 371, y: 75, width: 120, height: 15 },
+                platform4: { x: 78, y: 160, width: 181, height: 14 },
+                platform5: { x: 621, y: 129, width: 83, height: 15 },
+                platform6: { x: 72, y: 389, width: 359, height: 14}, 
+                platform7: { x: 566, y: 388, width: 139, height: 13},
+                platform8: { x: 293, y: 110, width: 47, height: 13},
+                platform9: { x: 36, y: 300, width: 95, height: 16},
+                platform10: { x: 455, y: 195, width: 177, height: 13},
+                platform11: { x: 679, y: 233, width: 26, height: 13},
+                platform12: { x: 681, y: 334, width: 23, height: 16},
+                platform13: { x: 632, y: 284, width: 21, height: 15},
+                platform14: { x: 705, y: 1, width: 10, height: 400},
+                platform15: { x: 618, y: 210, width: 13, height: 137},
+                platform16: { x: 483, y: 183, width: 15, height: 11},
+                platform17: { x: 244, y: 351, width: 15, height: 37},
             };
             this.scene.launch('animation', {
                 fondo,
