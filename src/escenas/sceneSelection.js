@@ -30,7 +30,7 @@ export default class SceneSelection extends Phaser.Scene {
 		this.load.image('start', 'assets/PixelArt/start.png');
 		this.load.image('fondo2', 'assets/PixelArt/backgroundMenu.png');
         this.load.image('catedralMini', 'assets/PixelArt/backgroundPlataformasMini.png');
-        this.load.image('murallaMini', 'assets/PixelArt/backgroundMurallaPlataformasMini.png');
+        this.load.image('murallaMini', 'assets/PixelArt/backgroundMurallaMini.png');
         this.load.image('muralla', 'assets/PixelArt/backgroundMurallaPlataformas.png');
         this.loadFont('font', 'assets/webfonts/AncientModernTales.otf');
 	}
@@ -92,20 +92,18 @@ export default class SceneSelection extends Phaser.Scene {
             fondo = 'muralla';
             plataformas = {
                 platform1: { x: 196, y: 248, width: 178, height: 15 },
-                platform2: { x: 417, y: 316, width: 159, height: 16 },
-                platform3: { x: 371, y: 75, width: 120, height: 15 },
+                platform3: { x: 360, y: 98, width: 120, height: 15 },
                 platform4: { x: 78, y: 160, width: 181, height: 14 },
-                platform5: { x: 621, y: 129, width: 83, height: 15 },
+                platform5: { x: 600, y: 86, width: 103, height: 15 },
                 platform6: { x: 72, y: 389, width: 359, height: 14}, 
-                platform7: { x: 566, y: 388, width: 139, height: 13},
-                platform8: { x: 293, y: 110, width: 47, height: 13},
+                platform7: { x: 506, y: 388, width: 197, height: 13},
                 platform9: { x: 36, y: 300, width: 95, height: 16},
-                platform10: { x: 455, y: 195, width: 177, height: 13},
-                platform11: { x: 679, y: 233, width: 26, height: 13},
-                platform12: { x: 681, y: 334, width: 23, height: 16},
-                platform13: { x: 632, y: 284, width: 21, height: 15},
+                platform10: { x: 453, y: 195, width: 105, height: 13},
+                platform11: { x: 664, y: 194, width: 39, height: 13},
+                platform12: { x: 664, y: 324, width: 40, height: 16},
+                platform13: { x: 561, y: 270, width: 44, height: 15},
                 platform14: { x: 705, y: 1, width: 10, height: 400},
-                platform15: { x: 618, y: 210, width: 13, height: 137},
+                platform15: { x: 546, y: 196, width: 14, height: 128},
                 platform16: { x: 483, y: 183, width: 15, height: 11},
                 platform17: { x: 244, y: 351, width: 15, height: 37},
             };
