@@ -89,7 +89,7 @@ export default class Animation extends Phaser.Scene {
 		// Recogemos los datos de la escena
 		const fondo = data.fondo;
 		const plataformas = data.plataformas;
-
+		this.powerUpText = this.add.text(10, 10, "", { fontSize: "32px", fill: "#ffffff" });
 		//Imagen de fondo
 		this.add.image(0, 0, fondo).setOrigin(0, 0);
 
@@ -196,7 +196,18 @@ export default class Animation extends Phaser.Scene {
 			bullet.destroy();
 			powerUp.destroyMe();
 			this.powerUpCount--;
-			console.log(this.powerUpCount);
+			const playerNumber = player.controls.playerNumber;
+			var powerUpText = this.add.text("");
+			if(playerNumber == "1"){
+				powerUpText = this.add.text(10, 10, `Jugador ${playerNumber} obtuvo ${randomPowerUpType}`, { fontSize: '20px', fill: '#ff0000', fontFamily: 'font' })
+			}
+			else{
+				powerUpText = this.add.text(500, 10, `Jugador ${playerNumber} obtuvo ${randomPowerUpType}`, { fontSize: '20px', fill: '#ff0000', fontFamily: 'font' })
+			}
+
+			setTimeout(() => {
+				powerUpText.destroy()
+			}, 7000);
 		});
 
 
