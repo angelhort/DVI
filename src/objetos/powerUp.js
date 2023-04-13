@@ -98,4 +98,5 @@ export default class PowerUp extends Phaser.GameObjects.Sprite {
 	destroyMe(){
 		this.play('hit');
 	}
+
 }

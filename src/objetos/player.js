@@ -22,11 +22,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, controls, sprite, spriteBullets) {
 		super(scene, x, y, sprite, spriteBullets);
 		this.speed = 170; // Nuestra velocidad de movimiento
+		this.speedX = 170;
 		this.controls = controls;
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
 		this.isAttacking = false;
 		this.cdDisparo = false;
 		this.rotationAux = 0;
+		this.jumpBoost = 1;
 		this.sprite = sprite;
 		this.spriteBullets = spriteBullets;
 		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
@@ -163,8 +165,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				this.play('run'+this.sprite);
 			}
 			
-			const speed = this.body.touching.down ? this.speed : this.speed * this.airSpeedMultiplier;
-   			this.body.setVelocityX(-speed);
+			const speed = this.body.touching.down ? this.speedX : this.speed * this.airSpeedMultiplier;
+        	this.body.setVelocityX(-speed);
 
 			// Ajustar el "collider" cuando el jugador se mueve hacia la izquierda
 			this.body.setOffset(this.bodyOffset - this.bodyWidth/2.5, 0);
@@ -177,8 +179,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			if(this.anims.currentAnim.key !== 'run'+this.sprite){
 				this.play('run'+this.sprite);
 			}
-			const speed = this.body.touching.down ? this.speed : this.speed * this.airSpeedMultiplier;
-   			this.body.setVelocityX(speed);
+			const speed = this.body.touching.down ? this.speedX : this.speed * this.airSpeedMultiplier;
+        this.body.setVelocityX(speed);
 			
 			// Restablecer el "collider" a su posición original
 			this.body.setOffset(this.bodyOffset, 0);
@@ -202,7 +204,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		// Mientras saltamos no podremos volver a saltar ni atacar
 		if(Phaser.Input.Keyboard.JustDown(this.controls.up) && !this.jumpDisabled && this.body.touching.down){
 			this.disableJump();
-			this.body.setVelocityY(-this.speed*1.2);
+			this.body.setVelocityY(-this.speed * 1.2 * this.jumpBoost); // Multiplicamos por jumpBoost
 			const miAudio = cargarSonido("./assets/sonidos/jump.mp3");
 			miAudio.play();
 		}
@@ -244,7 +246,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
             // Dispara la bala desde la posición del personaje
 			console.log("la rotacion: " + this.rotationAux)
 			this.play('attack'+this.sprite);
-			let bullet = new Bullet(this.scene, this.x, this.y, this.spriteBullets, this.controls.playerNumber);
+			let bullet = new Bullet(this.scene, this.x, this.y, this.spriteBullets, this);
             this.scene.add.existing(bullet);
 		    this.scene.physics.add.existing(bullet);
 			this.scene.bullets.add(bullet);		
@@ -254,4 +256,26 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			}, 1000);
 		}
     }
+
+	applyPowerUpType(typePowerUp){
+		typePowerUp = "salto";
+		if(typePowerUp == "salto"){
+			this.jumpAux = this.jumpBoost;
+			this.jumpBoost *= 1.25;
+			setTimeout(() => {
+				this.jumpBoost = this.jumpAux;
+			}, 7000);
+
+		}
+		else if(typePowerUp == "velocidad"){
+			this.speedAux = this.speedX;
+			this.speedX *= 3;
+			setTimeout(() => {
+				this.speedX = this.speedAux
+			}, 7000);
+		}
+		else{
+
+		}
+	}
 }

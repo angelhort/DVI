@@ -181,6 +181,8 @@ export default class Animation extends Phaser.Scene {
 
 		// Añadir colisiones entre balas y powerUps
 		this.physics.add.collider(this.bullets, powerUps, (bullet, powerUp) => {
+			const player = bullet.player;
+			player.applyPowerUpType();
 			bullet.destroy();
 			powerUp.destroyMe();
 			this.powerUpCount--;
