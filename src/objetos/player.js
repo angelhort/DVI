@@ -66,6 +66,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			frameRate: 1,
 			repeat: -1
 		});
+		this.scene.anims.create({
+			key: 'dance'+this.sprite,
+			frames: scene.anims.generateFrameNumbers(sprite, {start:11, end:12}),
+			frameRate: 2,
+			repeat: -1
+		});
 
 		// Si la animación de ataque se completa pasamos a ejecutar la animación 'idle'
 		this.on('animationcomplete', end => {
@@ -118,7 +124,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		// Aplicar fuerza de rozamiento si el jugador está en contacto con una caja
 		if (this.touchingPowerUp) {
-			const frictionForce = 0.1; // Ajusta este valor para cambiar la fuerza de rozamiento
+			const frictionForce = 0.02; // Ajusta este valor para cambiar la fuerza de rozamiento
 			this.body.setVelocityX(this.body.velocity.x * (1 - frictionForce));
 		}
 		
@@ -152,9 +158,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		// Si el otro jugador esta muerto
 		if (otherPlayer === undefined || otherPlayer.isDead) {
 			this.body.setVelocityX(0);
-			this.play('idle'+this.sprite);
+			this.play('dance'+this.sprite);
 			this.inmortal = true;
-			return;
 		}
 		
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
