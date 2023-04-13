@@ -64,6 +64,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			frameRate: 1,
 			repeat: -1
 		});
+		this.scene.anims.create({
+			key: 'dance'+this.sprite,
+			frames: scene.anims.generateFrameNumbers(sprite, {start:11, end:12}),
+			frameRate: 2,
+			repeat: -1
+		});
 
 		// Si la animación de ataque se completa pasamos a ejecutar la animación 'idle'
 		this.on('animationcomplete', end => {
@@ -150,9 +156,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		// Si el otro jugador esta muerto
 		if (otherPlayer === undefined || otherPlayer.isDead) {
 			this.body.setVelocityX(0);
-			this.play('idle'+this.sprite);
+			this.play('dance'+this.sprite);
 			this.inmortal = true;
-			return;
 		}
 		
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
