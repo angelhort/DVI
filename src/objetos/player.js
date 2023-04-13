@@ -122,7 +122,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		// Aplicar fuerza de rozamiento si el jugador está en contacto con una caja
 		if (this.touchingPowerUp) {
-			const frictionForce = 0.1; // Ajusta este valor para cambiar la fuerza de rozamiento
+			const frictionForce = 0.02; // Ajusta este valor para cambiar la fuerza de rozamiento
 			this.body.setVelocityX(this.body.velocity.x * (1 - frictionForce));
 		}
 		
