@@ -69,6 +69,12 @@ export default class Animation extends Phaser.Scene {
     	}
 	}
 
+	getRandomPowerUpType() {
+		const powerUpTypes = ["salto", "velocidad", "cadencia"];
+		const randomIndex = Math.floor(Math.random() * powerUpTypes.length);
+		return powerUpTypes[randomIndex];
+	}
+
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
@@ -179,10 +185,14 @@ export default class Animation extends Phaser.Scene {
 			}
 		});
 
+		
+
 		// Añadir colisiones entre balas y powerUps
 		this.physics.add.collider(this.bullets, powerUps, (bullet, powerUp) => {
 			const player = bullet.player;
-			player.applyPowerUpType();
+			const randomPowerUpType = this.getRandomPowerUpType();
+			console.log(randomPowerUpType);
+			player.applyPowerUpType(randomPowerUpType);
 			bullet.destroy();
 			powerUp.destroyMe();
 			this.powerUpCount--;

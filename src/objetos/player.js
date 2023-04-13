@@ -23,6 +23,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		super(scene, x, y, sprite, spriteBullets);
 		this.speed = 170; // Nuestra velocidad de movimiento
 		this.speedX = 170;
+		this.cadencia = 1000;
 		this.controls = controls;
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
 		this.isAttacking = false;
@@ -258,12 +259,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			bullet.fire(this.x, this.y, this.rotationAux);
 			setTimeout(() => {
 				this.cdDisparo = false;
-			}, 1000);
+			}, this.cadencia);
 		}
     }
 
 	applyPowerUpType(typePowerUp){
-		typePowerUp = "salto";
 		if(typePowerUp == "salto"){
 			this.jumpAux = this.jumpBoost;
 			this.jumpBoost *= 1.25;
@@ -274,13 +274,17 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		}
 		else if(typePowerUp == "velocidad"){
 			this.speedAux = this.speedX;
-			this.speedX *= 3;
+			this.speedX *= 2;
 			setTimeout(() => {
 				this.speedX = this.speedAux
 			}, 7000);
 		}
-		else{
-
+		else if (typePowerUp == "cadencia"){
+			this.cadenciaAux = this.cadencia;
+			this.cadencia *= 0.5;
+			setTimeout(() => {
+				this.cadencia = this.cadenciaAux;
+			}, 7000);
 		}
 	}
 }
