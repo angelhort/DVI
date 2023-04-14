@@ -146,8 +146,8 @@ export default class Animation extends Phaser.Scene {
 
 		// Crear plataformas
 		for (const plataforma of Object.values(plataformas)) {
-			let { x, y, width } = plataforma;
-			let platform = new Platform(this, x, y, width);
+			let { x, y, width, height } = plataforma;
+			let platform = new Platform(this, x, y, width, height);
 			platforms.push(platform);
 		}
 		
