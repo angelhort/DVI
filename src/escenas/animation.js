@@ -26,6 +26,12 @@ export default class Animation extends Phaser.Scene {
 	preload(){
 		// Cargar imágenes y spritesheets
 		this.load.image('catedral', 'assets/PixelArt/backgroundPlataformas.png');
+		this.load.image('velocidad', 'assets/PixelArt/velocidad.png');
+		this.load.image('salto', 'assets/PixelArt/salto.png');
+		this.load.image('cadencia', 'assets/PixelArt/cadencia.png');
+		this.load.image('velocidadColor', 'assets/PixelArt/velocidadColor.png');
+		this.load.image('saltoColor', 'assets/PixelArt/saltoColor.png');
+		this.load.image('cadenciaColor', 'assets/PixelArt/cadenciaColor.png');
 		this.load.spritesheet('amancio', 'assets/PixelArt/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('rajoy', 'assets/PixelArt/rajoyAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('powerup', 'assets/PixelArt/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
@@ -86,12 +92,29 @@ export default class Animation extends Phaser.Scene {
 		const player1Bullets = data.player1Bullets;
     	const player2Bullets = data.player2Bullets;
 
+		//Imagenes de los powerUps
+
+		//Imagenes de los powerUps
+		
+
+
+
 		// Recogemos los datos de la escena
 		const fondo = data.fondo;
 		const plataformas = data.plataformas;
+
 		this.powerUpText = this.add.text(10, 10, "", { fontSize: "32px", fill: "#ffffff" });
 		//Imagen de fondo
 		this.add.image(0, 0, fondo).setOrigin(0, 0);
+
+		// Imágenes de los power-ups
+		var imagenPUVelocidadJugador1 = this.add.image(30, 0, 'velocidad').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
+		var imagenPUCadenciaJugador1 = this.add.image(70, 0, 'cadencia').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
+		var imagenPUSaltoJugador1 = this.add.image(110, 0, 'salto').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
+
+		var imagenPUVelocidadJugador2 = this.add.image(560, 0, 'velocidad').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
+		var imagenPUCadenciaJugador2 = this.add.image(600, 0, 'cadencia').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
+		var imagenPUSaltoJugador2 = this.add.image(640, 0, 'salto').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
 
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
@@ -199,10 +222,44 @@ export default class Animation extends Phaser.Scene {
 			const playerNumber = player.controls.playerNumber;
 			var powerUpText = this.add.text("");
 			if(playerNumber == "1"){
-				powerUpText = this.add.text(10, 10, `Jugador ${playerNumber} obtuvo ${randomPowerUpType}`, { fontSize: '20px', fill: '#ff0000', fontFamily: 'font' })
+				if(randomPowerUpType == "velocidad"){
+					var imagenPUVelocidadColorJugador1 = this.add.image(30, 0, 'velocidadColor').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
+					setTimeout(() => {
+						imagenPUVelocidadColorJugador1.destroy()
+					}, 7000);
+				}
+				else if(randomPowerUpType == "cadencia"){
+					var imagenPUCadenciaColorJugador1 = this.add.image(70, 0, 'cadenciaColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
+					setTimeout(() => {
+						imagenPUCadenciaColorJugador1.destroy()
+					}, 7000);
+				}
+				else{
+					var imagenPUSaltoColorJugador1 = this.add.image(110, 0, 'saltoColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
+					setTimeout(() => {
+						imagenPUSaltoColorJugador1.destroy()
+					}, 7000);
+				}
 			}
 			else{
-				powerUpText = this.add.text(500, 10, `Jugador ${playerNumber} obtuvo ${randomPowerUpType}`, { fontSize: '20px', fill: '#ff0000', fontFamily: 'font' })
+				if(randomPowerUpType == "velocidad"){
+					var imagenPUVelocidadColorJugador2 = this.add.image(560, 0, 'velocidadColor').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
+					setTimeout(() => {
+						imagenPUVelocidadColorJugador2.destroy()
+					}, 7000);
+				}
+				else if(randomPowerUpType == "cadencia"){
+					var imagenPUCadenciaColorJugador2 = this.add.image(600, 0, 'cadenciaColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
+					setTimeout(() => {
+						imagenPUCadenciaColorJugador2.destroy()
+					}, 7000);
+				}
+				else{
+					var imagenPUSaltoColorJugador2 = this.add.image(640, 0, 'saltoColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
+					setTimeout(() => {
+						imagenPUSaltoColorJugador2.destroy()
+					}, 7000);
+				}
 			}
 
 			setTimeout(() => {

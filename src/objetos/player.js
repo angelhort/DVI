@@ -35,6 +35,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
 		this.inmortal = false;
 
+		//Auxiliares para powerups
+		const auxSpeed = 170;
+		const jumpBoost = 1;
+
 		this.scene.add.existing(this); //Añadimos el jugador a la escena
 
 		// Añadir propiedad para detectar si el jugador está en contacto con un powerup
@@ -278,7 +282,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			this.jumpAux = this.jumpBoost;
 			this.jumpBoost *= 1.25;
 			setTimeout(() => {
-				this.jumpBoost = this.jumpAux;
+				this.jumpBoost /= 1.25;
 			}, 7000);
 
 		}
@@ -286,14 +290,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			this.speedAux = this.speedX;
 			this.speedX *= 2;
 			setTimeout(() => {
-				this.speedX = this.speedAux
+				this.speedX /= 2;
 			}, 7000);
 		}
 		else if (typePowerUp == "cadencia"){
 			this.cadenciaAux = this.cadencia;
 			this.cadencia *= 0.5;
 			setTimeout(() => {
-				this.cadencia = this.cadenciaAux;
+				this.cadencia /= 0.5;
 			}, 7000);
 		}
 	}
