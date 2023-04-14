@@ -31,6 +31,8 @@ export default class SceneSelection extends Phaser.Scene {
 		this.load.image('fondo2', 'assets/PixelArt/backgroundMenu.png');
         this.load.image('catedralMini', 'assets/PixelArt/backgroundPlataformasMini.png');
         this.load.image('murallaMini', 'assets/PixelArt/backgroundMurallaMini.png');
+        this.load.image('playaMini', 'assets/PixelArt/backgroundCatedralesMini.png');
+        this.load.image('playa', 'assets/PixelArt/backgroundCatedralesPlataformas.png');
         this.load.image('muralla', 'assets/PixelArt/backgroundMurallaPlataformas.png');
         this.loadFont('font', 'assets/webfonts/AncientModernTales.otf');
 	}
@@ -51,12 +53,16 @@ export default class SceneSelection extends Phaser.Scene {
         const sceneSelectionMenu = this.add.container();
 
         // Crear los sprites de las escenas
-        const catedral = this.add.sprite(this.cameras.main.centerX - 100, this.cameras.main.centerY, 'catedralMini', 0);
-        const muralla = this.add.sprite(this.cameras.main.centerX + 100, this.cameras.main.centerY, 'murallaMini', 0);
+        const catedral = this.add.sprite(this.cameras.main.centerX - 80, this.cameras.main.centerY, 'catedralMini', 0);
+        const muralla = this.add.sprite(this.cameras.main.centerX + 80, this.cameras.main.centerY, 'murallaMini', 0);
+        const playa = this.add.sprite(this.cameras.main.centerX + 250, this.cameras.main.centerY, 'playaMini', 0);
+        const puente = this.add.sprite(this.cameras.main.centerX - 250, this.cameras.main.centerY, 'playaMini', 0);
 
         // Añadir texto debajo de cada sprite
         const catedralText = this.add.text(catedral.x, catedral.y + catedral.height / 2 + 10, 'Catedral de Santiago de Compostela', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
         const murallaText = this.add.text(muralla.x, muralla.y + muralla.height / 2 + 10, 'Muralla de Lugo', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        const playaText = this.add.text(playa.x, playa.y + playa.height / 2 + 10, 'Playa de las Catedrales', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        const puenteText = this.add.text(puente.x, puente.y + puente.height / 2 + 10, 'Puente del Milenio', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
 
         // Texto para la selección de escena
         this.playerText = this.add.text(this.cameras.main.centerX, 50, 'Selecciona la escena de combate', { fontSize: '48px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
@@ -64,6 +70,8 @@ export default class SceneSelection extends Phaser.Scene {
         // Añadir interactividad a los sprites
         catedral.setInteractive();
         muralla.setInteractive();
+        playa.setInteractive();
+        puente.setInteractive();
 
         let fondo;
         let plataformas;
@@ -117,11 +125,61 @@ export default class SceneSelection extends Phaser.Scene {
             });
         });
 
+        playa.on('pointerdown', pointer => {
+            fondo = 'playa';
+            plataformas = {
+                platform1: { x: 16, y: 16, width: 10, height: 237 },
+                platform3: { x: 26, y: 160, width: 78, height: 10 },
+                platform4: { x: 26, y: 243, width: 118, height: 10 },
+                platform5: { x: 80, y: 390, width: 636, height: 10 },
+                platform6: { x: 236, y: 160, width: 81, height: 10}, 
+                platform7: { x: 317, y: 160, width: 10, height: 170},
+                platform9: { x: 197, y: 320, width: 120, height: 10},
+                platform10: { x: 427, y: 160, width: 103, height: 10},
+                platform11: { x: 417, y: 160, width: 10, height: 170},
+                platform12: { x: 427, y: 320, width: 172, height: 10},
+                platform13: { x: 620, y: 235, width: 86, height: 10},
+                platform14: { x: 706, y: 16, width: 10, height: 229}
+            };
+            this.scene.launch('animation', {
+                fondo,
+                plataformas,
+                player1Character,
+                player2Character,
+                player1Bullets,
+                player2Bullets
+            });
+        });
+
+        puente.on('pointerdown', pointer => {
+            fondo = 'catedral';
+            plataformas = {
+                platform1: { x: 140, y: 289, width: 153, height: 7 },
+                platform2: { x: 561, y: 316, width: 141, height: 7 },
+                platform3: { x: 370, y: 227, width: 160, height: 7 },
+                platform4: { x: 45, y: 196, width: 143, height: 7 },
+                platform5: { x: 589, y: 175, width: 121, height: 7 },
+                platform6: { x: 97, y: 391, width: 533, height: 7}
+            };
+            this.scene.launch('animation', {
+                fondo,
+                plataformas,
+                player1Character,
+                player2Character,
+                player1Bullets,
+                player2Bullets
+            });
+        });
+
         // Añadir los sprites al menú
         sceneSelectionMenu.add(catedral);
         sceneSelectionMenu.add(muralla);
         sceneSelectionMenu.add(catedralText);
         sceneSelectionMenu.add(murallaText);
+        sceneSelectionMenu.add(playa);
+        sceneSelectionMenu.add(playaText);
+        sceneSelectionMenu.add(puente);
+        sceneSelectionMenu.add(puenteText);
 
         // Si cambiamos de escena borramos lo de esta escena
         this.scene.get('animation').events.on('start', () => {
