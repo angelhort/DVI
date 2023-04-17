@@ -1,5 +1,8 @@
 import Animation from './escenas/animation.js';
 import Title from './escenas/title.js'
+import CharacterSelection from './escenas/characterSelection.js';
+import SceneSelection from './escenas/sceneSelection.js';
+
 /**
  * Inicio del juego en Phaser. Creamos el archivo de configuración del juego y creamos
  * la clase Game de Phaser, encargada de crear e iniciar el juego.
@@ -10,8 +13,8 @@ let config = {
     parent: 'juego',
     // type: Phaser.CANVAS,
     // canvas: document.getElementById("juego"),
-    width:  656,
-    height: 376,
+    width:  700,
+    height: 394,
     pixelArt: true,
 	scale: {
 		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
@@ -23,12 +26,12 @@ let config = {
             height: 188
         },
 		max: {
-            width: 1312,
+            width: 1400,
             height: 752
         },
 		zoom: 1
     },
-    scene: [Title, Animation],
+    scene: [Title, Animation, CharacterSelection, SceneSelection],
     physics: { 
         default: 'arcade', 
         arcade: { 
