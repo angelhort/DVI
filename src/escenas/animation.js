@@ -119,8 +119,13 @@ export default class Animation extends Phaser.Scene {
 		var imagenPUCadenciaJugador2 = this.add.image(600, 0, 'cadencia').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
 		var imagenPUSaltoJugador2 = this.add.image(640, 0, 'salto').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
 
+		//Contador de las victorias de los jugadores
+		const victoriasJugador1 = this.add.text(30, 20, "Victorias J1: " + this.player1Wins, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0, -1);
+		const victoriasJugador2 = this.add.text(560, 20, "Victorias J2: " + this.player2Wins, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0, -1);
+
+
 		//Número de rondas
-		this.roundsText = this.add.text(20, 20, "Rondas: " + numberOfRounds, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0, -1);
+		this.roundsText = this.add.text(310, 0, "Rondas: " + numberOfRounds, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0, -1);
 
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
@@ -289,10 +294,22 @@ export default class Animation extends Phaser.Scene {
 		// Añadir evento para mostrar texto cuando un jugador muere		
 		this.playerGroup.getChildren().forEach(player => {
 			player.on('died', () => {
-				const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${player.controls.playerNumber === 1 ? 2 : 1} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
+				const winningPlayerNumber = player.controls.playerNumber === 1 ? 2 : 1;
+				if (winningPlayerNumber === 1) {
+					this.player1Wins++;
+				} else {
+					this.player2Wins++;
+				}
+		
+				const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
 				winnerText.setOrigin(0.5);
+		
 				setTimeout(() => {
-					this.scene.restart();
+					if (this.player1Wins >= numberOfRounds || this.player2Wins >= numberOfRounds) {
+						this.scene.start('characterSelection');
+					} else {
+						this.scene.restart();
+					}
 				}, 3000);
 				this.powerUpCount = 0;
 			});
