@@ -296,8 +296,10 @@ export default class Animation extends Phaser.Scene {
 			player.on('died', () => {
 				const winningPlayerNumber = player.controls.playerNumber === 1 ? 2 : 1;
 				if (winningPlayerNumber === 1) {
+					player1.dance();
 					this.player1Wins++;
 				} else {
+					player2.dance();
 					this.player2Wins++;
 				}
 		

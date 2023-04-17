@@ -74,7 +74,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.scene.anims.create({
 			key: 'dance'+this.sprite,
 			frames: scene.anims.generateFrameNumbers(sprite, {start:11, end:12}),
-			frameRate: 2,
+			frameRate: 3,
 			repeat: -1
 		});
 
@@ -168,9 +168,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		if (otherPlayer === undefined || otherPlayer.isDead) {
 			this.body.setVelocityX(0);
 			this.inmortal = true;
-			this.play('dance'+this.sprite);
+			//this.play('dance'+this.sprite);
 			return;
-			
 		}
 		
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
@@ -250,6 +249,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.jumpDisabled = false;
 	}
 
+	dance(){
+		this.play('dance'+this.sprite);
+	}
 	
 	/**
 	 * Terminamos el ataque
