@@ -34,6 +34,8 @@ export default class SceneSelection extends Phaser.Scene {
         this.load.image('playaMini', 'assets/PixelArt/backgroundCatedralesMini.png');
         this.load.image('playa', 'assets/PixelArt/backgroundCatedralesPlataformas.png');
         this.load.image('muralla', 'assets/PixelArt/backgroundMurallaPlataformas.png');
+        this.load.image('arrow_left', 'assets/images/flechaIzquierda.png');
+        this.load.image('arrow_right', 'assets/images/flechaDerecha.png');
         this.loadFont('font', 'assets/webfonts/AncientModernTales.otf');
 	}
 
@@ -67,6 +69,29 @@ export default class SceneSelection extends Phaser.Scene {
         // Texto para la selección de escena
         this.playerText = this.add.text(this.cameras.main.centerX, 50, 'Selecciona la escena de combate', { fontSize: '48px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
 
+        // Crear un selector de rondas
+        const roundsSelectionContainer = this.add.container();
+        const roundsText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 100, 'Rondas:', { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        
+        roundsSelectionContainer.add(roundsText);
+
+        var numberOfRounds = 3;
+        
+        const leftArrow = this.add.image(this.cameras.main.centerX - 50, roundsText.y + 30, 'arrow_left').setInteractive().setScale(0.01);
+        const rightArrow = this.add.image(this.cameras.main.centerX + 50, roundsText.y + 30, 'arrow_right').setInteractive().setScale(0.01);
+        const selectedRoundsText = this.add.text(this.cameras.main.centerX, roundsText.y + 30, numberOfRounds, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        // Añadir interactividad a las flechas
+        leftArrow.on('pointerdown', () => {
+            numberOfRounds = Math.max(3, numberOfRounds - 2);
+            selectedRoundsText.setText(numberOfRounds);
+        });
+    
+        rightArrow.on('pointerdown', () => {
+            numberOfRounds = Math.min(7, numberOfRounds + 2);
+            selectedRoundsText.setText(numberOfRounds);
+        });
+
+
         // Añadir interactividad a los sprites
         catedral.setInteractive();
         muralla.setInteractive();
@@ -92,7 +117,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player1Character,
                 player2Character,
                 player1Bullets,
-                player2Bullets
+                player2Bullets,
+                numberOfRounds
             });
         });
 
@@ -121,7 +147,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player1Character,
                 player2Character,
                 player1Bullets,
-                player2Bullets
+                player2Bullets,
+                numberOfRounds
             });
         });
 
@@ -147,7 +174,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player1Character,
                 player2Character,
                 player1Bullets,
-                player2Bullets
+                player2Bullets,
+                numberOfRounds
             });
         });
 
@@ -167,7 +195,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player1Character,
                 player2Character,
                 player1Bullets,
-                player2Bullets
+                player2Bullets,
+                numberOfRounds
             });
         });
 
@@ -186,6 +215,10 @@ export default class SceneSelection extends Phaser.Scene {
             sceneSelectionMenu.destroy();
             this.playerText.destroy();
             this.fondo.destroy();
+            leftArrow.destroy();
+            rightArrow.destroy();
+            selectedRoundsText.destroy();
+            roundsText.destroy();
         });
     }
 }

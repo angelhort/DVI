@@ -12,6 +12,8 @@ export default class Animation extends Phaser.Scene {
 		super({ key: 'animation' });
 		// Variable para llevar la cuenta de powerUps en el juego
   		this.powerUpCount = 0;
+		this.player1Wins = 0;
+		this.player2Wins = 0;
 	}
 
 	loadFont(name, url){
@@ -91,9 +93,10 @@ export default class Animation extends Phaser.Scene {
     	const player2Character = data.player2Character;
 		const player1Bullets = data.player1Bullets;
     	const player2Bullets = data.player2Bullets;
+		const numberOfRounds = data.numberOfRounds;
 
 		//Imagenes de los powerUps
-
+		console.log("Numero de rondas: " + numberOfRounds);
 		//Imagenes de los powerUps
 		
 
@@ -115,6 +118,9 @@ export default class Animation extends Phaser.Scene {
 		var imagenPUVelocidadJugador2 = this.add.image(560, 0, 'velocidad').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
 		var imagenPUCadenciaJugador2 = this.add.image(600, 0, 'cadencia').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
 		var imagenPUSaltoJugador2 = this.add.image(640, 0, 'salto').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
+
+		//Número de rondas
+		this.roundsText = this.add.text(20, 20, "Rondas: " + numberOfRounds, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0, -1);
 
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
