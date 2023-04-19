@@ -39,6 +39,11 @@ export default class Animation extends Phaser.Scene {
 		this.load.spritesheet('powerup', 'assets/PixelArt/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
 		this.load.spritesheet('billete', 'assets/PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
 		this.load.spritesheet('pp', 'assets/PixelArt/pp.png', {frameWidth: 15, frameHeight: 15});
+		// Sonidos
+		this.load.audio('miAudio', './assets/sonidos/muerte.mp3');
+		this.load.audio('miAudio2', './assets/sonidos/powerupsound1.mp3');
+		this.load.audio('miAudio3', './assets/sonidos/powerupsound2.mp3');
+		this.load.audio('miAudio4', './assets/sonidos/backgroundsound2.mp3');
 		// Cargar fuente personalizada
   		this.loadFont('font', 'assets/webfonts/NightmareCodehack.otf');
 	}
@@ -82,6 +87,8 @@ export default class Animation extends Phaser.Scene {
 		const randomIndex = Math.floor(Math.random() * powerUpTypes.length);
 		return powerUpTypes[randomIndex];
 	}
+
+
 
 	/**
 	* Creación de los elementos de la escena principal de juego
@@ -175,9 +182,7 @@ export default class Animation extends Phaser.Scene {
 		let player2 = new Player(this, 560, 0, player2Controls, player2Character, player2Bullets);
 
 		// Musica de fondo
-		const audio3 = player1.cargarSonido("./assets/sonidos/backgroundsound2.mp3");
-		audio3.volume = 0.3;
-		audio3.play();
+
 
 		// Añadir jugadores al grupo de jugadores
 		this.playerGroup.add(player1);
@@ -219,18 +224,24 @@ export default class Animation extends Phaser.Scene {
 		// Añadir colisiones entre bala y jugadores
 		this.physics.add.collider(this.playerGroup, this.bullets, (player, bullet) => {
 			if (bullet.playerNumber !== player.controls.playerNumber) {
+				this.miAudio = this.sound.add('miAudio');
+				this.miAudio.play();
 				player.takeDamage();
 				bullet.destroy();
 			}
 		});
+
+		this.miAudio4 = this.sound.add('miAudio4');
+		this.miAudio4.volume = 0.2;
+		this.miAudio4.play();
 
 		
 
 		// Añadir colisiones entre balas y powerUps
 		this.physics.add.collider(this.bullets, powerUps, (bullet, powerUp) => {
 			const player = bullet.player;
-			const audio = player1.cargarSonido("./assets/sonidos/powerupsound1.mp3");
-			audio.play();
+			this.miAudio2 = this.sound.add('miAudio2');
+			this.miAudio2.play();
 			const randomPowerUpType = this.getRandomPowerUpType();
 			console.log(randomPowerUpType);
 			player.applyPowerUpType(randomPowerUpType);
@@ -282,8 +293,8 @@ export default class Animation extends Phaser.Scene {
 
 			setTimeout(() => {
 				powerUpText.destroy();
-				const audio2 = player1.cargarSonido("./assets/sonidos/powerupsound2.mp3");
-				audio2.play();
+				this.miAudio3 = this.sound.add('miAudio3');
+				this.miAudio3.play();
 			}, 7000);
 		});
 
@@ -327,9 +338,11 @@ export default class Animation extends Phaser.Scene {
 				setTimeout(() => {
 					
 					if (this.player1Wins >= numberOfRounds || this.player2Wins >= numberOfRounds) {
+						this.miAudio4.pause();
 						this.scene.start('characterSelection');
 						this.player1Wins = 0;
 						this.player2Wins = 0;
+
 					} else {
 						this.scene.restart();
 					}

@@ -123,8 +123,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 	takeDamage() {
 		if(!this.inmortal){
-		const miAudio3 = this.cargarSonido("./assets/sonidos/muerte.mp3");
-		miAudio3.play();
 		console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
 		this.play('dead'+this.sprite);
 		this.isDead = true;
@@ -222,8 +220,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		if(Phaser.Input.Keyboard.JustDown(this.controls.up) && !this.jumpDisabled && this.body.touching.down){
 			this.disableJump();
 			this.body.setVelocityY(-this.speed * 1.2 * this.jumpBoost); // Multiplicamos por jumpBoost
-			this.miAudio = this.sound.add('miAudio');
-			this.miAudio.play();
+			const miAudio = this.cargarSonido("./assets/sonidos/jump.mp3");
+			miAudio.play();
 		}
 		// Si pulsamos 'SPACE' o 'ENTER' atacamos		
 		if (Phaser.Input.Keyboard.JustDown(this.controls.fire)) {
