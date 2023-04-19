@@ -120,12 +120,12 @@ export default class Animation extends Phaser.Scene {
 		var imagenPUSaltoJugador2 = this.add.image(640, 0, 'salto').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
 
 		//Contador de las victorias de los jugadores
-		const victoriasJugador1 = this.add.text(30, 20, "Victorias J1: " + this.player1Wins, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0, -1);
-		const victoriasJugador2 = this.add.text(560, 20, "Victorias J2: " + this.player2Wins, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0, -1);
+		const victoriasJugador1 = this.add.text(30, 20, "Victorias J1: " + this.player1Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font' }).setOrigin(0, -1);
+		const victoriasJugador2 = this.add.text(560, 20, "Victorias J2: " + this.player2Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font' }).setOrigin(0, -1);
 
 
 		//Número de rondas
-		this.roundsText = this.add.text(310, 0, "Rondas: " + numberOfRounds, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0, -1);
+		this.roundsText = this.add.text(310, 20, "Rondas: " + numberOfRounds, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font' }).setOrigin(0, -1);
 
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
@@ -303,16 +303,27 @@ export default class Animation extends Phaser.Scene {
 					this.player2Wins++;
 				}
 		
-				const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
-				winnerText.setOrigin(0.5);
+				var tiempoEspera;
+				if(this.player1Wins == numberOfRounds || this.player2Wins == numberOfRounds){
+					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado todas las rondas`, { fontSize: '50px', fill: '#FFD700', fontFamily: 'font' });
+					winnerText.setOrigin(0.5);
+					tiempoEspera = 7000;
+				}
+				else{
+					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
+					winnerText.setOrigin(0.5);
+					tiempoEspera = 3000;
+				}
 		
 				setTimeout(() => {
 					if (this.player1Wins >= numberOfRounds || this.player2Wins >= numberOfRounds) {
 						this.scene.start('characterSelection');
+						this.player1Wins = 0;
+						this.player2Wins = 0;
 					} else {
 						this.scene.restart();
 					}
-				}, 3000);
+				}, tiempoEspera);
 				this.powerUpCount = 0;
 			});
 		});
