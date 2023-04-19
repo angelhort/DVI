@@ -130,9 +130,9 @@ export default class Animation extends Phaser.Scene {
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
 
-		// Añadir temporizador para generar una nueva caja cada 30 segundos
+		// Añadir temporizador para generar una nueva caja cada 4 segundos
 		this.time.addEvent({
-			delay: 10000, // 10 segundos en milisegundos
+			delay: 4000, // 4 segundos en milisegundos
 			callback: () => this.spawnPowerUps(powerUps),
 			loop: true
 		});
@@ -171,8 +171,8 @@ export default class Animation extends Phaser.Scene {
 		}, 2);
 		
 		// Crear jugadores y establecer su propiedad otherPlayer
-		let player1 = new Player(this, 200, 0, player1Controls, player1Character, player1Bullets);
-		let player2 = new Player(this, 500, 0, player2Controls, player2Character, player2Bullets);
+		let player1 = new Player(this, 100, 0, player1Controls, player1Character, player1Bullets);
+		let player2 = new Player(this, 560, 0, player2Controls, player2Character, player2Bullets);
 
 		// Añadir jugadores al grupo de jugadores
 		this.playerGroup.add(player1);

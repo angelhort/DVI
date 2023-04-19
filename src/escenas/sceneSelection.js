@@ -32,8 +32,10 @@ export default class SceneSelection extends Phaser.Scene {
         this.load.image('catedralMini', 'assets/PixelArt/backgroundPlataformasMini.png');
         this.load.image('murallaMini', 'assets/PixelArt/backgroundMurallaMini.png');
         this.load.image('playaMini', 'assets/PixelArt/backgroundCatedralesMini.png');
+        this.load.image('puenteMini', 'assets/PixelArt/backgroundPuenteMini.png');
         this.load.image('playa', 'assets/PixelArt/backgroundCatedralesPlataformas.png');
         this.load.image('muralla', 'assets/PixelArt/backgroundMurallaPlataformas.png');
+        this.load.image('puente', 'assets/PixelArt/backgroundPuentePlataformas.png');
         this.load.image('arrow_left', 'assets/images/flechaIzquierda.png');
         this.load.image('arrow_right', 'assets/images/flechaDerecha.png');
         this.loadFont('font', 'assets/webfonts/AncientModernTales.otf');
@@ -58,7 +60,7 @@ export default class SceneSelection extends Phaser.Scene {
         const catedral = this.add.sprite(this.cameras.main.centerX - 80, this.cameras.main.centerY, 'catedralMini', 0);
         const muralla = this.add.sprite(this.cameras.main.centerX + 80, this.cameras.main.centerY, 'murallaMini', 0);
         const playa = this.add.sprite(this.cameras.main.centerX + 250, this.cameras.main.centerY, 'playaMini', 0);
-        const puente = this.add.sprite(this.cameras.main.centerX - 250, this.cameras.main.centerY, 'playaMini', 0);
+        const puente = this.add.sprite(this.cameras.main.centerX - 250, this.cameras.main.centerY, 'puenteMini', 0);
 
         // Añadir texto debajo de cada sprite
         const catedralText = this.add.text(catedral.x, catedral.y + catedral.height / 2 + 10, 'Catedral de Santiago de Compostela', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
@@ -180,14 +182,18 @@ export default class SceneSelection extends Phaser.Scene {
         });
 
         puente.on('pointerdown', pointer => {
-            fondo = 'catedral';
+            fondo = 'puente';
             plataformas = {
-                platform1: { x: 140, y: 289, width: 153, height: 7 },
-                platform2: { x: 561, y: 316, width: 141, height: 7 },
-                platform3: { x: 370, y: 227, width: 160, height: 7 },
-                platform4: { x: 45, y: 196, width: 143, height: 7 },
-                platform5: { x: 589, y: 175, width: 121, height: 7 },
-                platform6: { x: 97, y: 391, width: 533, height: 7}
+                platform1: { x: 16, y: 16, width: 21, height: 113 },
+                platform2: { x: 16, y: 129, width: 131, height: 21 },
+                platform3: { x: 247, y: 173, width: 238, height: 21 },
+                platform4: { x: 695, y: 16, width: 21, height: 113 },
+                platform5: { x: 585, y: 129, width: 131, height: 21 },
+                platform6: { x: 16, y: 295, width: 253, height: 21},
+                platform7: { x: 205, y: 253, width: 21, height: 42},
+                platform8: { x: 464, y: 295, width: 253, height: 21},
+                platform9: { x: 506, y: 253, width: 21, height: 42},
+                platform10: { x: 247, y: 389, width: 238, height: 21},
             };
             this.scene.launch('animation', {
                 fondo,
