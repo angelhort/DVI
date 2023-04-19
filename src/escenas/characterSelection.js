@@ -128,6 +128,8 @@ export default class CharacterSelection extends Phaser.Scene {
         characterSelectionMenu.add(amancioText);
         characterSelectionMenu.add(rajoyText);
 
+        // Sonido
+
         // Si cambiamos de escena borramos lo de esta escena
         this.scene.get('sceneSelection').events.on('start', () => {
             characterSelectionMenu.destroy();

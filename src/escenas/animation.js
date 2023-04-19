@@ -174,6 +174,11 @@ export default class Animation extends Phaser.Scene {
 		let player1 = new Player(this, 200, 0, player1Controls, player1Character, player1Bullets);
 		let player2 = new Player(this, 500, 0, player2Controls, player2Character, player2Bullets);
 
+		// Musica de fondo
+		const audio3 = player1.cargarSonido("./assets/sonidos/backgroundsound2.mp3");
+		audio3.volume = 0.3;
+		audio3.play();
+
 		// Añadir jugadores al grupo de jugadores
 		this.playerGroup.add(player1);
 		this.playerGroup.add(player2);
@@ -224,6 +229,8 @@ export default class Animation extends Phaser.Scene {
 		// Añadir colisiones entre balas y powerUps
 		this.physics.add.collider(this.bullets, powerUps, (bullet, powerUp) => {
 			const player = bullet.player;
+			const audio = player1.cargarSonido("./assets/sonidos/powerupsound1.mp3");
+			audio.play();
 			const randomPowerUpType = this.getRandomPowerUpType();
 			console.log(randomPowerUpType);
 			player.applyPowerUpType(randomPowerUpType);
@@ -274,7 +281,9 @@ export default class Animation extends Phaser.Scene {
 			}
 
 			setTimeout(() => {
-				powerUpText.destroy()
+				powerUpText.destroy();
+				const audio2 = player1.cargarSonido("./assets/sonidos/powerupsound2.mp3");
+				audio2.play();
 			}, 7000);
 		});
 
@@ -307,12 +316,16 @@ export default class Animation extends Phaser.Scene {
 				winnerText.setOrigin(0.5);
 		
 				setTimeout(() => {
+					
 					if (this.player1Wins >= numberOfRounds || this.player2Wins >= numberOfRounds) {
-						this.scene.start('characterSelection');
+						audio3.pause();
+						this.scene.start('characterSelection');	
+						
 					} else {
 						this.scene.restart();
 					}
 				}, 3000);
+				
 				this.powerUpCount = 0;
 			});
 		});

@@ -35,6 +35,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
 		this.inmortal = false;
 
+
 		//Auxiliares para powerups
 		const auxSpeed = 170;
 		const jumpBoost = 1;
@@ -117,7 +118,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		sonido.style.display = "none"; // <-- oculto
 		document.body.appendChild(sonido);
 		return sonido;
-	};
+	};	
+	
 
 	takeDamage() {
 		if(!this.inmortal){
@@ -220,8 +222,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		if(Phaser.Input.Keyboard.JustDown(this.controls.up) && !this.jumpDisabled && this.body.touching.down){
 			this.disableJump();
 			this.body.setVelocityY(-this.speed * 1.2 * this.jumpBoost); // Multiplicamos por jumpBoost
-			const miAudio = this.cargarSonido("./assets/sonidos/jump.mp3");
-			miAudio.play();
+			this.miAudio = this.sound.add('miAudio');
+			this.miAudio.play();
 		}
 		// Si pulsamos 'SPACE' o 'ENTER' atacamos		
 		if (Phaser.Input.Keyboard.JustDown(this.controls.fire)) {
