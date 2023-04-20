@@ -12,6 +12,8 @@ export default class Animation extends Phaser.Scene {
 		super({ key: 'animation' });
 		// Variable para llevar la cuenta de powerUps en el juego
   		this.powerUpCount = 0;
+		this.player1Wins = 0;
+		this.player2Wins = 0;
 	}
 
 	loadFont(name, url){
@@ -26,13 +28,28 @@ export default class Animation extends Phaser.Scene {
 	preload(){
 		// Cargar imágenes y spritesheets
 		this.load.image('catedral', 'assets/PixelArt/backgroundPlataformas.png');
+		this.load.image('velocidad', 'assets/PixelArt/velocidad.png');
+		this.load.image('salto', 'assets/PixelArt/salto.png');
+		this.load.image('cadencia', 'assets/PixelArt/cadencia.png');
+		this.load.image('velocidadColor', 'assets/PixelArt/velocidadColor.png');
+		this.load.image('saltoColor', 'assets/PixelArt/saltoColor.png');
+		this.load.image('cadenciaColor', 'assets/PixelArt/cadenciaColor.png');
 		this.load.spritesheet('amancio', 'assets/PixelArt/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('rajoy', 'assets/PixelArt/rajoyAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('powerup', 'assets/PixelArt/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
 		this.load.spritesheet('billete', 'assets/PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
+		this.load.spritesheet('hoja', 'assets/PixelArt/hoja.png', {frameWidth: 15, frameHeight: 9});
 		this.load.spritesheet('pp', 'assets/PixelArt/pp.png', {frameWidth: 15, frameHeight: 15});
+		// Sonidos
+		this.load.audio('miAudio', './assets/sonidos/muerte.mp3');
+		this.load.audio('miAudio2', './assets/sonidos/powerupsound1.mp3');
+		this.load.audio('miAudio3', './assets/sonidos/powerupsound2.mp3');
+		this.load.audio('miAudio4', './assets/sonidos/backgroundsound2.mp3');
+		this.load.audio('miAudio6', './assets/sonidos/jump.mp3');
+		this.load.audio('miAudio7', './assets/sonidos/lanzar1.mp3');
+		this.load.audio('miAudio8', './assets/sonidos/caida.mp3');
 		// Cargar fuente personalizada
-  		this.loadFont('font', 'assets/webfonts/NightmareCodehack.otf');
+  		this.loadFont('font2', 'assets/webfonts/NightmareCodehack.otf');
 	}
 	
 	// Función para generar un objeto de control para cada jugador
@@ -75,6 +92,8 @@ export default class Animation extends Phaser.Scene {
 		return powerUpTypes[randomIndex];
 	}
 
+
+
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
@@ -85,20 +104,45 @@ export default class Animation extends Phaser.Scene {
     	const player2Character = data.player2Character;
 		const player1Bullets = data.player1Bullets;
     	const player2Bullets = data.player2Bullets;
+		const numberOfRounds = data.numberOfRounds;
+
+		//Imagenes de los powerUps
+		console.log("Numero de rondas: " + numberOfRounds);
+		//Imagenes de los powerUps
+		
+
 
 		// Recogemos los datos de la escena
 		const fondo = data.fondo;
 		const plataformas = data.plataformas;
+
 		this.powerUpText = this.add.text(10, 10, "", { fontSize: "32px", fill: "#ffffff" });
 		//Imagen de fondo
 		this.add.image(0, 0, fondo).setOrigin(0, 0);
 
+		// Imágenes de los power-ups
+		var imagenPUVelocidadJugador1 = this.add.image(30, 0, 'velocidad').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
+		var imagenPUCadenciaJugador1 = this.add.image(70, 0, 'cadencia').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
+		var imagenPUSaltoJugador1 = this.add.image(110, 0, 'salto').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
+
+		var imagenPUVelocidadJugador2 = this.add.image(560, 0, 'velocidad').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
+		var imagenPUCadenciaJugador2 = this.add.image(600, 0, 'cadencia').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
+		var imagenPUSaltoJugador2 = this.add.image(640, 0, 'salto').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
+
+		//Contador de las victorias de los jugadores
+		const victoriasJugador1 = this.add.text(30, 20, "Victorias J1: " + this.player1Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font2' }).setOrigin(0, -1);
+		const victoriasJugador2 = this.add.text(560, 20, "Victorias J2: " + this.player2Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font2' }).setOrigin(0, -1);
+
+
+		//Número de rondas
+		this.roundsText = this.add.text(310, 20, "Rondas: " + numberOfRounds, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font2' }).setOrigin(0, -1);
+
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
 
-		// Añadir temporizador para generar una nueva caja cada 30 segundos
+		// Añadir temporizador para generar una nueva caja cada 4 segundos
 		this.time.addEvent({
-			delay: 10000, // 10 segundos en milisegundos
+			delay: 4000, // 4 segundos en milisegundos
 			callback: () => this.spawnPowerUps(powerUps),
 			loop: true
 		});
@@ -137,8 +181,11 @@ export default class Animation extends Phaser.Scene {
 		}, 2);
 		
 		// Crear jugadores y establecer su propiedad otherPlayer
-		let player1 = new Player(this, 200, 0, player1Controls, player1Character, player1Bullets);
-		let player2 = new Player(this, 500, 0, player2Controls, player2Character, player2Bullets);
+		let player1 = new Player(this, 100, 0, player1Controls, player1Character, player1Bullets);
+		let player2 = new Player(this, 560, 0, player2Controls, player2Character, player2Bullets);
+
+		// Musica de fondo
+
 
 		// Añadir jugadores al grupo de jugadores
 		this.playerGroup.add(player1);
@@ -150,6 +197,8 @@ export default class Animation extends Phaser.Scene {
 			let platform = new Platform(this, x, y, width, height);
 			platforms.push(platform);
 		}
+
+
 		
 		// Habilitar colisiones entre jugadores y plataformas
 		this.playerGroup.getChildren().forEach(player => {
@@ -180,16 +229,22 @@ export default class Animation extends Phaser.Scene {
 		// Añadir colisiones entre bala y jugadores
 		this.physics.add.collider(this.playerGroup, this.bullets, (player, bullet) => {
 			if (bullet.playerNumber !== player.controls.playerNumber) {
+				this.miAudio = this.sound.add('miAudio');
+				this.miAudio.play();
 				player.takeDamage();
 				bullet.destroy();
 			}
 		});
+
+
 
 		
 
 		// Añadir colisiones entre balas y powerUps
 		this.physics.add.collider(this.bullets, powerUps, (bullet, powerUp) => {
 			const player = bullet.player;
+			this.miAudio2 = this.sound.add('miAudio2');
+			this.miAudio2.play();
 			const randomPowerUpType = this.getRandomPowerUpType();
 			console.log(randomPowerUpType);
 			player.applyPowerUpType(randomPowerUpType);
@@ -199,17 +254,58 @@ export default class Animation extends Phaser.Scene {
 			const playerNumber = player.controls.playerNumber;
 			var powerUpText = this.add.text("");
 			if(playerNumber == "1"){
-				powerUpText = this.add.text(10, 10, `Jugador ${playerNumber} obtuvo ${randomPowerUpType}`, { fontSize: '20px', fill: '#ff0000', fontFamily: 'font' })
+				if(randomPowerUpType == "velocidad"){
+					var imagenPUVelocidadColorJugador1 = this.add.image(30, 0, 'velocidadColor').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
+					setTimeout(() => {
+						imagenPUVelocidadColorJugador1.destroy()
+					}, 7000);
+				}
+				else if(randomPowerUpType == "cadencia"){
+					var imagenPUCadenciaColorJugador1 = this.add.image(70, 0, 'cadenciaColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
+					setTimeout(() => {
+						imagenPUCadenciaColorJugador1.destroy()
+					}, 7000);
+				}
+				else{
+					var imagenPUSaltoColorJugador1 = this.add.image(110, 0, 'saltoColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
+					setTimeout(() => {
+						imagenPUSaltoColorJugador1.destroy()
+					}, 7000);
+				}
 			}
 			else{
-				powerUpText = this.add.text(500, 10, `Jugador ${playerNumber} obtuvo ${randomPowerUpType}`, { fontSize: '20px', fill: '#ff0000', fontFamily: 'font' })
+				if(randomPowerUpType == "velocidad"){
+					var imagenPUVelocidadColorJugador2 = this.add.image(560, 0, 'velocidadColor').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
+					setTimeout(() => {
+						imagenPUVelocidadColorJugador2.destroy()
+					}, 7000);
+				}
+				else if(randomPowerUpType == "cadencia"){
+					var imagenPUCadenciaColorJugador2 = this.add.image(600, 0, 'cadenciaColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
+					setTimeout(() => {
+						imagenPUCadenciaColorJugador2.destroy()
+					}, 7000);
+				}
+				else{
+					var imagenPUSaltoColorJugador2 = this.add.image(640, 0, 'saltoColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
+					setTimeout(() => {
+						imagenPUSaltoColorJugador2.destroy()
+					}, 7000);
+				}
 			}
 
 			setTimeout(() => {
-				powerUpText.destroy()
+				powerUpText.destroy();
+				this.miAudio3 = this.sound.add('miAudio3');
+				this.miAudio3.play();
 			}, 7000);
 		});
 
+		if (this.player1Wins == 0 && this.player2Wins == 0){
+			this.miAudio4 = this.sound.add('miAudio4');
+			this.miAudio4.volume = 0.2;
+			this.miAudio4.play();
+		}
 
 		// Escuchar eventos de colisión en el mundo
 		this.physics.world.on('collide', (gameObject1, gameObject2, body1, body2) => {
@@ -226,11 +322,39 @@ export default class Animation extends Phaser.Scene {
 		// Añadir evento para mostrar texto cuando un jugador muere		
 		this.playerGroup.getChildren().forEach(player => {
 			player.on('died', () => {
-				const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${player.controls.playerNumber === 1 ? 2 : 1} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
-				winnerText.setOrigin(0.5);
+				const winningPlayerNumber = player.controls.playerNumber === 1 ? 2 : 1;
+				if (winningPlayerNumber === 1) {
+					player1.dance();
+					this.player1Wins++;
+				} else {
+					player2.dance();
+					this.player2Wins++;
+				}
+		
+				var tiempoEspera;
+				if(this.player1Wins == numberOfRounds || this.player2Wins == numberOfRounds){
+					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado todas las rondas`, { fontSize: '50px', fill: '#FFD700', fontFamily: 'font2' });
+					winnerText.setOrigin(0.5);
+					tiempoEspera = 7000;
+				}
+				else{
+					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font2' });
+					winnerText.setOrigin(0.5);
+					tiempoEspera = 3000;
+				}
+		
 				setTimeout(() => {
-					this.scene.restart();
-				}, 3000);
+					
+					if (this.player1Wins >= numberOfRounds || this.player2Wins >= numberOfRounds) {
+						this.miAudio4.stop();
+						this.scene.start('characterSelection');
+						this.player1Wins = 0;
+						this.player2Wins = 0;
+
+					} else {
+						this.scene.restart();
+					}
+				}, tiempoEspera);
 				this.powerUpCount = 0;
 			});
 		});

@@ -32,8 +32,12 @@ export default class SceneSelection extends Phaser.Scene {
         this.load.image('catedralMini', 'assets/PixelArt/backgroundPlataformasMini.png');
         this.load.image('murallaMini', 'assets/PixelArt/backgroundMurallaMini.png');
         this.load.image('playaMini', 'assets/PixelArt/backgroundCatedralesMini.png');
+        this.load.image('puenteMini', 'assets/PixelArt/backgroundPuenteMini.png');
         this.load.image('playa', 'assets/PixelArt/backgroundCatedralesPlataformas.png');
         this.load.image('muralla', 'assets/PixelArt/backgroundMurallaPlataformas.png');
+        this.load.image('puente', 'assets/PixelArt/backgroundPuentePlataformas.png');
+        this.load.image('arrow_left', 'assets/PixelArt/flechaIzquierda.png');
+        this.load.image('arrow_right', 'assets/PixelArt/flechaDerecha.png');
         this.loadFont('font', 'assets/webfonts/AncientModernTales.otf');
 	}
 
@@ -46,6 +50,7 @@ export default class SceneSelection extends Phaser.Scene {
     	const player2Character = data.player2Character;
 		const player1Bullets = data.player1Bullets;
     	const player2Bullets = data.player2Bullets;
+        this.miAudio5 = data.miAudioAux;
 
         this.fondo = this.add.image(0, 0, 'fondo2').setOrigin(0, 0);
 
@@ -56,7 +61,7 @@ export default class SceneSelection extends Phaser.Scene {
         const catedral = this.add.sprite(this.cameras.main.centerX - 80, this.cameras.main.centerY, 'catedralMini', 0);
         const muralla = this.add.sprite(this.cameras.main.centerX + 80, this.cameras.main.centerY, 'murallaMini', 0);
         const playa = this.add.sprite(this.cameras.main.centerX + 250, this.cameras.main.centerY, 'playaMini', 0);
-        const puente = this.add.sprite(this.cameras.main.centerX - 250, this.cameras.main.centerY, 'playaMini', 0);
+        const puente = this.add.sprite(this.cameras.main.centerX - 250, this.cameras.main.centerY, 'puenteMini', 0);
 
         // Añadir texto debajo de cada sprite
         const catedralText = this.add.text(catedral.x, catedral.y + catedral.height / 2 + 10, 'Catedral de Santiago de Compostela', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
@@ -66,6 +71,33 @@ export default class SceneSelection extends Phaser.Scene {
 
         // Texto para la selección de escena
         this.playerText = this.add.text(this.cameras.main.centerX, 50, 'Selecciona la escena de combate', { fontSize: '48px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+
+        // Crear un selector de rondas
+        const roundsSelectionContainer = this.add.container();
+        const roundsText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 100, 'Rondas:', { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        
+        roundsSelectionContainer.add(roundsText);
+
+        var numberOfRounds = 3;
+        
+        const leftArrow = this.add.image(this.cameras.main.centerX - 50, roundsText.y + 30, 'arrow_left').setInteractive().setScale(0.01);
+        const rightArrow = this.add.image(this.cameras.main.centerX + 50, roundsText.y + 30, 'arrow_right').setInteractive().setScale(0.01);
+        const selectedRoundsText = this.add.text(this.cameras.main.centerX, roundsText.y + 30, numberOfRounds, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        // Añadir interactividad a las flechas
+        leftArrow.on('pointerdown', () => {
+            this.miAudio10 = this.sound.add('miAudio10');
+			this.miAudio10.play();
+            numberOfRounds = Math.max(3, numberOfRounds - 2);
+            selectedRoundsText.setText(numberOfRounds);
+        });
+    
+        rightArrow.on('pointerdown', () => {
+            this.miAudio10 = this.sound.add('miAudio10');
+			this.miAudio10.play();
+            numberOfRounds = Math.min(7, numberOfRounds + 2);
+            selectedRoundsText.setText(numberOfRounds);
+        });
+
 
         // Añadir interactividad a los sprites
         catedral.setInteractive();
@@ -77,6 +109,8 @@ export default class SceneSelection extends Phaser.Scene {
         let plataformas;
 
         catedral.on('pointerdown', pointer => {
+            this.miAudio10 = this.sound.add('miAudio10');
+			this.miAudio10.play();
             fondo = 'catedral';
             plataformas = {
                 platform1: { x: 140, y: 289, width: 153, height: 7 },
@@ -92,11 +126,14 @@ export default class SceneSelection extends Phaser.Scene {
                 player1Character,
                 player2Character,
                 player1Bullets,
-                player2Bullets
+                player2Bullets,
+                numberOfRounds
             });
         });
 
         muralla.on('pointerdown', pointer => {
+            this.miAudio10 = this.sound.add('miAudio10');
+			this.miAudio10.play();
             fondo = 'muralla';
             plataformas = {
                 platform1: { x: 196, y: 248, width: 178, height: 15 },
@@ -121,11 +158,14 @@ export default class SceneSelection extends Phaser.Scene {
                 player1Character,
                 player2Character,
                 player1Bullets,
-                player2Bullets
+                player2Bullets,
+                numberOfRounds
             });
         });
 
         playa.on('pointerdown', pointer => {
+            this.miAudio10 = this.sound.add('miAudio10');
+			this.miAudio10.play();
             fondo = 'playa';
             plataformas = {
                 platform1: { x: 16, y: 16, width: 10, height: 237 },
@@ -147,19 +187,26 @@ export default class SceneSelection extends Phaser.Scene {
                 player1Character,
                 player2Character,
                 player1Bullets,
-                player2Bullets
+                player2Bullets,
+                numberOfRounds
             });
         });
 
         puente.on('pointerdown', pointer => {
-            fondo = 'catedral';
+            this.miAudio10 = this.sound.add('miAudio10');
+			this.miAudio10.play();
+            fondo = 'puente';
             plataformas = {
-                platform1: { x: 140, y: 289, width: 153, height: 7 },
-                platform2: { x: 561, y: 316, width: 141, height: 7 },
-                platform3: { x: 370, y: 227, width: 160, height: 7 },
-                platform4: { x: 45, y: 196, width: 143, height: 7 },
-                platform5: { x: 589, y: 175, width: 121, height: 7 },
-                platform6: { x: 97, y: 391, width: 533, height: 7}
+                platform1: { x: 16, y: 16, width: 21, height: 113 },
+                platform2: { x: 16, y: 129, width: 131, height: 21 },
+                platform3: { x: 247, y: 173, width: 238, height: 21 },
+                platform4: { x: 695, y: 16, width: 21, height: 113 },
+                platform5: { x: 585, y: 129, width: 131, height: 21 },
+                platform6: { x: 16, y: 295, width: 253, height: 21},
+                platform7: { x: 205, y: 253, width: 21, height: 42},
+                platform8: { x: 464, y: 295, width: 253, height: 21},
+                platform9: { x: 506, y: 253, width: 21, height: 42},
+                platform10: { x: 247, y: 389, width: 238, height: 21},
             };
             this.scene.launch('animation', {
                 fondo,
@@ -167,7 +214,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player1Character,
                 player2Character,
                 player1Bullets,
-                player2Bullets
+                player2Bullets,
+                numberOfRounds
             });
         });
 
@@ -186,6 +234,11 @@ export default class SceneSelection extends Phaser.Scene {
             sceneSelectionMenu.destroy();
             this.playerText.destroy();
             this.fondo.destroy();
+            leftArrow.destroy();
+            rightArrow.destroy();
+            selectedRoundsText.destroy();
+            roundsText.destroy();
+            this.miAudio5.stop();
         });
     }
 }
