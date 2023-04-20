@@ -38,6 +38,7 @@ export default class Animation extends Phaser.Scene {
 		this.load.spritesheet('rajoy', 'assets/PixelArt/rajoyAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('powerup', 'assets/PixelArt/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
 		this.load.spritesheet('billete', 'assets/PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
+		this.load.spritesheet('hoja', 'assets/PixelArt/hoja.png', {frameWidth: 15, frameHeight: 9});
 		this.load.spritesheet('pp', 'assets/PixelArt/pp.png', {frameWidth: 15, frameHeight: 15});
 		// Cargar fuente personalizada
   		this.loadFont('font', 'assets/webfonts/NightmareCodehack.otf');
