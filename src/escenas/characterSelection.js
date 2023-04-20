@@ -146,6 +146,8 @@ export default class CharacterSelection extends Phaser.Scene {
         });
 
         rosalia.on('pointerdown', pointer => {
+            this.miAudio10 = this.sound.add('miAudio10');
+			this.miAudio10.play();
             if (player1Turn) {
                 player1Character = 'rosalia';
                 player1Bullets = 'hoja';
