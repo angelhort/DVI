@@ -10,7 +10,7 @@ Este juego es perfecto para pasárselo bien con amigos. Mientras otros juegos cu
 <img src="assets/images/paginaInicio.png" alt="Página Inicio" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
 
 * ### Si deslizamos para abajo nos encontraremos con la pantalla del juego la cual, tras darle a *Start*, empezará el juego.<br><br>
-<img src="assets/images/start.jpg" alt="Start" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
+<img src="assets/images/start.png" alt="Start" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
 
 * ### En pantalla aparecerán 2 personajes en el interior de una catedral con plataformas. Estos son Amancio Ortega y Mariano Rajoy dentro de la catedral de Santiago. <br>
 ### Ambos pueden disparar, Amancio dispara billetes mientras que rajoy dispara discos con el simbrolo del PP. <br><br>
@@ -27,7 +27,7 @@ Este juego es perfecto para pasárselo bien con amigos. Mientras otros juegos cu
 <img src="assets/PixelArt/powerUpAnimacion.png" alt="PixelArt Power Up"/> <br>
 
 * ### Cuando un jugador impacta una bala en otro jugador gana la partida.<br><br>
-<img src="assets/images/victoria.jpg" alt="Página Victoria"/> <br>
+<img src="assets/images/victoria.png" alt="Página Victoria"/> <br>
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
