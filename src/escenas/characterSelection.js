@@ -33,6 +33,8 @@ export default class CharacterSelection extends Phaser.Scene {
 		this.load.spritesheet('rajoy', 'assets/PixelArt/rajoyAnimaciones.png', {frameWidth: 48, frameHeight: 48})
         this.load.spritesheet('rosalia', 'assets/PixelArt/rosaliaAnimaciones.png', {frameWidth: 48, frameHeight: 48})
         this.loadFont('font', 'assets/webfonts/AncientModernTales.otf');
+        this.load.audio('miAudio5', './assets/sonidos/backgroundsound.mp3');
+        this.load.audio('miAudio10', './assets/sonidos/click.mp3');
 	}
 
     /**
@@ -94,8 +96,14 @@ export default class CharacterSelection extends Phaser.Scene {
         let player1Bullets;
         let player2Bullets;
 
+        this.miAudio5 = this.sound.add('miAudio5');
+        this.miAudio5.volume = 0.2;
+        this.miAudio5.play();
 
+        let miAudioAux = this.miAudio5;
         amancio.on('pointerdown', pointer => {
+            this.miAudio10 = this.sound.add('miAudio10');
+			this.miAudio10.play();
             if (player1Turn) {
                 player1Character = 'amancio';
                 player1Bullets = 'billete';
@@ -109,12 +117,15 @@ export default class CharacterSelection extends Phaser.Scene {
                     player1Character,
                     player2Character,
                     player1Bullets,
-                    player2Bullets
+                    player2Bullets,
+                    miAudioAux
                 });
             }
         });
 
         rajoy.on('pointerdown', pointer => {
+            this.miAudio10 = this.sound.add('miAudio10');
+			this.miAudio10.play();
             if (player1Turn) {
                 player1Character = 'rajoy';
                 player1Bullets = 'pp';
@@ -128,7 +139,8 @@ export default class CharacterSelection extends Phaser.Scene {
                     player1Character,
                     player2Character,
                     player1Bullets,
-                    player2Bullets
+                    player2Bullets,
+                    miAudioAux
                 });
             }
         });
@@ -159,6 +171,8 @@ export default class CharacterSelection extends Phaser.Scene {
         characterSelectionMenu.add(rajoyText);
         characterSelectionMenu.add(rosalia);
         characterSelectionMenu.add(rosaliaText);
+
+        // Sonido
 
         // Si cambiamos de escena borramos lo de esta escena
         this.scene.get('sceneSelection').events.on('start', () => {
