@@ -44,8 +44,11 @@ export default class Animation extends Phaser.Scene {
 		this.load.audio('miAudio2', './assets/sonidos/powerupsound1.mp3');
 		this.load.audio('miAudio3', './assets/sonidos/powerupsound2.mp3');
 		this.load.audio('miAudio4', './assets/sonidos/backgroundsound2.mp3');
+		this.load.audio('miAudio6', './assets/sonidos/jump.mp3');
+		this.load.audio('miAudio7', './assets/sonidos/lanzar1.mp3');
+		this.load.audio('miAudio8', './assets/sonidos/caida.mp3');
 		// Cargar fuente personalizada
-  		this.loadFont('font', 'assets/webfonts/NightmareCodehack.otf');
+  		this.loadFont('font2', 'assets/webfonts/NightmareCodehack.otf');
 	}
 	
 	// Función para generar un objeto de control para cada jugador
@@ -108,7 +111,6 @@ export default class Animation extends Phaser.Scene {
 		
 
 
-
 		// Recogemos los datos de la escena
 		const fondo = data.fondo;
 		const plataformas = data.plataformas;
@@ -127,12 +129,12 @@ export default class Animation extends Phaser.Scene {
 		var imagenPUSaltoJugador2 = this.add.image(640, 0, 'salto').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
 
 		//Contador de las victorias de los jugadores
-		const victoriasJugador1 = this.add.text(30, 20, "Victorias J1: " + this.player1Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font' }).setOrigin(0, -1);
-		const victoriasJugador2 = this.add.text(560, 20, "Victorias J2: " + this.player2Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font' }).setOrigin(0, -1);
+		const victoriasJugador1 = this.add.text(30, 20, "Victorias J1: " + this.player1Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font2' }).setOrigin(0, -1);
+		const victoriasJugador2 = this.add.text(560, 20, "Victorias J2: " + this.player2Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font2' }).setOrigin(0, -1);
 
 
 		//Número de rondas
-		this.roundsText = this.add.text(310, 20, "Rondas: " + numberOfRounds, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font' }).setOrigin(0, -1);
+		this.roundsText = this.add.text(310, 20, "Rondas: " + numberOfRounds, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font2' }).setOrigin(0, -1);
 
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
@@ -194,6 +196,8 @@ export default class Animation extends Phaser.Scene {
 			let platform = new Platform(this, x, y, width, height);
 			platforms.push(platform);
 		}
+
+
 		
 		// Habilitar colisiones entre jugadores y plataformas
 		this.playerGroup.getChildren().forEach(player => {
@@ -231,9 +235,7 @@ export default class Animation extends Phaser.Scene {
 			}
 		});
 
-		this.miAudio4 = this.sound.add('miAudio4');
-		this.miAudio4.volume = 0.2;
-		this.miAudio4.play();
+
 
 		
 
@@ -298,6 +300,11 @@ export default class Animation extends Phaser.Scene {
 			}, 7000);
 		});
 
+		if (this.player1Wins == 0 && this.player2Wins == 0){
+			this.miAudio4 = this.sound.add('miAudio4');
+			this.miAudio4.volume = 0.2;
+			this.miAudio4.play();
+		}
 
 		// Escuchar eventos de colisión en el mundo
 		this.physics.world.on('collide', (gameObject1, gameObject2, body1, body2) => {
@@ -325,12 +332,12 @@ export default class Animation extends Phaser.Scene {
 		
 				var tiempoEspera;
 				if(this.player1Wins == numberOfRounds || this.player2Wins == numberOfRounds){
-					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado todas las rondas`, { fontSize: '50px', fill: '#FFD700', fontFamily: 'font' });
+					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado todas las rondas`, { fontSize: '50px', fill: '#FFD700', fontFamily: 'font2' });
 					winnerText.setOrigin(0.5);
 					tiempoEspera = 7000;
 				}
 				else{
-					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
+					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font2' });
 					winnerText.setOrigin(0.5);
 					tiempoEspera = 3000;
 				}
@@ -338,7 +345,7 @@ export default class Animation extends Phaser.Scene {
 				setTimeout(() => {
 					
 					if (this.player1Wins >= numberOfRounds || this.player2Wins >= numberOfRounds) {
-						this.miAudio4.pause();
+						this.miAudio4.stop();
 						this.scene.start('characterSelection');
 						this.player1Wins = 0;
 						this.player2Wins = 0;
