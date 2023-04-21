@@ -35,6 +35,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
 		this.inmortal = false;
 
+
 		//Auxiliares para powerups
 		const auxSpeed = 170;
 		const jumpBoost = 1;
@@ -108,21 +109,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	/**
 	 * Detecta si el jugador está siendo golpeado por otro jugador
 	 */
-
-	cargarSonido = function (fuente) {
-		const sonido = document.createElement("audio");
-		sonido.src = fuente;
-		sonido.setAttribute("preload", "auto");
-		sonido.setAttribute("controls", "none");
-		sonido.style.display = "none"; // <-- oculto
-		document.body.appendChild(sonido);
-		return sonido;
-	};
+	
 
 	takeDamage() {
 		if(!this.inmortal){
-		const miAudio3 = this.cargarSonido("./assets/sonidos/muerte.mp3");
-		miAudio3.play();
 		console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
 		this.play('dead'+this.sprite);
 		this.isDead = true;
@@ -147,6 +137,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		
 		if(!this.isDead){
 			if (this.y > this.scene.game.config.height) {
+				this.miAudiom = this.scene.sound.add('miAudio8');
+				this.miAudiom.play();
 				this.isDead = true;
 				this.updateColliderOnDeath();
 				this.play('dead'+this.sprite);
@@ -220,16 +212,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		if(Phaser.Input.Keyboard.JustDown(this.controls.up) && !this.jumpDisabled && this.body.touching.down){
 			this.disableJump();
 			this.body.setVelocityY(-this.speed * 1.2 * this.jumpBoost); // Multiplicamos por jumpBoost
-			const miAudio = this.cargarSonido("./assets/sonidos/jump.mp3");
-			miAudio.play();
+			this.miAudio = this.scene.sound.add('miAudio6');
+			this.miAudio.play();
 		}
 		// Si pulsamos 'SPACE' o 'ENTER' atacamos		
 		if (Phaser.Input.Keyboard.JustDown(this.controls.fire)) {
-			const miAudio2 = this.cargarSonido("./assets/sonidos/lanzar1.mp3");
 			if(!this.cdDisparo){
             	this.shoot();
 				if(this.canShoot){
-					miAudio2.play();
+					this.miAudio = this.scene.sound.add('miAudio7');
+					this.miAudio.play();
 				}
 			}
         }

@@ -40,8 +40,16 @@ export default class Animation extends Phaser.Scene {
 		this.load.spritesheet('billete', 'assets/PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
 		this.load.spritesheet('hoja', 'assets/PixelArt/hoja.png', {frameWidth: 15, frameHeight: 9});
 		this.load.spritesheet('pp', 'assets/PixelArt/pp.png', {frameWidth: 15, frameHeight: 15});
+		// Sonidos
+		this.load.audio('miAudio', './assets/sonidos/muerte.mp3');
+		this.load.audio('miAudio2', './assets/sonidos/powerupsound1.mp3');
+		this.load.audio('miAudio3', './assets/sonidos/powerupsound2.mp3');
+		this.load.audio('miAudio4', './assets/sonidos/backgroundsound2.mp3');
+		this.load.audio('miAudio6', './assets/sonidos/jump.mp3');
+		this.load.audio('miAudio7', './assets/sonidos/lanzar1.mp3');
+		this.load.audio('miAudio8', './assets/sonidos/caida.mp3');
 		// Cargar fuente personalizada
-  		this.loadFont('font', 'assets/webfonts/NightmareCodehack.otf');
+  		this.loadFont('font2', 'assets/webfonts/NightmareCodehack.otf');
 	}
 	
 	// Función para generar un objeto de control para cada jugador
@@ -84,6 +92,8 @@ export default class Animation extends Phaser.Scene {
 		return powerUpTypes[randomIndex];
 	}
 
+
+
 	/**
 	* Creación de los elementos de la escena principal de juego
 	*/
@@ -100,7 +110,6 @@ export default class Animation extends Phaser.Scene {
 		console.log("Numero de rondas: " + numberOfRounds);
 		//Imagenes de los powerUps
 		
-
 
 
 		// Recogemos los datos de la escena
@@ -121,12 +130,12 @@ export default class Animation extends Phaser.Scene {
 		var imagenPUSaltoJugador2 = this.add.image(640, 0, 'salto').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
 
 		//Contador de las victorias de los jugadores
-		const victoriasJugador1 = this.add.text(30, 20, "Victorias J1: " + this.player1Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font' }).setOrigin(0, -1);
-		const victoriasJugador2 = this.add.text(560, 20, "Victorias J2: " + this.player2Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font' }).setOrigin(0, -1);
+		const victoriasJugador1 = this.add.text(30, 20, "Victorias J1: " + this.player1Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font2' }).setOrigin(0, -1);
+		const victoriasJugador2 = this.add.text(560, 20, "Victorias J2: " + this.player2Wins, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font2' }).setOrigin(0, -1);
 
 
 		//Número de rondas
-		this.roundsText = this.add.text(310, 20, "Rondas: " + numberOfRounds, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font' }).setOrigin(0, -1);
+		this.roundsText = this.add.text(310, 20, "Rondas: " + numberOfRounds, { fontSize: '24px', color: '#5B5B5B', fontFamily: 'font2' }).setOrigin(0, -1);
 
 		// Crear grupo de cajas
 		let powerUps = this.physics.add.group();
@@ -175,6 +184,9 @@ export default class Animation extends Phaser.Scene {
 		let player1 = new Player(this, 100, 0, player1Controls, player1Character, player1Bullets);
 		let player2 = new Player(this, 560, 0, player2Controls, player2Character, player2Bullets);
 
+		// Musica de fondo
+
+
 		// Añadir jugadores al grupo de jugadores
 		this.playerGroup.add(player1);
 		this.playerGroup.add(player2);
@@ -185,6 +197,8 @@ export default class Animation extends Phaser.Scene {
 			let platform = new Platform(this, x, y, width, height);
 			platforms.push(platform);
 		}
+
+
 		
 		// Habilitar colisiones entre jugadores y plataformas
 		this.playerGroup.getChildren().forEach(player => {
@@ -215,16 +229,22 @@ export default class Animation extends Phaser.Scene {
 		// Añadir colisiones entre bala y jugadores
 		this.physics.add.collider(this.playerGroup, this.bullets, (player, bullet) => {
 			if (bullet.playerNumber !== player.controls.playerNumber) {
+				this.miAudio = this.sound.add('miAudio');
+				this.miAudio.play();
 				player.takeDamage();
 				bullet.destroy();
 			}
 		});
+
+
 
 		
 
 		// Añadir colisiones entre balas y powerUps
 		this.physics.add.collider(this.bullets, powerUps, (bullet, powerUp) => {
 			const player = bullet.player;
+			this.miAudio2 = this.sound.add('miAudio2');
+			this.miAudio2.play();
 			const randomPowerUpType = this.getRandomPowerUpType();
 			console.log(randomPowerUpType);
 			player.applyPowerUpType(randomPowerUpType);
@@ -275,10 +295,17 @@ export default class Animation extends Phaser.Scene {
 			}
 
 			setTimeout(() => {
-				powerUpText.destroy()
+				powerUpText.destroy();
+				this.miAudio3 = this.sound.add('miAudio3');
+				this.miAudio3.play();
 			}, 7000);
 		});
 
+		if (this.player1Wins == 0 && this.player2Wins == 0){
+			this.miAudio4 = this.sound.add('miAudio4');
+			this.miAudio4.volume = 0.2;
+			this.miAudio4.play();
+		}
 
 		// Escuchar eventos de colisión en el mundo
 		this.physics.world.on('collide', (gameObject1, gameObject2, body1, body2) => {
@@ -306,21 +333,24 @@ export default class Animation extends Phaser.Scene {
 		
 				var tiempoEspera;
 				if(this.player1Wins == numberOfRounds || this.player2Wins == numberOfRounds){
-					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado todas las rondas`, { fontSize: '50px', fill: '#FFD700', fontFamily: 'font' });
+					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado todas las rondas`, { fontSize: '50px', fill: '#FFD700', fontFamily: 'font2' });
 					winnerText.setOrigin(0.5);
 					tiempoEspera = 7000;
 				}
 				else{
-					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font' });
+					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado`, { fontSize: '68px', fill: '#ff0000', fontFamily: 'font2' });
 					winnerText.setOrigin(0.5);
 					tiempoEspera = 3000;
 				}
 		
 				setTimeout(() => {
+					
 					if (this.player1Wins >= numberOfRounds || this.player2Wins >= numberOfRounds) {
+						this.miAudio4.stop();
 						this.scene.start('characterSelection');
 						this.player1Wins = 0;
 						this.player2Wins = 0;
+
 					} else {
 						this.scene.restart();
 					}

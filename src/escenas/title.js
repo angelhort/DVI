@@ -18,6 +18,7 @@ export default class Title extends Phaser.Scene {
 		this.load.image('start', 'assets/PixelArt/start.png');
 		this.load.image('inicio', 'assets/PixelArt/backgroundStart.png');
 		this.load.image('logo', 'assets/images/logo1-2.png');
+		this.load.audio('miAudio9', './assets/sonidos/gamestart.mp3');
 	}
 	
 	/**
@@ -39,6 +40,8 @@ export default class Title extends Phaser.Scene {
 
 	    sprite.on('pointerup', pointer => {
 			this.scene.start('characterSelection'); //Cambiamos a la escena de menu de personajes
+			this.miAudio9 = this.sound.add('miAudio9');
+			this.miAudio9.play();
 	    });
 	}
 }
