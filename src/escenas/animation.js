@@ -2,6 +2,7 @@ import Player from '../objetos/player.js';
 import PowerUp from '../objetos/powerUp.js';
 import Platform from '../objetos/platform.js';
 import Bullet from '../objetos/bullet.js';
+import Grenade from '../objetos/grenade.js';
 /**
  * Escena principal de juego.
  * @extends Phaser.Scene
@@ -154,6 +155,13 @@ export default class Animation extends Phaser.Scene {
 			runChildUpdate: true
 		});
 
+		// Grenade
+		this.grenades = this.physics.add.group({
+			classType: Grenade,
+			maxSize: 10,
+			runChildUpdate: true
+		});
+
 		// Crear grupo de jugadores y habilitar actualización de hijos
 		this.playerGroup = this.physics.add.group({
 			classType: Player,
@@ -226,6 +234,12 @@ export default class Animation extends Phaser.Scene {
 			b.destroy();
 		});
 
+		//Añadir colisiones entre granadas y plataformas
+		this.physics.add.collider(this.grenades, platforms);
+		//Añadir colisiones entre granadas y jugadores
+		this.physics.add.collider(this.playerGroup, this.grenades);
+		
+
 		// Añadir colisiones entre bala y jugadores
 		this.physics.add.collider(this.playerGroup, this.bullets, (player, bullet) => {
 			if (bullet.playerNumber !== player.controls.playerNumber) {
@@ -249,6 +263,68 @@ export default class Animation extends Phaser.Scene {
 			console.log(randomPowerUpType);
 			player.applyPowerUpType(randomPowerUpType);
 			bullet.destroy();
+			powerUp.destroyMe();
+			this.powerUpCount--;
+			const playerNumber = player.controls.playerNumber;
+			var powerUpText = this.add.text("");
+			if(playerNumber == "1"){
+				if(randomPowerUpType == "velocidad"){
+					var imagenPUVelocidadColorJugador1 = this.add.image(30, 0, 'velocidadColor').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
+					setTimeout(() => {
+						imagenPUVelocidadColorJugador1.destroy()
+					}, 7000);
+				}
+				else if(randomPowerUpType == "cadencia"){
+					var imagenPUCadenciaColorJugador1 = this.add.image(70, 0, 'cadenciaColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
+					setTimeout(() => {
+						imagenPUCadenciaColorJugador1.destroy()
+					}, 7000);
+				}
+				else{
+					var imagenPUSaltoColorJugador1 = this.add.image(110, 0, 'saltoColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
+					setTimeout(() => {
+						imagenPUSaltoColorJugador1.destroy()
+					}, 7000);
+				}
+			}
+			else{
+				if(randomPowerUpType == "velocidad"){
+					var imagenPUVelocidadColorJugador2 = this.add.image(560, 0, 'velocidadColor').setOrigin(0, 0).setScale(0.2); // Esquina superior izquierda
+					setTimeout(() => {
+						imagenPUVelocidadColorJugador2.destroy()
+					}, 7000);
+				}
+				else if(randomPowerUpType == "cadencia"){
+					var imagenPUCadenciaColorJugador2 = this.add.image(600, 0, 'cadenciaColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUVelocidad
+					setTimeout(() => {
+						imagenPUCadenciaColorJugador2.destroy()
+					}, 7000);
+				}
+				else{
+					var imagenPUSaltoColorJugador2 = this.add.image(640, 0, 'saltoColor').setOrigin(0, 0).setScale(0.2); // A la derecha de imagenPUCadencia
+					setTimeout(() => {
+						imagenPUSaltoColorJugador2.destroy()
+					}, 7000);
+				}
+			}
+
+			setTimeout(() => {
+				powerUpText.destroy();
+				this.miAudio3 = this.sound.add('miAudio3');
+				this.miAudio3.play();
+			}, 7000);
+		});
+
+		// Añadir colisiones entre granadas y powerUps
+		this.physics.add.collider(this.grenades, powerUps, (grenade, powerUp) => {
+			const player = grenade.player;
+			this.miAudio2 = this.sound.add('miAudio2');
+			this.miAudio2.play();
+			const randomPowerUpType = this.getRandomPowerUpType();
+			console.log(randomPowerUpType);
+			player.applyPowerUpType(randomPowerUpType);
+			grenade.destruido();
+			grenade.destroy();
 			powerUp.destroyMe();
 			this.powerUpCount--;
 			const playerNumber = player.controls.playerNumber;

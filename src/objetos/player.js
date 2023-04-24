@@ -1,4 +1,5 @@
 import Bullet from '../objetos/bullet.js';
+import Grenade from '../objetos/grenade.js';
 
 export default class Player extends Phaser.GameObjects.Sprite {
 
@@ -34,6 +35,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.spriteBullets = spriteBullets;
 		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
 		this.inmortal = false;
+		this.grenade = true;
 
 
 		//Auxiliares para powerups
@@ -256,18 +258,32 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	
 	shoot() {
 		if(this.canShoot){
-			this.cdDisparo = true;
-            // Dispara la bala desde la posición del personaje
-			console.log("la rotacion: " + this.rotationAux)
-			this.play('attack'+this.sprite);
-			let bullet = new Bullet(this.scene, this.x, this.y, this.spriteBullets, this);
-            this.scene.add.existing(bullet);
-		    this.scene.physics.add.existing(bullet);
-			this.scene.bullets.add(bullet);		
-			bullet.fire(this.x, this.y, this.rotationAux);
-			setTimeout(() => {
-				this.cdDisparo = false;
-			}, this.cadencia);
+			if (!this.grenade){
+				console.log("BULLET")
+				this.cdDisparo = true;
+				this.play('attack'+this.sprite);
+				let bullet = new Bullet(this.scene, this.x, this.y, this.spriteBullets, this);
+				this.scene.add.existing(bullet);
+				this.scene.physics.add.existing(bullet);
+				this.scene.bullets.add(bullet);		
+				bullet.fire(this.x, this.y, this.rotationAux);
+				setTimeout(() => {
+					this.cdDisparo = false;
+				}, this.cadencia);
+			}
+			else{
+				console.log("GRENADE")
+				this.cdDisparo = true;
+				this.play('attack'+this.sprite);
+				let grenade = new Grenade(this.scene, this.x, this.y, this.spriteBullets, this);
+				this.scene.add.existing(grenade);
+				this.scene.physics.add.existing(grenade);
+				this.scene.grenades.add(grenade);		
+				grenade.fire(this.x, this.y, this.rotationAux);
+				setTimeout(() => {
+					this.cdDisparo = false;
+				}, this.cadencia);
+			}
 		}
     }
 
