@@ -41,6 +41,7 @@ export default class Animation extends Phaser.Scene {
 		this.load.spritesheet('billete', 'assets/PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
 		this.load.spritesheet('hoja', 'assets/PixelArt/hoja.png', {frameWidth: 15, frameHeight: 9});
 		this.load.spritesheet('pp', 'assets/PixelArt/pp.png', {frameWidth: 15, frameHeight: 15});
+		this.load.spritesheet('explosion', 'assets/PixelArt/explosion.png', { frameWidth: 128, frameHeight: 128 });
 		// Sonidos
 		this.load.audio('miAudio', './assets/sonidos/muerte.mp3');
 		this.load.audio('miAudio2', './assets/sonidos/powerupsound1.mp3');
@@ -194,6 +195,13 @@ export default class Animation extends Phaser.Scene {
 
 		// Musica de fondo
 
+		//Animacion de explosion
+		this.anims.create({
+			key: 'explode',
+			frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 11 }),
+			frameRate: 24,
+			repeat: 0
+		});
 
 		// Añadir jugadores al grupo de jugadores
 		this.playerGroup.add(player1);
@@ -323,7 +331,7 @@ export default class Animation extends Phaser.Scene {
 			const randomPowerUpType = this.getRandomPowerUpType();
 			console.log(randomPowerUpType);
 			player.applyPowerUpType(randomPowerUpType);
-			grenade.destruido();
+			grenade.setDestruido();
 			grenade.destroy();
 			powerUp.destroyMe();
 			this.powerUpCount--;

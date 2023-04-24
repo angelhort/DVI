@@ -15,12 +15,6 @@ export default class Grenade extends Phaser.Physics.Arcade.Sprite {
         this.explosionRadius = 100; // Puedes ajustar el radio de la explosión aquí
         this.explosionDelay = 2000; // Tiempo que tarda en explotar la granada (en milisegundos)
 
-        this.scene.anims.create({
-            key: this.sprite,
-            frames: scene.anims.generateFrameNumbers(this.sprite, {start:0, end:2}),
-            frameRate: 3,
-            repeat: -1
-        });
     }
 
     setDestruido(){
@@ -34,7 +28,7 @@ export default class Grenade extends Phaser.Physics.Arcade.Sprite {
         this.setPosition(x, y);
         this.setRotation(angle);
 
-        this.scene.physics.velocityFromRotation(angle, 600, this.body.velocity);
+        this.scene.physics.velocityFromRotation(angle, 400, this.body.velocity);
 
         this.scene.time.delayedCall(this.explosionDelay, () => {
             this.explode();
@@ -45,28 +39,39 @@ export default class Grenade extends Phaser.Physics.Arcade.Sprite {
         if (!this.exploded && !this.destruido) {
             this.exploded = true;
     
+            // Agrega el sprite de la explosión
+            this.explosionSprite = this.scene.add.sprite(this.x, this.y-40, 'explosion');
+            this.explosionSprite.setDisplaySize(this.explosionRadius, this.explosionRadius); // Ajusta el tamaño del sprite al radio de la explosión
+            this.explosionSprite.setDepth(10); // Ajusta la profundidad para que aparezca sobre otros objetos
+            this.explosionSprite.play('explode'); // Reproduce la animación de la explosión
+    
             const enemies = this.scene.playerGroup.getChildren();
-            const explosionDamage = 100; // Puedes ajustar el daño de la explosión aquí
+            const explosionDamage = 100;
     
             for (let i = 0; i < enemies.length; i++) {
                 const enemy = enemies[i];
     
-                // Calcula la distancia entre la granada y el enemigo
                 const dx = enemy.x - this.x;
                 const dy = enemy.y - this.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
     
-                // Si el enemigo está dentro del radio de la explosión, inflige daño
                 if (distance <= this.explosionRadius) {
                     enemy.takeDamage(explosionDamage);
                 }
             }
+    
+            // Oculta y destruye el sprite de la explosión después de que la animación termine
+            this.explosionSprite.on('animationcomplete', () => {
+                this.explosionSprite.setVisible(false);
+                this.explosionSprite.destroy();
+            });
     
             this.setActive(false);
             this.setVisible(false);
             this.destroy();
         }
     }
+    
 
     update() {
         if (this.body.blocked.down) {
