@@ -14,7 +14,9 @@ export default class Grenade extends Phaser.Physics.Arcade.Sprite {
         this.exploded = false;
         this.explosionRadius = 100; // Puedes ajustar el radio de la explosión aquí
         this.explosionDelay = 2000; // Tiempo que tarda en explotar la granada (en milisegundos)
+        this.gravity = 3000;
 
+        this.body.setGravityY(this.gravity);
     }
 
     setDestruido(){
@@ -26,14 +28,27 @@ export default class Grenade extends Phaser.Physics.Arcade.Sprite {
         this.setActive(true);
         this.setVisible(true);
         this.setPosition(x, y);
-        this.setRotation(angle);
-
-        this.scene.physics.velocityFromRotation(angle, 400, this.body.velocity);
-
+    
+        // Convierte el ángulo en radianes
+        const angleInRadians = Phaser.Math.DegToRad(angle);
+        
+        // Agrega una pequeña cantidad al ángulo en radianes para disparar un poco hacia arriba
+        const adjustedAngle = angleInRadians - Math.PI / 6; // Puedes ajustar este valor según la inclinación que desees
+    
+        // Establece la rotación del sprite de la granada
+        this.setRotation(adjustedAngle);
+        
+        // Aumenta la velocidad inicial si lo deseas
+        const initialVelocity = 400; // Puedes ajustar este valor según la velocidad que desees
+    
+        // Asigna la velocidad inicial ajustada al cuerpo de la granada
+        this.scene.physics.velocityFromRotation(adjustedAngle, initialVelocity, this.body.velocity);
+    
         this.scene.time.delayedCall(this.explosionDelay, () => {
             this.explode();
         }, null, this);
     }
+    
 
     explode() {
         if (!this.exploded && !this.destruido) {
@@ -79,7 +94,7 @@ export default class Grenade extends Phaser.Physics.Arcade.Sprite {
             this.body.velocity.x *= 0.95; // Simula fricción al deslizarse en el suelo
         }
 
-        if (this.y < 0 || this.y > this.scene.scale.height || this.x < 0 || this.x > this.scene.scale.width) {
+        if (this.y > this.scene.scale.height || this.x < 0 || this.x > this.scene.scale.width) {
             this.setActive(false);
             this.setVisible(false);
             this.setDestruido();
