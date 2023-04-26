@@ -106,6 +106,12 @@ export default class Animation extends Phaser.Scene {
     	const player2Character = data.player2Character;
 		const player1Bullets = data.player1Bullets;
     	const player2Bullets = data.player2Bullets;
+		const player1AjusteAlcance = data.player1AjusteAlcance;
+		const player2AjusteAlcance = data.player2AjusteAlcance;
+		const player1AjusteCadencia = data.player1AjusteCadencia;
+		const player2AjusteCadencia = data.player2AjusteCadencia;
+		const player1AjusteVelocidad = data.player1AjusteVelocidad;
+		const player2AjusteVelocidad = data.player2AjusteVelocidad;
 		const numberOfRounds = data.numberOfRounds;
 
 		//Imagenes de los powerUps
@@ -190,8 +196,8 @@ export default class Animation extends Phaser.Scene {
 		}, 2);
 		
 		// Crear jugadores y establecer su propiedad otherPlayer
-		let player1 = new Player(this, 100, 0, player1Controls, player1Character, player1Bullets);
-		let player2 = new Player(this, 560, 0, player2Controls, player2Character, player2Bullets);
+		let player1 = new Player(this, 100, 0, player1Controls, player1Character, player1Bullets, player1AjusteVelocidad, player1AjusteCadencia, player1AjusteAlcance);
+		let player2 = new Player(this, 560, 0, player2Controls, player2Character, player2Bullets, player2AjusteVelocidad, player2AjusteCadencia, player2AjusteAlcance);
 
 		// Musica de fondo
 

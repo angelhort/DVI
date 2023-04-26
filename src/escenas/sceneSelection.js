@@ -50,6 +50,12 @@ export default class SceneSelection extends Phaser.Scene {
     	const player2Character = data.player2Character;
 		const player1Bullets = data.player1Bullets;
     	const player2Bullets = data.player2Bullets;
+        let player1AjusteAlcance = data.player1AjusteAlcance;
+        let player2AjusteAlcance = data.player2AjusteAlcance;
+        let player1AjusteVelocidad = data.player1AjusteVelocidad;
+        let player2AjusteVelocidad = data.player2AjusteVelocidad;
+        let player1AjusteCadencia = data.player1AjusteCadencia;
+        let player2AjusteCadencia = data.player2AjusteCadencia;
         this.miAudio5 = data.miAudioAux;
 
         this.fondo = this.add.image(0, 0, 'fondo2').setOrigin(0, 0);
@@ -127,6 +133,12 @@ export default class SceneSelection extends Phaser.Scene {
                 player2Character,
                 player1Bullets,
                 player2Bullets,
+                player1AjusteAlcance,
+                player2AjusteAlcance,
+                player1AjusteVelocidad,
+                player2AjusteVelocidad,
+                player1AjusteCadencia,
+                player2AjusteCadencia,
                 numberOfRounds
             });
         });
@@ -159,6 +171,12 @@ export default class SceneSelection extends Phaser.Scene {
                 player2Character,
                 player1Bullets,
                 player2Bullets,
+                player1AjusteAlcance,
+                player2AjusteAlcance,
+                player1AjusteVelocidad,
+                player2AjusteVelocidad,
+                player1AjusteCadencia,
+                player2AjusteCadencia,
                 numberOfRounds
             });
         });
@@ -188,6 +206,12 @@ export default class SceneSelection extends Phaser.Scene {
                 player2Character,
                 player1Bullets,
                 player2Bullets,
+                player1AjusteAlcance,
+                player2AjusteAlcance,
+                player1AjusteVelocidad,
+                player2AjusteVelocidad,
+                player1AjusteCadencia,
+                player2AjusteCadencia,
                 numberOfRounds
             });
         });
@@ -215,6 +239,12 @@ export default class SceneSelection extends Phaser.Scene {
                 player2Character,
                 player1Bullets,
                 player2Bullets,
+                player1AjusteAlcance,
+                player2AjusteAlcance,
+                player1AjusteVelocidad,
+                player2AjusteVelocidad,
+                player1AjusteCadencia,
+                player2AjusteCadencia,
                 numberOfRounds
             });
         });
