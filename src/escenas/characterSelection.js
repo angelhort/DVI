@@ -95,6 +95,14 @@ export default class CharacterSelection extends Phaser.Scene {
         let player2Character;
         let player1Bullets;
         let player2Bullets;
+        let player1AjusteAlcance;
+        let player2AjusteAlcance;
+        let player1AjusteVelocidad;
+        let player2AjusteVelocidad;
+        let player1AjusteCadencia;
+        let player2AjusteCadencia;
+        let player1Granada;
+        let player2Granada;
 
         this.miAudio5 = this.sound.add('miAudio5');
         this.miAudio5.volume = 0.2;
@@ -109,15 +117,27 @@ export default class CharacterSelection extends Phaser.Scene {
                 player1Bullets = 'billete';
                 player1Turn = false;
                 player2Turn = true;
+                player1AjusteAlcance = 1.1;
+                player1AjusteCadencia = 0.8;
+                player1AjusteVelocidad = 1.1;
                 this.playerText.setText('Selecciona tu personaje Jugador 2');
             } else if (player2Turn) {
                 player2Character = 'amancio';
                 player2Bullets = 'billete';
+                player2AjusteAlcance = 1.1;
+                player2AjusteCadencia = 0.8;
+                player2AjusteVelocidad = 1.1;
                 this.scene.launch('sceneSelection', {
                     player1Character,
                     player2Character,
                     player1Bullets,
                     player2Bullets,
+                    player1AjusteAlcance,
+                    player2AjusteAlcance,
+                    player1AjusteVelocidad,
+                    player2AjusteVelocidad,
+                    player1AjusteCadencia,
+                    player2AjusteCadencia,
                     miAudioAux
                 });
             }
@@ -131,15 +151,27 @@ export default class CharacterSelection extends Phaser.Scene {
                 player1Bullets = 'pp';
                 player1Turn = false;
                 player2Turn = true;
+                player1AjusteAlcance = 1;
+                player1AjusteCadencia = 0.8;
+                player1AjusteVelocidad = 0.9;
                 this.playerText.setText('Selecciona tu personaje Jugador 2');
             } else if (player2Turn) {
                 player2Character = 'rajoy';
                 player2Bullets = 'pp';
+                player2AjusteAlcance = 1;
+                player2AjusteCadencia = 0.8;
+                player2AjusteVelocidad = 0.9;
                 this.scene.launch('sceneSelection', {
                     player1Character,
                     player2Character,
                     player1Bullets,
                     player2Bullets,
+                    player1AjusteAlcance,
+                    player2AjusteAlcance,
+                    player1AjusteVelocidad,
+                    player2AjusteVelocidad,
+                    player1AjusteCadencia,
+                    player2AjusteCadencia,
                     miAudioAux
                 });
             }
@@ -153,15 +185,27 @@ export default class CharacterSelection extends Phaser.Scene {
                 player1Bullets = 'hoja';
                 player1Turn = false;
                 player2Turn = true;
+                player1AjusteAlcance = 0.7;
+                player1AjusteCadencia = 0.4;
+                player1AjusteVelocidad = 1;
                 this.playerText.setText('Selecciona tu personaje Jugador 2');
             } else if (player2Turn) {
                 player2Character = 'rosalia';
                 player2Bullets = 'hoja';
+                player2AjusteAlcance = 0.7;
+                player2AjusteCadencia = 0.4;
+                player2AjusteVelocidad = 1;
                 this.scene.launch('sceneSelection', {
                     player1Character,
                     player2Character,
                     player1Bullets,
                     player2Bullets,
+                    player1AjusteAlcance,
+                    player2AjusteAlcance,
+                    player1AjusteVelocidad,
+                    player2AjusteVelocidad,
+                    player1AjusteCadencia,
+                    player2AjusteCadencia,
                     miAudioAux
                 });
             }

@@ -20,11 +20,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 * @param {number} x - coordenada x
 	 * @param {number} y - coordenada y
 	 */
-	constructor(scene, x, y, controls, sprite, spriteBullets) {
-		super(scene, x, y, sprite, spriteBullets);
+	constructor(scene, x, y, controls, sprite, spriteBullets, ajusteVelocidad, ajusteCadencia, ajusteAlcance) {
+		super(scene, x, y, sprite, spriteBullets, ajusteVelocidad, ajusteCadencia, ajusteAlcance);
 		this.speed = 170; // Nuestra velocidad de movimiento
-		this.speedX = 170;
-		this.cadencia = 1000;
+		this.speedX = 170*ajusteVelocidad;
+		this.cadencia = 1000*ajusteCadencia; // Cadencia de disparo
 		this.controls = controls;
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
 		this.isAttacking = false;
@@ -35,7 +35,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.spriteBullets = spriteBullets;
 		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
 		this.inmortal = false;
-		this.grenade = true;
+		this.grenade = false;
+		this.ajusteAlcance = ajusteAlcance;
 
 
 		//Auxiliares para powerups
@@ -262,7 +263,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				console.log("BULLET")
 				this.cdDisparo = true;
 				this.play('attack'+this.sprite);
-				let bullet = new Bullet(this.scene, this.x, this.y, this.spriteBullets, this);
+				let bullet = new Bullet(this.scene, this.x, this.y, this.spriteBullets, this, this.ajusteAlcance);
 				this.scene.add.existing(bullet);
 				this.scene.physics.add.existing(bullet);
 				this.scene.bullets.add(bullet);		

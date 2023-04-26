@@ -1,5 +1,5 @@
 export default class Bullet extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, sprite, player) {
+    constructor(scene, x, y, sprite, player, ajusteAlcance) {
         super(scene, x, y, sprite, player);
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -9,6 +9,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
         this.sprite = sprite;
         this.player = player;
+        this.ajusteAlcance = ajusteAlcance;
 
         this.scene.anims.create({
 			key: this.sprite,
@@ -25,7 +26,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.setPosition(x, y);
         this.setRotation(angle);
 
-        this.scene.physics.velocityFromRotation(angle, 600, this.body.velocity);
+        this.scene.physics.velocityFromRotation(angle, 600*this.ajusteAlcance, this.body.velocity);
     }
 
     update() {
