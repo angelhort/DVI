@@ -36,6 +36,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
 		this.inmortal = false;
 		this.grenade = true;
+		
 
 
 		//Auxiliares para powerups
@@ -106,6 +107,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		this.isDead = false; // Definimos si el jugador está vivo o muerto
 
+		this.body.setSize(this.width, this.height, true);
 	}
 
 	/**
@@ -168,7 +170,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
 		if(this.controls.left.isDown && !this.isAttacking){
-			this.setFlip(true, false)
+			this.setFlip(true)
 			this.rotationAux = -Math.PI;
 			if(this.anims.currentAnim.key !== 'run'+this.sprite){
 				this.play('run'+this.sprite);
@@ -178,13 +180,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
         	this.body.setVelocityX(-speed);
 
 			// Ajustar el "collider" cuando el jugador se mueve hacia la izquierda
-			this.body.setOffset(this.bodyOffset - this.bodyWidth/2.5, 0);
+			//this.body.setOffset(this.bodyOffset - this.bodyWidth/2.5, 0);
 		}
 
 		// Mientras pulsemos la tecla 'D' movelos el personaje en la X
 		if(this.controls.right.isDown && !this.isAttacking){
+			this.setFlip(false)
 			this.rotationAux = 0;
-			this.setFlip(false, false)
 			if(this.anims.currentAnim.key !== 'run'+this.sprite){
 				this.play('run'+this.sprite);
 			}
@@ -192,8 +194,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.body.setVelocityX(speed);
 			
 			// Restablecer el "collider" a su posición original
-			this.body.setOffset(this.bodyOffset, 0);
+			//this.body.setOffset(this.bodyOffset, 0);
 		}
+
+		
 
 		// Si dejamos de pulsar 'A' o 'D' volvemos al estado de animación'idle'
 		// Phaser.Input.Keyboard.JustUp y Phaser.Input.Keyboard.JustDown nos aseguran detectar la tecla una sola vez (evitamos repeticiones)
@@ -228,6 +232,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			}
         }
 	}
+
 
 	/**
 	 * Cambiamos la propiedad jumpDisabled a true para indicar que el personaje no puede saltar
@@ -283,6 +288,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				setTimeout(() => {
 					this.cdDisparo = false;
 				}, this.cadencia);
+				setTimeout(() => {
+					this.miAudiog = this.scene.sound.add('miAudio11');
+					this.miAudiog.play();
+				}, 2000);
 			}
 		}
     }

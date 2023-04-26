@@ -50,6 +50,7 @@ export default class Animation extends Phaser.Scene {
 		this.load.audio('miAudio6', './assets/sonidos/jump.mp3');
 		this.load.audio('miAudio7', './assets/sonidos/lanzar1.mp3');
 		this.load.audio('miAudio8', './assets/sonidos/caida.mp3');
+		this.load.audio('miAudio11', './assets/sonidos/explosion.mp3');
 		// Cargar fuente personalizada
   		this.loadFont('font2', 'assets/webfonts/NightmareCodehack.otf');
 	}
@@ -213,7 +214,6 @@ export default class Animation extends Phaser.Scene {
 			let platform = new Platform(this, x, y, width, height);
 			platforms.push(platform);
 		}
-
 
 		
 		// Habilitar colisiones entre jugadores y plataformas
@@ -417,7 +417,7 @@ export default class Animation extends Phaser.Scene {
 		
 				var tiempoEspera;
 				if(this.player1Wins == numberOfRounds || this.player2Wins == numberOfRounds){
-					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado todas las rondas`, { fontSize: '50px', fill: '#FFD700', fontFamily: 'font2' });
+					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado la partida`, { fontSize: '50px', fill: '#FFD700', fontFamily: 'font2' });
 					winnerText.setOrigin(0.5);
 					tiempoEspera = 7000;
 				}
