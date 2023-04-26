@@ -257,8 +257,6 @@ export default class Animation extends Phaser.Scene {
 		// Añadir colisiones entre bala y jugadores
 		this.physics.add.collider(this.playerGroup, this.bullets, (player, bullet) => {
 			if (bullet.playerNumber !== player.controls.playerNumber) {
-				this.miAudio = this.sound.add('miAudio');
-				this.miAudio.play();
 				player.takeDamage();
 				bullet.destroy();
 			}

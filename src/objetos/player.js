@@ -117,6 +117,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 	takeDamage() {
 		if(!this.inmortal){
+		this.miAudio = this.scene.sound.add('miAudio');
+		this.miAudio.play();
 		console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
 		this.play('dead'+this.sprite);
 		this.isDead = true;
@@ -291,7 +293,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				setTimeout(() => {
 					this.miAudiog = this.scene.sound.add('miAudio11');
 					this.miAudiog.play();
-				}, 2000);
+				}, 1900);
 			}
 		}
     }
