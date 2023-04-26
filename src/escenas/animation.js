@@ -41,6 +41,7 @@ export default class Animation extends Phaser.Scene {
 		this.load.spritesheet('billete', 'assets/PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
 		this.load.spritesheet('hoja', 'assets/PixelArt/hoja.png', {frameWidth: 15, frameHeight: 9});
 		this.load.spritesheet('pp', 'assets/PixelArt/pp.png', {frameWidth: 15, frameHeight: 15});
+		this.load.spritesheet('bomba', 'assets/PixelArt/bomba.png', {frameWidth: 15, frameHeight: 19});
 		this.load.spritesheet('explosion', 'assets/PixelArt/explosion.png', { frameWidth: 128, frameHeight: 128 });
 		// Sonidos
 		this.load.audio('miAudio', './assets/sonidos/muerte.mp3');

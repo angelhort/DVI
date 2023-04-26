@@ -227,7 +227,7 @@ export default class CharacterSelection extends Phaser.Scene {
 			this.miAudio10.play();
             if (player1Turn) {
                 player1Character = 'irmandinio';
-                player1Bullets = 'hoja';
+                player1Bullets = 'bomba';
                 player1Turn = false;
                 player2Turn = true;
                 player1AjusteAlcance = 0.7;
@@ -236,7 +236,7 @@ export default class CharacterSelection extends Phaser.Scene {
                 this.playerText.setText('Selecciona tu personaje Jugador 2');
             } else if (player2Turn) {
                 player2Character = 'irmandinio';
-                player2Bullets = 'hoja';
+                player2Bullets = 'bomba';
                 player2AjusteAlcance = 0.7;
                 player2AjusteCadencia = 0.4;
                 player2AjusteVelocidad = 1;
