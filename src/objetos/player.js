@@ -1,4 +1,5 @@
 import Bullet from '../objetos/bullet.js';
+import Grenade from '../objetos/grenade.js';
 
 export default class Player extends Phaser.GameObjects.Sprite {
 
@@ -19,11 +20,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 * @param {number} x - coordenada x
 	 * @param {number} y - coordenada y
 	 */
-	constructor(scene, x, y, controls, sprite, spriteBullets) {
-		super(scene, x, y, sprite, spriteBullets);
+	constructor(scene, x, y, controls, sprite, spriteBullets, ajusteVelocidad, ajusteCadencia, ajusteAlcance) {
+		super(scene, x, y, sprite, spriteBullets, ajusteVelocidad, ajusteCadencia, ajusteAlcance);
 		this.speed = 170; // Nuestra velocidad de movimiento
-		this.speedX = 170;
-		this.cadencia = 1000;
+		this.speedX = 170*ajusteVelocidad;
+		this.cadencia = 1000*ajusteCadencia; // Cadencia de disparo
 		this.controls = controls;
 		this.disableJump(); // Por defecto no podemos saltar hasta que estemos en una plataforma del juego
 		this.isAttacking = false;
@@ -34,6 +35,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.spriteBullets = spriteBullets;
 		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
 		this.inmortal = false;
+		this.grenade = false;
+		this.ajusteAlcance = ajusteAlcance;
 
 
 		//Auxiliares para powerups
@@ -104,6 +107,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		this.isDead = false; // Definimos si el jugador está vivo o muerto
 
+		this.body.setSize(this.width, this.height, true);
 	}
 
 	/**
@@ -113,6 +117,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 	takeDamage() {
 		if(!this.inmortal){
+		this.miAudio = this.scene.sound.add('miAudio');
+		this.miAudio.play();
 		console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
 		this.play('dead'+this.sprite);
 		this.isDead = true;
@@ -166,7 +172,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
 		if(this.controls.left.isDown && !this.isAttacking){
-			this.setFlip(true, false)
+			this.setFlip(true)
 			this.rotationAux = -Math.PI;
 			if(this.anims.currentAnim.key !== 'run'+this.sprite){
 				this.play('run'+this.sprite);
@@ -176,13 +182,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
         	this.body.setVelocityX(-speed);
 
 			// Ajustar el "collider" cuando el jugador se mueve hacia la izquierda
-			this.body.setOffset(this.bodyOffset - this.bodyWidth/2.5, 0);
+			//this.body.setOffset(this.bodyOffset - this.bodyWidth/2.5, 0);
 		}
 
 		// Mientras pulsemos la tecla 'D' movelos el personaje en la X
 		if(this.controls.right.isDown && !this.isAttacking){
+			this.setFlip(false)
 			this.rotationAux = 0;
-			this.setFlip(false, false)
 			if(this.anims.currentAnim.key !== 'run'+this.sprite){
 				this.play('run'+this.sprite);
 			}
@@ -190,8 +196,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.body.setVelocityX(speed);
 			
 			// Restablecer el "collider" a su posición original
-			this.body.setOffset(this.bodyOffset, 0);
+			//this.body.setOffset(this.bodyOffset, 0);
 		}
+
+		
 
 		// Si dejamos de pulsar 'A' o 'D' volvemos al estado de animación'idle'
 		// Phaser.Input.Keyboard.JustUp y Phaser.Input.Keyboard.JustDown nos aseguran detectar la tecla una sola vez (evitamos repeticiones)
@@ -227,6 +235,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         }
 	}
 
+
 	/**
 	 * Cambiamos la propiedad jumpDisabled a true para indicar que el personaje no puede saltar
 	 */
@@ -256,18 +265,36 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	
 	shoot() {
 		if(this.canShoot){
-			this.cdDisparo = true;
-            // Dispara la bala desde la posición del personaje
-			console.log("la rotacion: " + this.rotationAux)
-			this.play('attack'+this.sprite);
-			let bullet = new Bullet(this.scene, this.x, this.y, this.spriteBullets, this);
-            this.scene.add.existing(bullet);
-		    this.scene.physics.add.existing(bullet);
-			this.scene.bullets.add(bullet);		
-			bullet.fire(this.x, this.y, this.rotationAux);
-			setTimeout(() => {
-				this.cdDisparo = false;
-			}, this.cadencia);
+			if (!this.grenade){
+				console.log("BULLET")
+				this.cdDisparo = true;
+				this.play('attack'+this.sprite);
+				let bullet = new Bullet(this.scene, this.x, this.y, this.spriteBullets, this, this.ajusteAlcance);
+				this.scene.add.existing(bullet);
+				this.scene.physics.add.existing(bullet);
+				this.scene.bullets.add(bullet);		
+				bullet.fire(this.x, this.y, this.rotationAux);
+				setTimeout(() => {
+					this.cdDisparo = false;
+				}, this.cadencia);
+			}
+			else{
+				console.log("GRENADE")
+				this.cdDisparo = true;
+				this.play('attack'+this.sprite);
+				let grenade = new Grenade(this.scene, this.x, this.y, this.spriteBullets, this);
+				this.scene.add.existing(grenade);
+				this.scene.physics.add.existing(grenade);
+				this.scene.grenades.add(grenade);		
+				grenade.fire(this.x, this.y, this.rotationAux);
+				setTimeout(() => {
+					this.cdDisparo = false;
+				}, this.cadencia);
+				setTimeout(() => {
+					this.miAudiog = this.scene.sound.add('miAudio11');
+					this.miAudiog.play();
+				}, 1900);
+			}
 		}
     }
 
