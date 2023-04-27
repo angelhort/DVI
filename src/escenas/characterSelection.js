@@ -131,6 +131,7 @@ export default class CharacterSelection extends Phaser.Scene {
                 player1AjusteAlcance = 1.1;
                 player1AjusteCadencia = 0.8;
                 player1AjusteVelocidad = 1.1;
+                player1Granada = false;
                 this.playerText.setText('Selecciona tu personaje Jugador 2');
             } else if (player2Turn) {
                 player2Character = 'amancio';
@@ -138,6 +139,7 @@ export default class CharacterSelection extends Phaser.Scene {
                 player2AjusteAlcance = 1.1;
                 player2AjusteCadencia = 0.8;
                 player2AjusteVelocidad = 1.1;
+                player2Granada = false;
                 this.scene.launch('sceneSelection', {
                     player1Character,
                     player2Character,
@@ -149,6 +151,8 @@ export default class CharacterSelection extends Phaser.Scene {
                     player2AjusteVelocidad,
                     player1AjusteCadencia,
                     player2AjusteCadencia,
+                    player1Granada,
+                    player2Granada,
                     miAudioAux
                 });
             }
@@ -165,6 +169,7 @@ export default class CharacterSelection extends Phaser.Scene {
                 player1AjusteAlcance = 1;
                 player1AjusteCadencia = 0.8;
                 player1AjusteVelocidad = 0.9;
+                player1Granada = false;
                 this.playerText.setText('Selecciona tu personaje Jugador 2');
             } else if (player2Turn) {
                 player2Character = 'rajoy';
@@ -172,6 +177,7 @@ export default class CharacterSelection extends Phaser.Scene {
                 player2AjusteAlcance = 1;
                 player2AjusteCadencia = 0.8;
                 player2AjusteVelocidad = 0.9;
+                player2Granada = false;
                 this.scene.launch('sceneSelection', {
                     player1Character,
                     player2Character,
@@ -183,6 +189,8 @@ export default class CharacterSelection extends Phaser.Scene {
                     player2AjusteVelocidad,
                     player1AjusteCadencia,
                     player2AjusteCadencia,
+                    player1Granada,
+                    player2Granada,
                     miAudioAux
                 });
             }
@@ -199,6 +207,7 @@ export default class CharacterSelection extends Phaser.Scene {
                 player1AjusteAlcance = 0.7;
                 player1AjusteCadencia = 0.4;
                 player1AjusteVelocidad = 1;
+                player1Granada = false;
                 this.playerText.setText('Selecciona tu personaje Jugador 2');
             } else if (player2Turn) {
                 player2Character = 'rosalia';
@@ -206,6 +215,7 @@ export default class CharacterSelection extends Phaser.Scene {
                 player2AjusteAlcance = 0.7;
                 player2AjusteCadencia = 0.4;
                 player2AjusteVelocidad = 1;
+                player2Granada = false;
                 this.scene.launch('sceneSelection', {
                     player1Character,
                     player2Character,
@@ -217,6 +227,8 @@ export default class CharacterSelection extends Phaser.Scene {
                     player2AjusteVelocidad,
                     player1AjusteCadencia,
                     player2AjusteCadencia,
+                    player1Granada,
+                    player2Granada,
                     miAudioAux
                 });
             }
@@ -233,6 +245,7 @@ export default class CharacterSelection extends Phaser.Scene {
                 player1AjusteAlcance = 0.7;
                 player1AjusteCadencia = 0.4;
                 player1AjusteVelocidad = 1;
+                player1Granada = true;
                 this.playerText.setText('Selecciona tu personaje Jugador 2');
             } else if (player2Turn) {
                 player2Character = 'irmandinio';
@@ -240,6 +253,7 @@ export default class CharacterSelection extends Phaser.Scene {
                 player2AjusteAlcance = 0.7;
                 player2AjusteCadencia = 0.4;
                 player2AjusteVelocidad = 1;
+                player2Granada = true;
                 this.scene.launch('sceneSelection', {
                     player1Character,
                     player2Character,
@@ -251,6 +265,8 @@ export default class CharacterSelection extends Phaser.Scene {
                     player2AjusteVelocidad,
                     player1AjusteCadencia,
                     player2AjusteCadencia,
+                    player1Granada,
+                    player2Granada,
                     miAudioAux
                 });
             }

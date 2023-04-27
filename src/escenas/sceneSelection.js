@@ -56,6 +56,8 @@ export default class SceneSelection extends Phaser.Scene {
         let player2AjusteVelocidad = data.player2AjusteVelocidad;
         let player1AjusteCadencia = data.player1AjusteCadencia;
         let player2AjusteCadencia = data.player2AjusteCadencia;
+        let player1Granada = data.player1Granada;
+        let player2Granada = data.player2Granada;
         this.miAudio5 = data.miAudioAux;
 
         this.fondo = this.add.image(0, 0, 'fondo2').setOrigin(0, 0);
@@ -139,6 +141,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player2AjusteVelocidad,
                 player1AjusteCadencia,
                 player2AjusteCadencia,
+                player1Granada,
+                player2Granada,
                 numberOfRounds
             });
         });
@@ -177,6 +181,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player2AjusteVelocidad,
                 player1AjusteCadencia,
                 player2AjusteCadencia,
+                player1Granada,
+                player2Granada,
                 numberOfRounds
             });
         });
@@ -212,6 +218,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player2AjusteVelocidad,
                 player1AjusteCadencia,
                 player2AjusteCadencia,
+                player1Granada,
+                player2Granada,
                 numberOfRounds
             });
         });
@@ -245,6 +253,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player2AjusteVelocidad,
                 player1AjusteCadencia,
                 player2AjusteCadencia,
+                player1Granada,
+                player2Granada,
                 numberOfRounds
             });
         });
