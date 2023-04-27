@@ -447,5 +447,19 @@ export default class Animation extends Phaser.Scene {
 				this.powerUpCount = 0;
 			});
 		});
+		this.physics.world.drawDebug = false;
+  		this.toggleDebug = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 	}
+
+	update() {
+		if (Phaser.Input.Keyboard.JustDown(this.toggleDebug)) {
+		  if (this.physics.world.drawDebug) {
+			this.physics.world.drawDebug = false;
+			this.physics.world.debugGraphic.clear();
+		  }
+		  else {
+			this.physics.world.drawDebug = true;
+		  }
+		}
+	  }
 }
