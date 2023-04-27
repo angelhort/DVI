@@ -37,6 +37,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.inmortal = false;
 		this.grenade = granada;
 		this.ajusteAlcance = ajusteAlcance;
+		this.facing = 'right';
 
 
 		//Auxiliares para powerups
@@ -172,6 +173,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
 		if(this.controls.left.isDown && !this.isAttacking){
+			this.facing = 'left';
 			this.setFlip(true)
 			this.rotationAux = -Math.PI;
 			if(this.anims.currentAnim.key !== 'run'+this.sprite){
@@ -187,6 +189,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		// Mientras pulsemos la tecla 'D' movelos el personaje en la X
 		if(this.controls.right.isDown && !this.isAttacking){
+			this.facing = 'right';
 			this.setFlip(false)
 			this.rotationAux = 0;
 			if(this.anims.currentAnim.key !== 'run'+this.sprite){
