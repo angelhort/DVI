@@ -100,14 +100,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		// Ajustamos el "collider" de nuestro jugador
 		this.bodyOffset = this.body.width/3;
-		this.bodyWidth = this.body.width*2/3.5;
+		
 		
 		this.body.setOffset(this.bodyOffset, 0);
-		this.body.width = this.bodyWidth;
+		this.body.width /= 2;
 
 		this.isDead = false; // Definimos si el jugador está vivo o muerto
 
-		this.body.setSize(this.width, this.height, true);
+		this.body.setSize(this.body.width, this.height, true);
 	}
 
 	/**
