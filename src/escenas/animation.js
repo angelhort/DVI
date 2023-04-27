@@ -116,6 +116,7 @@ export default class Animation extends Phaser.Scene {
 		const player2AjusteVelocidad = data.player2AjusteVelocidad;
 		const numberOfRounds = data.numberOfRounds;
 
+
 		//Imagenes de los powerUps
 		console.log("Numero de rondas: " + numberOfRounds);
 		//Imagenes de los powerUps
@@ -421,7 +422,7 @@ export default class Animation extends Phaser.Scene {
 				}
 		
 				var tiempoEspera;
-				if(this.player1Wins == numberOfRounds || this.player2Wins == numberOfRounds){
+				if(this.player1Wins == Math.floor(data.numberOfRounds/2)+1 || this.player2Wins == Math.floor(data.numberOfRounds/2)+1){
 					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado la partida`, { fontSize: '50px', fill: '#FFD700', fontFamily: 'font2' });
 					winnerText.setOrigin(0.5);
 					tiempoEspera = 7000;
@@ -434,7 +435,7 @@ export default class Animation extends Phaser.Scene {
 		
 				setTimeout(() => {
 					
-					if (this.player1Wins >= numberOfRounds || this.player2Wins >= numberOfRounds) {
+					if (this.player1Wins == Math.floor(data.numberOfRounds/2)+1 || this.player2Wins == Math.floor(data.numberOfRounds/2)+1) {
 						this.miAudio4.stop();
 						this.scene.start('characterSelection');
 						this.player1Wins = 0;

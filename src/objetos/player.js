@@ -265,7 +265,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	
 	shoot() {
 		if(this.canShoot){
-			if (!this.grenade){
+			if (this.grenade){
 				console.log("BULLET")
 				this.cdDisparo = true;
 				this.play('attack'+this.sprite);

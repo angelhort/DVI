@@ -84,7 +84,7 @@ export default class SceneSelection extends Phaser.Scene {
         
         roundsSelectionContainer.add(roundsText);
 
-        var numberOfRounds = 3;
+        var numberOfRounds = 5;
         
         const leftArrow = this.add.image(this.cameras.main.centerX - 50, roundsText.y + 30, 'arrow_left').setInteractive().setScale(0.01);
         const rightArrow = this.add.image(this.cameras.main.centerX + 50, roundsText.y + 30, 'arrow_right').setInteractive().setScale(0.01);
@@ -93,14 +93,14 @@ export default class SceneSelection extends Phaser.Scene {
         leftArrow.on('pointerdown', () => {
             this.miAudio10 = this.sound.add('miAudio10');
 			this.miAudio10.play();
-            numberOfRounds = Math.max(3, numberOfRounds - 2);
+            numberOfRounds = Math.max(5, numberOfRounds - 2);
             selectedRoundsText.setText(numberOfRounds);
         });
     
         rightArrow.on('pointerdown', () => {
             this.miAudio10 = this.sound.add('miAudio10');
 			this.miAudio10.play();
-            numberOfRounds = Math.min(7, numberOfRounds + 2);
+            numberOfRounds = Math.min(9, numberOfRounds + 2);
             selectedRoundsText.setText(numberOfRounds);
         });
 
