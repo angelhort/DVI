@@ -12,11 +12,14 @@ Este juego es perfecto para pasárselo bien con amigos. Mientras otros juegos cu
 * ### Si deslizamos para abajo nos encontraremos con la pantalla del juego la cual, tras darle a *Start*, empezará el juego.<br><br>
 <img src="assets/images/start.jpg" alt="Start" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
 
+* ### Una vez pulsamos el boton start pasamos a la pantalla de selección de personajes, donde contamos con cuatro personajes elegibles. Estos son Amancio Ortega, Rosalia de Castro, Mariano Rajoy y un irmandinio.<br><br>
+<img src="assets/images/personajes.jpg" alt="Personajes" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
+
 * ### Inmediatamente después encontramos la selección de mapas y rondas, donde podremos elegir entre 4 diferentes, y seleccionar el número de rondas que se quieren jugar.<br><br>
 <img src="assets/images/mapas.jpg" alt="Mapas" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
 
-* ### En pantalla aparecerán 2 personajes en el interior de una catedral con plataformas. Estos son Amancio Ortega y Mariano Rajoy dentro de la catedral de Santiago. <br>
-### Ambos pueden disparar, Amancio dispara billetes mientras que rajoy dispara discos con el simbrolo del PP. <br><br>
+* ### En pantalla aparecerán 2 personajes en el interior de una catedral con plataformas, dependiendo de los que hayamos elegido previamente. <br>
+### Cada personaje tiene su bala personalizada y una serie de características propias y únicas. <br><br>
 <img src="assets/images/juego.png" alt="Juego" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
 
 ## Amancio Ortega:
@@ -27,6 +30,9 @@ Este juego es perfecto para pasárselo bien con amigos. Mientras otros juegos cu
 
 ## Rosalia de Castro:
 <img src="assets/PixelArt/rosaliaAnimaciones.png" alt="PixelArt Rosalia de Castro"/> <br>
+
+## Irmandinio:
+<img src="assets/PixelArt/irmandinioAnimaciones.png" alt="PixelArt Irmandinio"/> <br>
 
 ## Power Ups:
 ### Cada cierto tiempo unos *Power Ups* caen del cielo. Concederán alguna habilidad especial al jugador que los rompa.
