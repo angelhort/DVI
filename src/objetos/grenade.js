@@ -52,10 +52,6 @@ export default class Grenade extends Phaser.Physics.Arcade.Sprite {
         }, null, this);
     }
     
-    
-    
-    
-
     explode() {
         if (!this.exploded && !this.destruido) {
             this.exploded = true;
@@ -93,7 +89,6 @@ export default class Grenade extends Phaser.Physics.Arcade.Sprite {
         }
     }
     
-
     update() {
         if (this.body.blocked.down) {
             this.body.velocity.y = 0;
@@ -106,7 +101,5 @@ export default class Grenade extends Phaser.Physics.Arcade.Sprite {
             this.setDestruido();
             this.destroy();
         }
-
     }
-    
 }

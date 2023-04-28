@@ -12,7 +12,6 @@ export default class Platform extends Phaser.GameObjects.Sprite {
   
       this.scene.physics.add.collider(this);
   
-      // Cambiamos el tamaño del body para ocupar todo el ancho de la escena
       this.body.width = width;
       this.body.height = height;
     }

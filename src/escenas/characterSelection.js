@@ -42,7 +42,7 @@ export default class CharacterSelection extends Phaser.Scene {
 	* Creación de los elementos de la escena principal de juego
 	*/
 	create() {
-
+        // Pintamos un fondo
         this.fondo = this.add.image(0, 0, 'fondo2').setOrigin(0, 0);
 
         // Crear un menú de selección de personajes
@@ -283,7 +283,6 @@ export default class CharacterSelection extends Phaser.Scene {
         characterSelectionMenu.add(irmandinioText);
 
         // Sonido
-
         // Si cambiamos de escena borramos lo de esta escena
         this.scene.get('sceneSelection').events.on('start', () => {
             characterSelectionMenu.destroy();

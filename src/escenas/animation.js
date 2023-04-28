@@ -35,8 +35,6 @@ export default class Animation extends Phaser.Scene {
 		this.load.image('velocidadColor', 'assets/PixelArt/velocidadColor.png');
 		this.load.image('saltoColor', 'assets/PixelArt/saltoColor.png');
 		this.load.image('cadenciaColor', 'assets/PixelArt/cadenciaColor.png');
-		this.load.spritesheet('amancio', 'assets/PixelArt/amancioAnimaciones.png', {frameWidth: 48, frameHeight: 48})
-		this.load.spritesheet('rajoy', 'assets/PixelArt/rajoyAnimaciones.png', {frameWidth: 48, frameHeight: 48})
 		this.load.spritesheet('powerup', 'assets/PixelArt/powerUpAnimacion.png', {frameWidth: 44, frameHeight: 44})
 		this.load.spritesheet('billete', 'assets/PixelArt/billete.png', {frameWidth: 15, frameHeight: 9});
 		this.load.spritesheet('hoja', 'assets/PixelArt/hoja.png', {frameWidth: 15, frameHeight: 9});
@@ -90,6 +88,7 @@ export default class Animation extends Phaser.Scene {
     	}
 	}
 
+	// Función para generar los poderes de los powerUps
 	getRandomPowerUpType() {
 		const powerUpTypes = ["salto", "velocidad", "cadencia"];
 		const randomIndex = Math.floor(Math.random() * powerUpTypes.length);
@@ -118,13 +117,8 @@ export default class Animation extends Phaser.Scene {
 		const player2Granada = data.player2Granada;
 		const numberOfRounds = data.numberOfRounds;
 
-
-		//Imagenes de los powerUps
 		console.log("Numero de rondas: " + numberOfRounds);
-		//Imagenes de los powerUps
 		
-
-
 		// Recogemos los datos de la escena
 		const fondo = data.fondo;
 		const plataformas = data.plataformas;
@@ -466,3 +460,4 @@ export default class Animation extends Phaser.Scene {
 		}
 	  }
 }
+

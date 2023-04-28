@@ -30,7 +30,6 @@ export default class PowerUp extends Phaser.GameObjects.Sprite {
 			repeat: -1
 		});
 
-
 		// Si la animación de ataque se completa
 		this.on('animationcomplete', end => {
 			if (this.anims.currentAnim.key === 'hit'){
@@ -98,5 +97,4 @@ export default class PowerUp extends Phaser.GameObjects.Sprite {
 	destroyMe(){
 		this.play('hit');
 	}
-
 }

@@ -38,18 +38,15 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.grenade = granada;
 		this.ajusteAlcance = ajusteAlcance;
 		this.facing = 'right';
-
+		this.touchingPowerUp = false; // Añadir propiedad para detectar si el jugador está en contacto con un powerup
+		this.airSpeedMultiplier = 0.6;
+		this.isDead = false; // Definimos si el jugador está vivo o muerto
 
 		//Auxiliares para powerups
 		const auxSpeed = 170;
 		const jumpBoost = 1;
 
 		this.scene.add.existing(this); //Añadimos el jugador a la escena
-
-		// Añadir propiedad para detectar si el jugador está en contacto con un powerup
-  		this.touchingPowerUp = false;
-
-		this.airSpeedMultiplier = 0.6; // Ajusta este valor para cambiar la velocidad en el aire
 
 		// Creamos las animaciones de nuestro jugador
 		this.scene.anims.create({
@@ -102,11 +99,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		// Ajustamos el "collider" de nuestro jugador
 		this.bodyOffset = this.body.width/3;
 		
-		
 		this.body.setOffset(this.bodyOffset, 0);
 		this.body.width /= 2;
-
-		this.isDead = false; // Definimos si el jugador está vivo o muerto
 
 		this.body.setSize(this.body.width, this.height, true);
 	}
@@ -114,8 +108,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	/**
 	 * Detecta si el jugador está siendo golpeado por otro jugador
 	 */
-	
-
 	takeDamage() {
 		if(!this.inmortal){
 		this.miAudio = this.scene.sound.add('miAudio');
@@ -154,12 +146,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			}
 		}
 
-
+		// Si el jugador está muerto, no ejecutamos el resto del código
 		if(this.isDead) {
 			return;
 		}
-
-
 
 		const otherPlayer = this.scene.playerGroup.getChildren().find(player => player !== this);
 
@@ -167,11 +157,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		if (otherPlayer === undefined || otherPlayer.isDead) {
 			this.body.setVelocityX(0);
 			this.inmortal = true;
-			//this.play('dance'+this.sprite);
 			return;
 		}
 		
-		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
+		// Mientras pulsemos la tecla 'A' movemos el personaje en la X
 		if(this.controls.left.isDown && !this.isAttacking){
 			this.facing = 'left';
 			this.setFlip(true)
@@ -182,9 +171,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			
 			const speed = this.body.touching.down ? this.speedX : this.speed * this.airSpeedMultiplier;
         	this.body.setVelocityX(-speed);
-
-			// Ajustar el "collider" cuando el jugador se mueve hacia la izquierda
-			//this.body.setOffset(this.bodyOffset - this.bodyWidth/2.5, 0);
 		}
 
 		// Mientras pulsemos la tecla 'D' movelos el personaje en la X
@@ -196,13 +182,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				this.play('run'+this.sprite);
 			}
 			const speed = this.body.touching.down ? this.speedX : this.speed * this.airSpeedMultiplier;
-        this.body.setVelocityX(speed);
-			
-			// Restablecer el "collider" a su posición original
-			//this.body.setOffset(this.bodyOffset, 0);
+        	this.body.setVelocityX(speed);
 		}
-
-		
 
 		// Si dejamos de pulsar 'A' o 'D' volvemos al estado de animación'idle'
 		// Phaser.Input.Keyboard.JustUp y Phaser.Input.Keyboard.JustDown nos aseguran detectar la tecla una sola vez (evitamos repeticiones)

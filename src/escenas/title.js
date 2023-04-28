@@ -26,22 +26,18 @@ export default class Title extends Phaser.Scene {
 	*/
 	create() {
 		//Pintamos un fondo
-		var back = this.add.image(0, 0, 'inicio').setOrigin(0, 0);
+		this.add.image(0, 0, 'inicio').setOrigin(0, 0);
 
-		//Pintamos un botón de Empezar
-		var sprite = this.add.image(this.sys.game.canvas.width/2, this.sys.game.canvas.height/1.5, 'start')
-		var logo = this.add.image(this.sys.game.canvas.width/2, this.sys.game.canvas.height/5, 'logo')
-		sprite.setInteractive(); // Hacemos el sprite interactivo para que lance eventos
-
-		// Escuchamos los eventos del ratón cuando interactual con nuestro sprite de "Start"
-	    sprite.on('pointerdown', pointer => {
-	    	console.log("pulsando");
-	    });
-
-	    sprite.on('pointerup', pointer => {
-			this.scene.start('characterSelection'); //Cambiamos a la escena de menu de personajes
-			this.miAudio9 = this.sound.add('miAudio9');
-			this.miAudio9.play();
-	    });
+		//Pintamos un botón de Empezar y el logo
+		const canvasWidth = this.sys.game.canvas.width;
+		const canvasHeight = this.sys.game.canvas.height;
+		this.add.image(canvasWidth/2, canvasHeight/1.5, 'start').setInteractive().on('pointerdown', () => {
+			console.log("pulsando");
+		}).on('pointerup', () => {
+			// Al pulsar el start, pasamos a la escena de selección de personaje
+			this.scene.start('characterSelection');
+			this.sound.add('miAudio9').play();
+		});
+		this.add.image(canvasWidth/2, canvasHeight/5, 'logo');
 	}
 }
