@@ -38,6 +38,8 @@ export default class SceneSelection extends Phaser.Scene {
         this.load.image('puente', 'assets/PixelArt/backgroundPuentePlataformas.png');
         this.load.image('arrow_left', 'assets/PixelArt/flechaIzquierda.png');
         this.load.image('arrow_right', 'assets/PixelArt/flechaDerecha.png');
+        this.load.image('checkboxUnchecked', 'assets/PixelArt/checkboxUnchecked.png');
+        this.load.image('checkboxChecked', 'assets/PixelArt/checkboxChecked.png');
         this.loadFont('font', 'assets/webfonts/AncientModernTales.otf');
 	}
 
@@ -56,6 +58,8 @@ export default class SceneSelection extends Phaser.Scene {
         let player2AjusteVelocidad = data.player2AjusteVelocidad;
         let player1AjusteCadencia = data.player1AjusteCadencia;
         let player2AjusteCadencia = data.player2AjusteCadencia;
+        let player1Granada = data.player1Granada;
+        let player2Granada = data.player2Granada;
         this.miAudio5 = data.miAudioAux;
 
         this.fondo = this.add.image(0, 0, 'fondo2').setOrigin(0, 0);
@@ -80,31 +84,65 @@ export default class SceneSelection extends Phaser.Scene {
 
         // Crear un selector de rondas
         const roundsSelectionContainer = this.add.container();
-        const roundsText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 100, 'Rondas:', { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        const roundsText = this.add.text(this.cameras.main.centerX-80, this.cameras.main.centerY + 90, 'Rondas:', { fontSize: '20px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
         
         roundsSelectionContainer.add(roundsText);
 
-        var numberOfRounds = 3;
+        var numberOfRounds = 5;
         
-        const leftArrow = this.add.image(this.cameras.main.centerX - 50, roundsText.y + 30, 'arrow_left').setInteractive().setScale(0.01);
-        const rightArrow = this.add.image(this.cameras.main.centerX + 50, roundsText.y + 30, 'arrow_right').setInteractive().setScale(0.01);
-        const selectedRoundsText = this.add.text(this.cameras.main.centerX, roundsText.y + 30, numberOfRounds, { fontSize: '24px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        const leftArrow = this.add.image(roundsText.x - 50, roundsText.y + 30, 'arrow_left').setInteractive().setScale(0.008);
+        const rightArrow = this.add.image(roundsText.x + 50, roundsText.y + 30, 'arrow_right').setInteractive().setScale(0.008);
+        const selectedRoundsText = this.add.text(roundsText.x, roundsText.y + 30, numberOfRounds, { fontSize: '20px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
         // Añadir interactividad a las flechas
         leftArrow.on('pointerdown', () => {
             this.miAudio10 = this.sound.add('miAudio10');
 			this.miAudio10.play();
-            numberOfRounds = Math.max(3, numberOfRounds - 2);
+            numberOfRounds = Math.max(5, numberOfRounds - 2);
             selectedRoundsText.setText(numberOfRounds);
         });
     
         rightArrow.on('pointerdown', () => {
             this.miAudio10 = this.sound.add('miAudio10');
 			this.miAudio10.play();
-            numberOfRounds = Math.min(7, numberOfRounds + 2);
+            numberOfRounds = Math.min(9, numberOfRounds + 2);
             selectedRoundsText.setText(numberOfRounds);
         });
 
+        let checkbox = this.add.image(selectedRoundsText.x +140, selectedRoundsText.y+17, 'checkboxUnchecked').setInteractive().setScale(0.2);
+        let checkboxChecked = this.add.image(selectedRoundsText.x +140, selectedRoundsText.y+17, 'checkboxChecked').setInteractive().setScale(0.2);
+        checkboxChecked.setVisible(false);
+        const checkBoxText = this.add.text(checkbox.x, checkbox.y-45, 'Modo Granada:', { fontSize: '16px', color: '#ffffff', fontFamily: 'font' }).setOrigin(0.5, 0);
+        let checkBoxActivated = false;
+        checkbox.on('pointerdown', () => {
+            checkBoxActivated = true;
+        player1AjusteAlcance = 1;
+        player2AjusteAlcance = 1;
+        player1AjusteVelocidad = 1;
+        player2AjusteVelocidad = 1;
+        player1AjusteCadencia = 1;
+        player2AjusteCadencia = 1;
+        player1Granada = checkBoxActivated;
+        player2Granada = checkBoxActivated;
+        checkbox.setVisible(false);
+        checkboxChecked.setVisible(true);
+        });
 
+        
+
+        checkboxChecked.on('pointerdown', () => {
+            checkBoxActivated = false;
+            player1AjusteAlcance = data.player1AjusteAlcance;
+            player2AjusteAlcance = data.player2AjusteAlcance;
+            player1AjusteVelocidad = data.player1AjusteVelocidad;
+            player2AjusteVelocidad = data.player2AjusteVelocidad;
+            player1AjusteCadencia = data.player1AjusteCadencia;
+            player2AjusteCadencia = data.player2AjusteCadencia;
+            player1Granada = data.player1Granada;
+            player2Granada = data.player2Granada;
+            checkbox.setVisible(true);
+            checkboxChecked.setVisible(false);
+        });
+        
         // Añadir interactividad a los sprites
         catedral.setInteractive();
         muralla.setInteractive();
@@ -139,6 +177,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player2AjusteVelocidad,
                 player1AjusteCadencia,
                 player2AjusteCadencia,
+                player1Granada,
+                player2Granada,
                 numberOfRounds
             });
         });
@@ -177,6 +217,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player2AjusteVelocidad,
                 player1AjusteCadencia,
                 player2AjusteCadencia,
+                player1Granada,
+                player2Granada,
                 numberOfRounds
             });
         });
@@ -212,6 +254,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player2AjusteVelocidad,
                 player1AjusteCadencia,
                 player2AjusteCadencia,
+                player1Granada,
+                player2Granada,
                 numberOfRounds
             });
         });
@@ -245,6 +289,8 @@ export default class SceneSelection extends Phaser.Scene {
                 player2AjusteVelocidad,
                 player1AjusteCadencia,
                 player2AjusteCadencia,
+                player1Granada,
+                player2Granada,
                 numberOfRounds
             });
         });
@@ -268,6 +314,9 @@ export default class SceneSelection extends Phaser.Scene {
             rightArrow.destroy();
             selectedRoundsText.destroy();
             roundsText.destroy();
+            checkbox.destroy();
+            checkBoxText.destroy();
+            checkboxChecked.destroy();
             this.miAudio5.stop();
         });
     }

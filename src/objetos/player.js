@@ -20,7 +20,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	 * @param {number} x - coordenada x
 	 * @param {number} y - coordenada y
 	 */
-	constructor(scene, x, y, controls, sprite, spriteBullets, ajusteVelocidad, ajusteCadencia, ajusteAlcance) {
+	constructor(scene, x, y, controls, sprite, spriteBullets, ajusteVelocidad, ajusteCadencia, ajusteAlcance, granada) {
 		super(scene, x, y, sprite, spriteBullets, ajusteVelocidad, ajusteCadencia, ajusteAlcance);
 		this.speed = 170; // Nuestra velocidad de movimiento
 		this.speedX = 170*ajusteVelocidad;
@@ -35,8 +35,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.spriteBullets = spriteBullets;
 		this.canShoot = false;   //Impedir disparar al principio de cada ronda antes de tocar el suelo
 		this.inmortal = false;
-		this.grenade = false;
+		this.grenade = granada;
 		this.ajusteAlcance = ajusteAlcance;
+		this.facing = 'right';
 
 
 		//Auxiliares para powerups
@@ -100,14 +101,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		// Ajustamos el "collider" de nuestro jugador
 		this.bodyOffset = this.body.width/3;
-		this.bodyWidth = this.body.width*2/3.5;
+		
 		
 		this.body.setOffset(this.bodyOffset, 0);
-		this.body.width = this.bodyWidth;
+		this.body.width /= 2;
 
 		this.isDead = false; // Definimos si el jugador está vivo o muerto
 
-		this.body.setSize(this.width, this.height, true);
+		this.body.setSize(this.body.width, this.height, true);
 	}
 
 	/**
@@ -172,6 +173,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		
 		// Mientras pulsemos la tecla 'A' movelos el personaje en la X
 		if(this.controls.left.isDown && !this.isAttacking){
+			this.facing = 'left';
 			this.setFlip(true)
 			this.rotationAux = -Math.PI;
 			if(this.anims.currentAnim.key !== 'run'+this.sprite){
@@ -187,6 +189,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 		// Mientras pulsemos la tecla 'D' movelos el personaje en la X
 		if(this.controls.right.isDown && !this.isAttacking){
+			this.facing = 'right';
 			this.setFlip(false)
 			this.rotationAux = 0;
 			if(this.anims.currentAnim.key !== 'run'+this.sprite){

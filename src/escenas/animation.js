@@ -114,7 +114,10 @@ export default class Animation extends Phaser.Scene {
 		const player2AjusteCadencia = data.player2AjusteCadencia;
 		const player1AjusteVelocidad = data.player1AjusteVelocidad;
 		const player2AjusteVelocidad = data.player2AjusteVelocidad;
+		const player1Granada = data.player1Granada;
+		const player2Granada = data.player2Granada;
 		const numberOfRounds = data.numberOfRounds;
+
 
 		//Imagenes de los powerUps
 		console.log("Numero de rondas: " + numberOfRounds);
@@ -198,8 +201,8 @@ export default class Animation extends Phaser.Scene {
 		}, 2);
 		
 		// Crear jugadores y establecer su propiedad otherPlayer
-		let player1 = new Player(this, 100, 0, player1Controls, player1Character, player1Bullets, player1AjusteVelocidad, player1AjusteCadencia, player1AjusteAlcance);
-		let player2 = new Player(this, 560, 0, player2Controls, player2Character, player2Bullets, player2AjusteVelocidad, player2AjusteCadencia, player2AjusteAlcance);
+		let player1 = new Player(this, 100, 0, player1Controls, player1Character, player1Bullets, player1AjusteVelocidad, player1AjusteCadencia, player1AjusteAlcance, player1Granada);
+		let player2 = new Player(this, 560, 0, player2Controls, player2Character, player2Bullets, player2AjusteVelocidad, player2AjusteCadencia, player2AjusteAlcance, player2Granada);
 
 		// Musica de fondo
 
@@ -421,7 +424,7 @@ export default class Animation extends Phaser.Scene {
 				}
 		
 				var tiempoEspera;
-				if(this.player1Wins == numberOfRounds || this.player2Wins == numberOfRounds){
+				if(this.player1Wins == Math.floor(data.numberOfRounds/2)+1 || this.player2Wins == Math.floor(data.numberOfRounds/2)+1){
 					const winnerText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, `Jugador ${winningPlayerNumber} ha ganado la partida`, { fontSize: '50px', fill: '#FFD700', fontFamily: 'font2' });
 					winnerText.setOrigin(0.5);
 					tiempoEspera = 7000;
@@ -434,7 +437,7 @@ export default class Animation extends Phaser.Scene {
 		
 				setTimeout(() => {
 					
-					if (this.player1Wins >= numberOfRounds || this.player2Wins >= numberOfRounds) {
+					if (this.player1Wins == Math.floor(data.numberOfRounds/2)+1 || this.player2Wins == Math.floor(data.numberOfRounds/2)+1) {
 						this.miAudio4.stop();
 						this.scene.start('characterSelection');
 						this.player1Wins = 0;
@@ -447,5 +450,19 @@ export default class Animation extends Phaser.Scene {
 				this.powerUpCount = 0;
 			});
 		});
+		this.physics.world.drawDebug = false;
+  		this.toggleDebug = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 	}
+
+	update() {
+		if (Phaser.Input.Keyboard.JustDown(this.toggleDebug)) {
+		  if (this.physics.world.drawDebug) {
+			this.physics.world.drawDebug = false;
+			this.physics.world.debugGraphic.clear();
+		  }
+		  else {
+			this.physics.world.drawDebug = true;
+		  }
+		}
+	  }
 }

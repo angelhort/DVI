@@ -31,23 +31,29 @@ export default class Grenade extends Phaser.Physics.Arcade.Sprite {
     
         // Convierte el ángulo en radianes
         const angleInRadians = Phaser.Math.DegToRad(angle);
-        
+    
         // Agrega una pequeña cantidad al ángulo en radianes para disparar un poco hacia arriba
         const adjustedAngle = angleInRadians - Math.PI / 6; // Puedes ajustar este valor según la inclinación que desees
+        console.log("facing: " + this.player.facing)
+        // Si el personaje está mirando a la izquierda, ajusta el ángulo final
+        const finalAngle = this.player.facing === 'right' ? adjustedAngle : Math.PI - adjustedAngle;
     
         // Establece la rotación del sprite de la granada
-        this.setRotation(adjustedAngle);
-        
+        this.setRotation(finalAngle);
+    
         // Aumenta la velocidad inicial si lo deseas
         const initialVelocity = 400; // Puedes ajustar este valor según la velocidad que desees
     
         // Asigna la velocidad inicial ajustada al cuerpo de la granada
-        this.scene.physics.velocityFromRotation(adjustedAngle, initialVelocity, this.body.velocity);
+        this.scene.physics.velocityFromRotation(finalAngle, initialVelocity, this.body.velocity);
     
         this.scene.time.delayedCall(this.explosionDelay, () => {
             this.explode();
         }, null, this);
     }
+    
+    
+    
     
 
     explode() {
