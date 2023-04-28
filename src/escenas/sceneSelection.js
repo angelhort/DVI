@@ -316,6 +316,7 @@ export default class SceneSelection extends Phaser.Scene {
             roundsText.destroy();
             checkbox.destroy();
             checkBoxText.destroy();
+            checkboxChecked.destroy();
             this.miAudio5.stop();
         });
     }
