@@ -320,8 +320,10 @@ export default class Animation extends Phaser.Scene {
 
 			setTimeout(() => {
 				powerUpText.destroy();
-				this.miAudio3 = this.sound.add('miAudio3');
-				this.miAudio3.play();
+				if(!player1.isDead && !player2.isDead){
+					this.miAudio3 = this.sound.add('miAudio3');
+					this.miAudio3.play();
+				}
 			}, 7000);
 		});
 
