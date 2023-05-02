@@ -108,8 +108,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	/**
 	 * Detecta si el jugador está siendo golpeado por otro jugador
 	 */
+	
 	takeDamage() {
-		if(!this.inmortal){
+		const otherPlayer = this.scene.playerGroup.getChildren().find(player => player !== this);
+		if(!this.inmortal && !otherPlayer.isDead && !this.isDead){
 		this.miAudio = this.scene.sound.add('miAudio');
 		this.miAudio.play();
 		console.log(`Jugador ${this.controls.playerNumber} ha muerto.`);
