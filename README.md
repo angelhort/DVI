@@ -42,7 +42,9 @@ Este juego es perfecto para pasárselo bien con amigos. Mientras otros juegos cu
 <img src="assets/images/victoria.JPG" alt="Página Victoria"/> <br>
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
-
+<br><br>
+# Diagrama UML
+<img src="./documents/UML.png" alt="Diagrama UML"/> <br>
 
 ## Enlace a la página web con el juego:
 ## https://angelhort.github.io/DVI/
