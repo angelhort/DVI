@@ -39,7 +39,7 @@ Este juego es perfecto para pasárselo bien con amigos. Mientras otros juegos cu
 <img src="assets/PixelArt/powerUpAnimacion.png" alt="PixelArt Power Up"/> <br>
 
 * ### Cuando un jugador impacta una bala en otro jugador gana la partida.<br><br>
-<img src="assets/images/victoria.jpg" alt="Página Victoria"/> <br>
+<img src="assets/images/victoria.JPG" alt="Página Victoria"/> <br>
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
