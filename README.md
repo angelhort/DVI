@@ -44,7 +44,7 @@ Este juego es perfecto para pasárselo bien con amigos. Mientras otros juegos cu
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 <br><br>
 # Diagrama UML
-<img src="./documents/UML.png" alt="Diagrama UML"/> <br>
+<img src="./documents/uml.png" alt="Diagrama UML"/> <br>
 
 ## Enlace a la página web con el juego:
 ## https://angelhort.github.io/DVI/
