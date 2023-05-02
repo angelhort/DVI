@@ -10,13 +10,13 @@ Este juego es perfecto para pasárselo bien con amigos. Mientras otros juegos cu
 <img src="assets/images/paginaInicio.png" alt="Página Inicio" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
 
 * ### Si deslizamos para abajo nos encontraremos con la pantalla del juego la cual, tras darle a *Start*, empezará el juego.<br><br>
-<img src="assets/images/start.jpg" alt="Start" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
+<img src="assets/images/start.JPG" alt="Start" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
 
 * ### Una vez pulsamos el boton start pasamos a la pantalla de selección de personajes, donde contamos con cuatro personajes elegibles. Estos son Amancio Ortega, Rosalia de Castro, Mariano Rajoy y un irmandinio.<br><br>
-<img src="assets/images/personajes.jpg" alt="Personajes" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
+<img src="assets/images/personajes.JPG" alt="Personajes" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
 
 * ### Inmediatamente después encontramos la selección de mapas y rondas, donde podremos elegir entre 4 diferentes, y seleccionar el número de rondas que se quieren jugar.<br><br>
-<img src="assets/images/mapas.jpg" alt="Mapas" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
+<img src="assets/images/mapas.JPG" alt="Mapas" style="display: block; margin-left: auto; margin-right: auto; width = 50%;"/> <br>
 
 * ### En pantalla aparecerán 2 personajes en el interior de una catedral con plataformas, dependiendo de los que hayamos elegido previamente. <br>
 ### Cada personaje tiene su bala personalizada y una serie de características propias y únicas. <br><br>
